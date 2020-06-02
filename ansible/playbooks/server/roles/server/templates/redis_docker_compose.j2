@@ -1,0 +1,16 @@
+# {{ sitepilot_managed }}
+version: '3.3'
+
+services:
+
+  redis-1:
+    image: redis:5
+    container_name: redis-1
+    restart: always
+    ports:
+      - '127.0.0.1:6379:6379'
+    expose:
+      - '6379'
+    user: '{{ cmd_admin_uid.stdout }}:{{ cmd_admin_gid.stdout }}'
+    volumes:
+      - /opt/sitepilot/services/redis/data/:/data

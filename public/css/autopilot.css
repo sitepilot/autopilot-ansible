@@ -1,0 +1,26 @@
+:root {
+    --primary: #292a37;
+    --primary-dark: #296af4;
+    --90: #292a37;
+}
+
+.bg-grad-sidebar {
+    background-image: linear-gradient(0deg, #283346 0%, #151b26 100%);
+    background-attachment: fixed;
+}
+
+.table td {
+    white-space: nowrap;
+}
+
+/* ==== Responive Custom ==== */
+
+@media(max-width: 962px) {
+    .h-header [type=button] {
+        width: 32px;
+    }
+    
+    input[type="text"][disabled] {
+        color: #292a37;
+    }
+}

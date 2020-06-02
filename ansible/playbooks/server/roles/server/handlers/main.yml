@@ -1,0 +1,23 @@
+---
+- name: restart olsws
+  service:
+    name: lsws
+    state: restarted
+
+- name: restart ssh server
+  service:
+    name: sshd
+    state: restarted
+
+- name: restart docker
+  service:
+    name: docker
+    state: restarted
+  when:
+    - autopilot_host is defined
+    - not autopilot_host|bool
+
+- name: restart fail2ban
+  service:
+    name: fail2ban
+    state: restarted

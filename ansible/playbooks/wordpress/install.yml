@@ -1,0 +1,49 @@
+---
+- hosts: "{{ host }}"
+  become: yes
+  become_user: "{{ user }}"
+  vars:
+    user: ""
+    app: ""
+    url: ""
+    title: ""
+    admin_user: ""
+    admin_pass: ""
+    admin_email: ""
+    db_name: ""
+    db_user: ""
+    db_pass: ""
+    db_host: ""
+    path: "/opt/sitepilot/users/{{ user }}/{{ app }}/public"
+  tasks:
+    - name: "wp/install : check if index.php exists"
+      stat:
+        path: "{{ path }}/index.php"
+      register: wp_index
+
+    - name: "wp/install : check if wp-config.php exists"
+      stat:
+        path: "{{ path }}/wp-config.php"
+      register: wp_config
+
+    - name: "wp/install : download core"
+      command: "wp core download --path={{ path }}"
+      when: not wp_index.stat.exists
+
+    - name: "wp/install : create config"
+      command: "wp config create --dbname='{{ db_name }}' --dbuser='{{ db_user }}' --dbpass='{{ db_pass }}' --dbhost='{{ db_host }}' --path={{ path }}"
+      when:
+        - db_name | length > 0
+        - db_user | length > 0
+        - db_pass | length > 0
+        - db_host | length > 0
+        - not wp_config.stat.exists
+
+    - name: "wp/install : install core"
+      command: "wp core install --url='{{ url }}' --title='{{ title }}' --admin_user='{{ admin_user }}' --admin_password='{{ admin_pass }}' --admin_email='{{ admin_email }}' --path={{ path }}"
+      when:
+        - url | length > 0
+        - title | length > 0
+        - admin_user | length > 0
+        - admin_pass | length > 0
+        - admin_email | length > 0

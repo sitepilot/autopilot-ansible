@@ -1,0 +1,18 @@
+---
+dependencies: []
+
+galaxy_info:
+  author: nick-jansen
+  description: Server configuration for the managed WordPress hosting platform.
+  company: "Sitepilot"
+  license: "license (BSD, MIT)"
+  min_ansible_version: 2.4
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - webserver
+    - database
+    - mysql
+    - apps

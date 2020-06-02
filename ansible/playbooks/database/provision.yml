@@ -1,0 +1,21 @@
+---
+- hosts: "all"
+  vars:
+    user: ""
+    password: ""
+    database: ""
+  tasks:
+    - name: "database/provision : {{ database }} : create database"
+      mysql_db:
+        name: "{{ database }}"
+        state: "present"
+        config_file: "/root/.my.cnf"
+
+    - name: "database/provision : {{ user }} : create database user"
+      mysql_user:
+        name: "{{ user }}"
+        password: "{{ password }}"
+        priv: "{{ database }}.*:ALL"
+        state: present
+        host: "%"
+        config_file: "/root/.my.cnf"

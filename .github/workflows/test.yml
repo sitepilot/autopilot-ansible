@@ -1,0 +1,54 @@
+---
+name: Test
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-18.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install pip packages.
+        run: sudo pip install ansible-lint && sudo pip install yamllint
+
+      - name: Run Yaml lint on ansible folder.
+        run: sudo yamllint -c tests/yamllint.yml ansible/
+
+      - name: Run Ansible lint on ansible folder.
+        run: sudo ansible-lint -v --force-color ansible/
+
+      - name: Build container.
+        run: docker build . --file Dockerfile --tag sitepilot/autopilot:${GITHUB_SHA}
+
+      - name: Create environment file.
+        run: |
+          sudo cp .env.example .env
+          sudo sed -i "s/APP_DOCKER_TAG=latest/APP_DOCKER_TAG=$GITHUB_SHA/" .env  
+          sudo sed -i 's/APP_ENV=local/APP_ENV=testing/' .env
+
+      - name: Run Autopilot installer.
+        run: ./autopilot install-test ${{ secrets.NOVA_USERNAME }} ${{ secrets.NOVA_PASSWORD }}
+
+      - name: Run unit tests.
+        run: ./autopilot test
+
+      - name: Deploy image to Docker hub.
+        run: |
+          if [[ ${GITHUB_REF##*/} = "master" ]]; then export DOCKER_TAG=latest; else export DOCKER_TAG=${GITHUB_REF##*/}; fi
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker tag sitepilot/autopilot:${GITHUB_SHA} sitepilot/autopilot:$DOCKER_TAG
+          docker push sitepilot/autopilot:$DOCKER_TAG
+
+      - name: "Failure: dump tasks."
+        if: failure()
+        run: |
+          ./autopilot task:debug
+
+      - name: "Failure: dump logs."
+        if: failure()
+        run: |
+          ./autopilot exec cat storage/logs/laravel.log

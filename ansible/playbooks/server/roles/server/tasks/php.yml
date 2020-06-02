@@ -1,0 +1,18 @@
+---
+- name: "php : create symbolic link"
+  file:
+    src: /usr/local/lsws/lsphp74/bin/php
+    dest: /usr/local/bin/php
+    state: link
+
+- name: "php : create PHP7.3 symbolic link"
+  file:
+    src: /usr/local/lsws/lsphp73/bin/php
+    dest: /usr/local/bin/php73
+    state: link
+
+- name: "php : create PHP7.4 symbolic link"
+  file:
+    src: /usr/local/lsws/lsphp74/bin/php
+    dest: /usr/local/bin/php74
+    state: link

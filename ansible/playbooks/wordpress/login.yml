@@ -1,0 +1,35 @@
+---
+- hosts: "{{ host }}"
+  become: yes
+  become_user: "{{ user }}"
+  vars:
+    user: ""
+    app: ""
+    login: ""
+    path: "/opt/sitepilot/users/{{ user }}/{{ app }}/public"
+  tasks:
+    - name: "wp/login : check if wp-config.php exists"
+      stat:
+        path: "{{ path }}/wp-config.php"
+      register: wp_config
+
+    - name: "wp/login : fail if wp-config.php doesn't exist"
+      fail:
+        msg: "WordPress is not installed."
+      when: not wp_config.stat.exists
+
+    - name: "wp/login : install one-time-login"
+      command: "wp plugin install one-time-login --activate --path={{ path }}"
+      register: result
+      changed_when: "'Plugin installed successfully.' in result.stdout"
+
+    - name: "wp/login : generate login url"
+      command: "wp user one-time-login {{ login }} --path={{ path }}"
+      register: login_url
+
+    - name: "wp/login : print login url"
+      debug:
+        msg: "{{ item }}"
+      loop:
+        - "[autopilot-result]{{ login_url.stdout }}[/autopilot-result]"
+        - "{{ login_url.stdout }}"

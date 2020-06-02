@@ -1,0 +1,11 @@
+---
+- hosts: "all"
+  vars:
+    user: ""
+    key: ""
+  tasks:
+    - name: "key/provision : {{ user }} : remove key from authorized keys"
+      authorized_key:
+        user: "{{ user }}"
+        state: "absent"
+        key: "{{ key }}"

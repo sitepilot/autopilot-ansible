@@ -1,0 +1,18 @@
+---
+- hosts: "all"
+  vars:
+    user: ""
+    database: ""
+  tasks:
+    - name: "database/destroy : {{ database }} : drop database"
+      mysql_db:
+        name: "{{ database }}"
+        state: "absent"
+        config_file: "/root/.my.cnf"
+
+    - name: "database/destroy : {{ user }} : remove database user"
+      mysql_user:
+        name: "{{ user }}"
+        state: "absent"
+        host: "%"
+        config_file: "/root/.my.cnf"

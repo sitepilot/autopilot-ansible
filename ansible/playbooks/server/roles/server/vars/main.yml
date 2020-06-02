@@ -1,0 +1,4 @@
+---
+__sitepilot_managed: >
+  WARNING: This file is managed by Sitepilot, any changes will be overwritten
+  (updated at: {{ansible_date_time.date}} {{ansible_date_time.time}}).

@@ -1,0 +1,16 @@
+---
+- name: "health : create folders"
+  file:
+    path: "{{ item.path }}"
+    owner: "{{ admin }}"
+    group: "{{ admin }}"
+    state: directory
+    recurse: "{{ item.recurse }}"
+  loop:
+    - path: /opt/sitepilot/services/health/public
+      recurse: true
+
+- name: "health : generate health check script"
+  template:
+    src: health_check.php.j2
+    dest: /opt/sitepilot/services/health/public/index.php

@@ -1,0 +1,14 @@
+---
+- hosts: "all"
+  vars:
+    path: ""
+  tasks:
+    - name: "wp/connect : check if wp-config.php exists"
+      stat:
+        path: "{{ path }}/wp-config.php"
+      register: wp_config
+
+    - name: "wp/connect : fail if wp-config.php doesn't exist"
+      fail:
+        msg: "WordPress is not installed."
+      when: not wp_config.stat.exists

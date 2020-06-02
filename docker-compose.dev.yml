@@ -1,0 +1,57 @@
+version: "3.3"
+
+services:
+  mysql:
+    image: mariadb:10.4-bionic
+    container_name: autopilot-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - "mysql_data:/var/lib/mysql"
+
+  redis:
+    image: "redis:alpine"
+    container_name: autopilot-redis
+    restart: always
+    volumes:
+      - redis_data:/var/lib/redis
+
+  autopilot:
+    image: sitepilot/autopilot-base:${APP_DOCKER_TAG}
+    container_name: autopilot
+    depends_on:
+      - mysql
+      - redis
+    ports:
+      - "${APP_HTTP_PORT}:80"
+      - "${APP_HTTPS_PORT}:443"
+    restart: always
+    environment:
+      WEBSERVER_USER_ID: ${APP_USER_ID}
+      WEBSERVER_USER_GID: ${APP_USER_GID}
+      SET_VHOST_FILE_PERMISSIONS: "yes"
+    volumes:
+      - type: bind
+        source: "./"
+        target: "/var/www/html"
+        consistency: cached
+
+  test:
+    build: ./docker
+    container_name: autopilot-test
+    restart: always
+    privileged: true
+    ports:
+      - "${APP_TEST_HTTP_PORT}:80"
+      - "${APP_TEST_HTTPS_PORT}:443"
+      - "${APP_TEST_LITESPEED_PORT}:2083"
+    volumes:
+      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+
+volumes:
+  mysql_data:
+  redis_data:

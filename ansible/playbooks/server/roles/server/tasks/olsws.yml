@@ -1,0 +1,184 @@
+---
+- name: "olsws : download repository script"
+  get_url:
+    url: http://rpms.litespeedtech.com/debian/enable_lst_debain_repo.sh
+    dest: /opt/sitepilot/scripts/olsws-repo-install.sh
+    mode: "0700"
+    force: true
+
+- name: "olsws : install repository"
+  shell: /opt/sitepilot/scripts/olsws-repo-install.sh
+
+- name: "olsws : install server and PHP packages"
+  apt:
+    name: >
+      openlitespeed,
+      lsphp73,
+      lsphp73-common,
+      lsphp73-json,
+      lsphp73-mysql,
+      lsphp73-opcache,
+      lsphp73-igbinary,
+      lsphp73-memcached,
+      lsphp73-redis,
+      lsphp73-imap,
+      lsphp73-curl,
+      lsphp73-imagick,
+      lsphp74,
+      lsphp74-common,
+      lsphp74-json,
+      lsphp74-mysql,
+      lsphp74-opcache,
+      lsphp74-igbinary,
+      lsphp74-memcached,
+      lsphp74-redis,
+      lsphp74-imap,
+      lsphp74-curl,
+      lsphp74-imagick
+    state: present
+  notify:
+    - restart olsws
+
+- name: "olsws: enable on startup"
+  service:
+    name: lsws
+    enabled: true
+
+- name: "olsws : create folders"
+  file:
+    path: "{{ item.path }}"
+    owner: "{{ admin }}"
+    group: "{{ admin }}"
+    state: directory
+    recurse: "{{ item.recurse }}"
+  loop:
+    # OpenLitespeed
+    - path: /tmp/lshttpd
+      recurse: true
+    - path: /opt/sitepilot/services/olsws
+      recurse: false
+    - path: /opt/sitepilot/services/olsws/tmp
+      recurse: false
+    - path: /opt/sitepilot/services/olsws/logs
+      recurse: false
+
+    # Default Vhost
+    - path: /opt/sitepilot/services/default
+      recurse: false
+    - path: /opt/sitepilot/services/default/public
+      recurse: false
+    - path: /opt/sitepilot/services/default/logs
+      recurse: false
+
+- name: "olsws : generate an OpenSSL private key"
+  openssl_privatekey:
+    path: /usr/local/lsws/conf/cert/server.key
+
+- name: "olsws : generate an OpenSSL csr"
+  openssl_csr:
+    path: /usr/local/lsws/conf/cert/server.csr
+    privatekey_path: /usr/local/lsws/conf/cert/server.key
+    common_name: "{{ hostname }}"
+
+- name: "olsws : generate a self signed OpenSSL certificate"
+  openssl_certificate:
+    path: /usr/local/lsws/conf/cert/server.crt
+    privatekey_path: /usr/local/lsws/conf/cert/server.key
+    csr_path: /usr/local/lsws/conf/cert/server.csr
+    provider: selfsigned
+
+- name: "olsws : generate default vhost index page"
+  template:
+    src: olsws_index.php.j2
+    dest: /opt/sitepilot/services/default/public/index.php
+
+- name: "olsws : generate default vhost configuration"
+  template:
+    src: olsws_default_vhost.j2
+    dest: /usr/local/lsws/conf/vhosts/default.conf
+  notify:
+    - restart olsws
+
+- name: "olsws : generate httpd config"
+  template:
+    src: olsws_httpd_config.j2
+    dest: /usr/local/lsws/conf/httpd_config.conf
+    owner: lsadm
+    group: lsadm
+  notify: restart olsws
+
+- name: "olsws : generate olsws admin config"
+  template:
+    src: olsws_admin_config.j2
+    dest: /usr/local/lsws/admin/conf/admin_config.conf
+    owner: lsadm
+    group: lsadm
+  notify: restart olsws
+
+- name: "olsws : generate lsphp74 vhost template"
+  template:
+    src: olsws_vhost_template.j2
+    dest: /usr/local/lsws/conf/templates/lsphp74.conf
+    owner: lsadm
+    group: lsadm
+  notify: restart olsws
+  vars:
+    php_version: "74"
+    ssl: false
+
+- name: "olsws : generate lsphp74-ssl vhost template"
+  template:
+    src: olsws_vhost_template.j2
+    dest: /usr/local/lsws/conf/templates/lsphp74-ssl.conf
+    owner: lsadm
+    group: lsadm
+  notify: restart olsws
+  vars:
+    php_version: "74"
+    ssl: true
+
+- name: "olsws : generate lsphp73 vhost template"
+  template:
+    src: olsws_vhost_template.j2
+    dest: /usr/local/lsws/conf/templates/lsphp73.conf
+    owner: lsadm
+    group: lsadm
+  notify: restart olsws
+  vars:
+    php_version: "73"
+    ssl: false
+
+- name: "olsws : generate lsphp73-ssl vhost template"
+  template:
+    src: olsws_vhost_template.j2
+    dest: /usr/local/lsws/conf/templates/lsphp73-ssl.conf
+    owner: lsadm
+    group: lsadm
+  notify: restart olsws
+  vars:
+    php_version: "73"
+    ssl: true
+
+- name: "olsws : generate admin password script"
+  template:
+    src: olsws_password.sh.j2
+    dest: /opt/sitepilot/scripts/olsws-password.sh
+    mode: "a+x"
+
+- name: "olsws : set admin password"
+  command: "/opt/sitepilot/scripts/olsws-password.sh {{ admin }} {{ admin_pass }}"
+  changed_when: false
+
+- name: "olsws : generate reload script"
+  template:
+    src: "olsws_reload.sh.j2"
+    dest: "/opt/sitepilot/scripts/olsws-reload.sh"
+    owner: "root"
+    group: "root"
+    mode: 0700
+
+- name: "olsws : configure reload cron"
+  cron:
+    name: "reload lshttpd"
+    minute: "*"
+    job: "/opt/sitepilot/scripts/olsws-reload.sh > /dev/null"

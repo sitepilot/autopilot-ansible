@@ -1,0 +1,13 @@
+---
+- hosts: "all"
+  vars:
+    user: ""
+    key: ""
+    comment: ""
+  tasks:
+    - name: "key/provision : {{ user }} : add key to authorized keys"
+      authorized_key:
+        user: "{{ user }}"
+        state: "present"
+        key: "{{ key }}"
+        comment: "{{ comment }}"

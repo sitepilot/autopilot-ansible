@@ -1,0 +1,24 @@
+---
+- hosts: "all"
+  vars:
+    user: ""
+    site: ""
+    path: "/opt/sitepilot/users/{{ user }}/{{ site }}"
+    path_vhost: "/usr/local/lsws/conf/vhosts/{{ site }}.conf"
+  tasks:
+    - name: "site/destroy : {{ user }} : {{ site }} : remove site folder"
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "{{ path }}"
+
+    - name: "site/destroy : {{ user }} : {{ site }} : remove vhost configuration"
+      file:
+        path: "{{ path_vhost }}"
+        state: absent
+
+    - name: "site/destroy : {{ user }} : {{ site }} : reload web server"
+      service:
+        name: lsws
+        state: restarted

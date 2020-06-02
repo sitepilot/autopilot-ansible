@@ -1,0 +1,14 @@
+#!/bin/bash
+# {{ sitepilot_managed }}
+set -e
+
+TIME_HOUR=$(date +"%H")
+BACKUP_DIR="/opt/sitepilot/backups/mysql"
+MYSQL=/usr/bin/mysql
+MYSQLDUMP=/usr/bin/mysqldump
+
+databases=`$MYSQL -e "SHOW DATABASES;" | grep -Ev "(Database|information_schema|performance_schema|mysql)"`
+
+for db in $databases; do
+  $MYSQLDUMP --force --opt --databases $db | gzip > "$BACKUP_DIR/${TIME_HOUR}_$db.gz"
+done

@@ -1,0 +1,39 @@
+---
+- hosts: "all"
+  vars:
+    user: ""
+    site: ""
+    domain: ""
+    aliases: []
+    ssl: false
+    php_version: "74"
+    path: "/opt/sitepilot/users/{{ user }}/{{ site }}"
+    path_vhost: "/usr/local/lsws/conf/vhosts/{{ site }}.conf"
+  tasks:
+    - name: "site/provision : {{ user }} : {{ site }} : create folders"
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ user }}"
+        group: "{{ user }}"
+        mode: "0755"
+      loop:
+        - "{{ path }}"
+        - "{{ path }}/public"
+        - "{{ path }}/logs"
+
+    - name: "site/provision : {{ user }} : {{ site }} : generate vhost configuration"
+      template:
+        src: ./templates/olsws_site_vhost.j2
+        dest: "{{ path_vhost }}"
+
+    - name: "site/provision : {{ user }} : {{ site }} : set folder / file permissions"
+      command: "{{ item }}"
+      loop:
+        - "find {{ path }} -type f -exec chmod 644 {} +"
+        - "find {{ path }} -type d -exec chmod 755 {} +"
+
+    - name: "site/provision : {{ user }} : {{ site }} : reload web server"
+      service:
+        name: lsws
+        state: restarted

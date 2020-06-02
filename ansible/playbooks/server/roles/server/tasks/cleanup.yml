@@ -1,0 +1,10 @@
+---
+- name: "cleanup : certbot : remove renew cron (replaced by Autopilot scheduler)"
+  cron:
+    name: "renew certbot"
+    state: "absent"
+
+- name: "cleanup : certbot : remove renew script (replaced by Autopilot scheduler)"
+  file:
+    path: /opt/sitepilot/scripts/certbot-renew.sh
+    state: absent

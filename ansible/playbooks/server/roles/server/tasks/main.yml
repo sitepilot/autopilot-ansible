@@ -1,0 +1,69 @@
+---
+- include: variables.yml
+  tags: "always"
+
+- include: swap.yml
+  tags: "swap"
+
+- include: config.yml
+  tags: "config"
+
+- include: upgrade.yml
+  tags: "upgrade"
+
+- include: install.yml
+  tags: "install"
+
+- include: root.yml
+  tags: "root"
+
+- include: admin.yml
+  tags: "admin"
+
+- include: sshd.yml
+  tags: "sshd"
+
+- include: ssmtp.yml
+  tags: "ssmtp"
+
+- include: firewall.yml
+  tags: "firewall"
+
+- include: docker.yml
+  tags: "docker"
+
+- include: mysql.yml
+  tags: "mysql"
+
+- include: redis.yml
+  tags: "redis"
+
+- include: olsws.yml
+  tags: "olsws"
+
+- include: php.yml
+  tags: "php"
+
+- include: composer.yml
+  tags: "composer"
+
+- include: wpcli.yml
+  tags: "wpcli"
+
+- include: pma.yml
+  tags: "pma"
+
+- include: health.yml
+  tags: "health"
+
+- include: fail2ban.yml
+  tags: "fail2ban"
+
+- include: nodejs.yml
+  tags: "nodejs"
+
+- include: certbot.yml
+  tags: "certbot"
+
+- include: cleanup.yml
+  tags: "cleanup"

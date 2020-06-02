@@ -1,0 +1,21 @@
+# {{ sitepilot_managed }}
+vhTemplate vhost {
+  {% if app.ssl is defined and app.ssl|bool %}
+  templateFile            $SERVER_ROOT/conf/templates/lsphp74-ssl.conf
+  {% else %}
+  templateFile            $SERVER_ROOT/conf/templates/lsphp74.conf
+  {% endif %}
+  listeners               http, https
+
+  member {{ app.name }} {
+    vhRoot                /opt/sitepilot/users/{{ user.name }}/$VH_NAME
+
+    {% if app.domain is defined %}
+    vhDomain              {{ app.domain }}
+    {% endif %}
+    
+    {% if app.aliases is defined %}
+    vhAliases             {{ app.aliases|join(', ') }}
+    {% endif %}
+  }
+}

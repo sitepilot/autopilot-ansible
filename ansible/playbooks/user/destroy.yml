@@ -1,0 +1,45 @@
+---
+- hosts: "all"
+  vars:
+    user: ""
+    user_path: "/opt/sitepilot/users/{{ user }}"
+  tasks:
+    - name: "user/destroy : {{ user }} : install required pip packages"
+      pip:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - PyMySQL
+
+    - name: "user/destroy : {{ user }} : remove user"
+      user:
+        name: "{{ user }}"
+        state: absent
+        force: true
+
+    - name: "user/destroy : {{ user }} : remove user group"
+      group:
+        name: "{{ user }}"
+        state: absent
+
+    - name: "user/destroy : {{ user }} : remove user folders"
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - "/home/{{ user }}"
+        - "{{ user_path }}"
+
+    - name: "user/destroy : {{ user }} : remove database user"
+      mysql_user:
+        name: "{{ user }}"
+        state: absent
+        config_file: "/root/.my.cnf"
+        host: "%"
+      no_log: true
+
+    - name: "user/destroy : {{ user }} : remove ssmtp alias"
+      lineinfile:
+        path: /etc/ssmtp/revaliases
+        regexp: "^{{ user }}:"
+        state: absent

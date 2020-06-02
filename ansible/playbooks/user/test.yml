@@ -1,0 +1,68 @@
+---
+- hosts: "all"
+  vars:
+    user: ""
+    mysql_password: ""
+    isolated: true
+    ssh_keys: []
+    sites: []
+    databases: []
+    domains: []
+    path: "/opt/sitepilot/users/{{ user }}"
+  tasks:
+    # SSH Tests (when test public key is used)
+    - name: "user/test : {{ user }} : can't login over SSH using a private key as an isolated user"
+      command: "ssh -i /root/.ssh/test_key -o StrictHostKeyChecking=no -o BatchMode=yes {{ user }}@127.0.0.1 'date'"
+      register: ssh_isolate_check
+      failed_when: not ssh_isolate_check.failed
+      when:
+        - "isolated is defined"
+        - "isolated | bool"
+        - "ssh_keys[0] is defined"
+        - '"test@server" in ssh_keys[0]'
+
+    - name: "user/test : {{ user }} : can login over SSH using a private key as an unisolated user"
+      command: "ssh -i /root/.ssh/test_key -o StrictHostKeyChecking=no -o BatchMode=yes {{ user }}@127.0.0.1 'date'"
+      when:
+        - "isolated is defined"
+        - "not isolated | bool"
+        - "ssh_keys[0] is defined"
+        - '"test@server" in ssh_keys[0]'
+
+    # MySQL Tests
+    - name: "user/test : {{ user }} : connect to MySQL as user"
+      command: "mysql -u {{ user }} -p'{{ mysql_password }}' -h 127.0.0.1 -e 'show databases;'"
+      changed_when: false
+
+    - name: "user/test : {{ user }} : databases exist"
+      command: "mysql -u {{ user }} -p'{{ mysql_password }}' -h 127.0.0.1 -e 'use {{ item }};'"
+      changed_when: false
+      loop: "{{ databases }}"
+
+    # File Tests
+    - name: "user/test : {{ user }} : user can write to app public folders"
+      command: "touch /opt/sitepilot/users/{{ user }}/{{ item }}/public/user_test"
+      become: true
+      become_user: "{{ user }}"
+      changed_when: false
+      loop: "{{ sites }}"
+      args:
+        warn: false
+
+    - name: "user/test : {{ user }} : user can delete files in app public folders"
+      command: "rm /opt/sitepilot/users/{{ user }}/{{ item }}/public/user_test"
+      become: true
+      become_user: "{{ user }}"
+      changed_when: false
+      loop: "{{ sites }}"
+      args:
+        warn: false
+
+    # HTTP Tests
+    - name: "user/test : {{ user }} : domains are reachable"
+      uri:
+        url: https://{{ item }}
+        validate_certs: false
+        timeout: 10
+      loop: "{{ domains }}"
+      tags: ["test-domains"]

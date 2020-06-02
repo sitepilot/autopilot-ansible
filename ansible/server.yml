@@ -1,0 +1,5 @@
+---
+- hosts: "{{ host }}"
+  become: true
+  roles:
+    - "server"

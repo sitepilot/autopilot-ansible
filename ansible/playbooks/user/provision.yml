@@ -1,0 +1,95 @@
+---
+- hosts: "all"
+  vars:
+    user: ""
+    full_name: ""
+    email: ""
+    password: ""
+    mysql_password: ""
+    isolated: true
+    path: "/opt/sitepilot/users/{{ user }}"
+  tasks:
+    - name: "user/provision : {{ user }} : ensure 'isolated' group exists"
+      group:
+        name: "isolated"
+        state: present
+
+    - name: "user/provision : {{ user }} : install required pip packages"
+      pip:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - PyMySQL
+
+    - name: "user/provision : {{ user }} : ensure user group '{{ user }}' exists"
+      group:
+        name: "{{ user }}"
+        state: present
+
+    - name: "user/provision : {{ user }} : create user folder"
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: "root"
+        group: "root"
+        mode: "0755"
+      loop:
+        - "{{ path }}"
+
+    - name: "user/provision : {{ user }} : ensure user exists"
+      user:
+        name: "{{ user }}"
+        group: "{{ user }}"
+        groups: "isolated"
+        shell: "/bin/bash"
+        password: "{{ password | password_hash('sha512') }}"
+        comment: "{{ full_name if (full_name is defined) and (full_name|length > 0) else user }}"
+
+    - name: "user/provision : {{ user }} : set home dir permission"
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ user }}"
+        group: "{{ user }}"
+        mode: "0750"
+      loop:
+        - "/home/{{ user }}"
+
+    - name: "user : {{ user }} : remove isolated group"
+      user:
+        name: "{{ user }}"
+        groups: ""
+      when:
+        - isolated is defined
+        - not isolated
+
+    - name: "user : {{ user }} : create database user"
+      mysql_user:
+        name: "{{ user }}"
+        password: "{{ mysql_password }}"
+        priv: "{{ user }}_%.*:SELECT,INSERT,UPDATE,DELETE,INDEX,ALTER,CREATE,CREATE TEMPORARY TABLES,EXECUTE,CREATE VIEW,SHOW VIEW,CREATE ROUTINE,ALTER ROUTINE,EVENT,TRIGGER,DROP"
+        state: present
+        host: "%"
+        config_file: "/root/.my.cnf"
+      when:
+        - mysql_password is defined
+        - mysql_password | length > 0
+      no_log: true
+
+    - name: "user : {{ user }} : set ssmtp alias"
+      lineinfile:
+        path: /etc/ssmtp/revaliases
+        regexp: "^{{ user }}:"
+        line: "{{ user }}:{{ email }}"
+        state: present
+      when:
+        - email is defined
+        - email | length > 0
+
+    - name: "user : {{ user }} : remove ssmtp alias"
+      lineinfile:
+        path: /etc/ssmtp/revaliases
+        regexp: "^{{ user }}:"
+        state: absent
+      when:
+        - (email is not defined) or (email | length < 1)

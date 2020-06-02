@@ -1,0 +1,32 @@
+---
+- name: "redis : create service folders"
+  file:
+    path: "{{ item.path }}"
+    owner: "{{ admin }}"
+    group: "{{ admin }}"
+    state: directory
+    recurse: "{{ item.recurse }}"
+  loop:
+    - path: /opt/sitepilot/services/redis/
+      recurse: false
+    - path: /opt/sitepilot/services/redis/data/
+      recurse: false
+
+- name: "redis : get the admin UID"
+  command: "id -u {{ admin }}"
+  register: cmd_admin_uid
+  changed_when: false
+
+- name: "redis : get the admin GID"
+  command: "id -g {{ admin }}"
+  register: cmd_admin_gid
+  changed_when: false
+
+- name: "redis : generate Docker Compose configuration"
+  template:
+    src: redis_docker_compose.j2
+    dest: /opt/sitepilot/services/redis/docker-compose.yml
+
+- name: "redis : start containers"
+  docker_compose:
+    project_src: /opt/sitepilot/services/redis

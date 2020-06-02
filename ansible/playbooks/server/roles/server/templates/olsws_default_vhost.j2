@@ -1,0 +1,11 @@
+# {{ sitepilot_managed }}
+
+vhTemplate vhost {
+  templateFile            $SERVER_ROOT/conf/templates/lsphp74.conf
+  listeners               http, https
+
+  member default {
+    vhDomain              *
+    vhRoot                /opt/sitepilot/services/$VH_NAME
+  }
+}
