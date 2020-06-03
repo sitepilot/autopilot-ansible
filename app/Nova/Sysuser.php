@@ -8,6 +8,7 @@ use App\Nova\Actions\JobAction;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Boolean;
 
 class Sysuser extends Resource
 {
@@ -86,6 +87,9 @@ class Sysuser extends Resource
                 ->hideFromIndex()
                 ->hideWhenCreating()
                 ->rules(\App\Sysuser::$validationRules['mysql_password']),
+
+            Boolean::make('Isolated')
+                ->rules(\App\Sysuser::$validationRules['isolated']),
 
             BelongsTo::make('Server')
                 ->searchable()
