@@ -37,9 +37,7 @@ virtualHostConfig  {
   extprocessor $VH_NAME-lsphp{{ php_version | default('74') }} {
     type                  lsapi
     address               uds://opt/sitepilot/services/olsws/tmp/$VH_NAME-lsphp{{ php_version | default('74') }}.sock
-    maxConns              5
     env                   PHP_LSAPI_CHILDREN=5
-    env                   LSAPI_AVOID_FORK=200M
     initTimeout           60
     retryTimeout          0
     respBuffer            1
