@@ -165,7 +165,8 @@ class UpCloud implements ServerProviderClient
                         "action" => "clone",
                         "storage" => "01000000-0000-4000-8000-000030200200", // Ubuntu 20.04
                         "title" => $this->server->name,
-                        "size" => $this->getStorageSizeByPlan($this->server->size)
+                        "size" => $this->getStorageSizeByPlan($this->server->size),
+                        "tier" => "maxiops"
                     ]
                 ],
                 "login_user" => [
