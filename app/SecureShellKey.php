@@ -28,7 +28,7 @@ class SecureShellKey
     {
         return app()->environment('testing')
             ? static::forTesting()
-            : static::make("{$sysuser->name}@sitepilot.io");
+            : static::make("{$sysuser->name}@{$sysuser->server->name}");
     }
 
     /**
@@ -54,7 +54,7 @@ class SecureShellKey
         $name = Str::random(20);
 
         (new Process(
-            ["ssh-keygen", "-C", "\"worker@sitepilot.io\"", "-f", $name, "-t", "rsa", "-m", "PEM", "-b", "4096"],
+            ["ssh-keygen", "-C", "\"$email\"", "-f", $name, "-t", "rsa", "-m", "PEM", "-b", "4096"],
             storage_path('app')
         ))->mustRun();
 
