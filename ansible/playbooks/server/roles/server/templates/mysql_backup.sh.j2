@@ -10,5 +10,5 @@ MYSQLDUMP=/usr/bin/mysqldump
 databases=`$MYSQL -e "SHOW DATABASES;" | grep -Ev "(Database|information_schema|performance_schema|mysql)"`
 
 for db in $databases; do
-  $MYSQLDUMP --force --opt --databases $db | gzip > "$BACKUP_DIR/${TIME_HOUR}_$db.gz"
+  $MYSQLDUMP --force --opt --column-statistics=0 --databases $db | gzip > "$BACKUP_DIR/${TIME_HOUR}_$db.gz"
 done
