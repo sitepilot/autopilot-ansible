@@ -7,6 +7,8 @@
     password: ""
     mysql_password: ""
     isolated: true
+    private_key: ""
+    public_key: ""
     path: "/opt/sitepilot/users/{{ user }}"
   tasks:
     - name: "user/provision : {{ user }} : ensure 'isolated' group exists"
@@ -26,7 +28,16 @@
         name: "{{ user }}"
         state: present
 
-    - name: "user/provision : {{ user }} : create user folder"
+    - name: "user/provision : {{ user }} : ensure user exists"
+      user:
+        name: "{{ user }}"
+        group: "{{ user }}"
+        groups: "isolated"
+        shell: "/bin/bash"
+        password: "{{ password | password_hash('sha512') }}"
+        comment: "{{ full_name if (full_name is defined) and (full_name|length > 0) else user }}"
+
+    - name: "user/provision : {{ user }} : create root owned user folders"
       file:
         path: "{{ item }}"
         state: directory
@@ -36,14 +47,15 @@
       loop:
         - "{{ path }}"
 
-    - name: "user/provision : {{ user }} : ensure user exists"
-      user:
-        name: "{{ user }}"
+    - name: "user/provision : {{ user }} : create user owned folders"
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ user }}"
         group: "{{ user }}"
-        groups: "isolated"
-        shell: "/bin/bash"
-        password: "{{ password | password_hash('sha512') }}"
-        comment: "{{ full_name if (full_name is defined) and (full_name|length > 0) else user }}"
+        mode: "0700"
+      loop:
+        - "/home/{{ user }}/.ssh/"
 
     - name: "user/provision : {{ user }} : set home dir permission"
       file:
@@ -93,3 +105,27 @@
         state: absent
       when:
         - (email is not defined) or (email | length < 1)
+
+    - name: "user : {{ user }} : save private key"
+      copy:
+        content: "{{ private_key }}"
+        dest: "/home/{{ user }}/.ssh/id_rsa"
+        force: yes
+        owner: "{{ user }}"
+        group: "{{ user }}"
+        mode: "0600"
+      when:
+        - private_key is defined
+        - private_key | length > 0
+
+    - name: "user : {{ user }} : save public key"
+      copy:
+        content: "{{ public_key }}"
+        dest: "/home/{{ user }}/.ssh/id_rsa.pub"
+        force: yes
+        owner: "{{ user }}"
+        group: "{{ user }}"
+        mode: "0600"
+      when:
+        - public_key is defined
+        - public_key | length > 0

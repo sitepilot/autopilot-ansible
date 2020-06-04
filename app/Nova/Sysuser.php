@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\GenerateKeypairAction;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
 use App\Nova\Actions\JobAction;
@@ -74,6 +75,16 @@ class Sysuser extends Resource
                 ->sortable()
                 ->rules(\App\Sysuser::$validationRules['email']),
 
+            Boolean::make('Isolated')
+                ->rules(\App\Sysuser::$validationRules['isolated']),
+
+            BelongsTo::make('Server')
+                ->searchable()
+                ->withoutTrashed()
+                ->nullable()
+                ->hideWhenUpdating()
+                ->help('A random server will be assigned when this field is left empty.'),
+
             Textarea::make('Password')
                 ->rows(1)
                 ->sortable()
@@ -88,15 +99,9 @@ class Sysuser extends Resource
                 ->hideWhenCreating()
                 ->rules(\App\Sysuser::$validationRules['mysql_password']),
 
-            Boolean::make('Isolated')
-                ->rules(\App\Sysuser::$validationRules['isolated']),
-
-            BelongsTo::make('Server')
-                ->searchable()
-                ->withoutTrashed()
-                ->nullable()
-                ->hideWhenUpdating()
-                ->help('A random server will be assigned when this field is left empty.'),
+            Textarea::make('Public Key', 'public_key')
+                ->exceptOnForms()
+                ->hideFromIndex(),
 
             \App\Sysuser::getNovaStatusField($this),
 
@@ -172,7 +177,8 @@ class Sysuser extends Resource
                 ->setFunctionName('provision')
                 ->confirmButtonText('Provision')
                 ->confirmText('Are you sure you want to provision the selected user(s)?')
-                ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.')
+                ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.'),
+            (new GenerateKeypairAction)
         ];
     }
 

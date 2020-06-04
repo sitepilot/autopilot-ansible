@@ -420,6 +420,16 @@ class Server extends Model implements ProvisionableResource
     }
 
     /**
+     * Generate keypair.
+     *
+     * @return bool
+     */
+    public function generateKeypair()
+    {
+        return $this->keypair = SecureShellKey::forServer();
+    }
+
+    /**
      * Dispatch server destroy job.
      *
      * @return bool|PendingDispatch|mixed

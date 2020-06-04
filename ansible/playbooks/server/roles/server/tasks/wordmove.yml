@@ -1,0 +1,15 @@
+---
+- name: "wordmove : install required packages"
+  apt:
+    name: >
+      rubygems,
+      rsync
+    state: present
+
+- name: "wordmove : install wordmove gem for all users"
+  gem:
+    name: wordmove
+    state: latest
+    user_install: no
+    include_dependencies: yes
+    force: yes

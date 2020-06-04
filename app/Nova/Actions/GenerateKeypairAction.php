@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 use Laravel\Nova\Fields\ActionFields;
 use Illuminate\Queue\InteractsWithQueue;
 
-class SiteCertRequestAction extends Action
+class GenerateKeypairAction extends Action
 {
     use InteractsWithQueue, Queueable;
 
@@ -17,7 +17,21 @@ class SiteCertRequestAction extends Action
      *
      * @var string
      */
-    public $name = 'Request Certificate';
+    public $name = 'Generate Keypair';
+
+    /**
+     * The text to be used for the action's confirm button.
+     *
+     * @var string
+     */
+    public $confirmButtonText = 'Generate';
+
+    /**
+     * The text to be used for the action's confirmation text.
+     *
+     * @var string
+     */
+    public $confirmText = 'Are you sure you want to (re)generate the ssh keypair?';
 
     /**
      * Perform the action on the given models.
@@ -29,10 +43,9 @@ class SiteCertRequestAction extends Action
     public function handle(ActionFields $fields, Collection $models)
     {
         foreach ($models as $model) {
-            $model->certRequest();
+            $model->generateKeypair();
+            $model->save();
         }
-
-        return Action::message("Autopilot will start issuing a new certificate for your site in a few seconds.");
     }
 
     /**
