@@ -79,3 +79,9 @@
       become: true
       become_user: "{{ admin }}"
       changed_when: false
+
+    - name: "server/test : Wordmove is installed"
+      command: "wordmove --version"
+      become: true
+      become_user: "{{ admin }}"
+      changed_when: false

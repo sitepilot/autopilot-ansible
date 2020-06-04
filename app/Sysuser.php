@@ -51,7 +51,7 @@ class Sysuser extends Model implements ProvisionableResource
      * @var array
      */
     protected $hidden = [
-        'password', 'mysql_password'
+        'password', 'mysql_password', 'private_key'
     ];
 
     /**
@@ -169,6 +169,20 @@ class Sysuser extends Model implements ProvisionableResource
     }
 
     /**
+     * Set the SSH key attributes on the model.
+     *
+     * @param  object  $value
+     * @return void
+     */
+    public function setKeypairAttribute($value)
+    {
+        $this->attributes = [
+            'public_key' => trim($value->publicKey),
+            'private_key' => encrypt(trim($value->privateKey)),
+        ] + $this->attributes;
+    }
+
+    /**
      * Set mysql password attribute.
      *
      * @param  string  $value
@@ -177,6 +191,32 @@ class Sysuser extends Model implements ProvisionableResource
     public function setMysqlPasswordAttribute($value)
     {
         $this->attributes['mysql_password'] = encrypt($value);
+    }
+
+    /**
+     * Get private key attribute.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getPrivateKeyAttribute($value)
+    {
+        try {
+            return decrypt($value);
+        } catch (DecryptException $e) {
+            return '';
+        }
+    }
+
+    /**
+     * Set private key attribute.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setPrivateKeyAttribute($value)
+    {
+        $this->attributes['private_key'] = encrypt($value);
     }
 
     /**

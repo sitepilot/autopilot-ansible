@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Server;
 use App\Sysuser;
+use App\SecureShellKey;
 use Illuminate\Support\Str;
 
 class SysuserObserver
@@ -16,6 +17,8 @@ class SysuserObserver
      */
     public function creating(Sysuser $sysuser)
     {
+        $sysuser->keypair = SecureShellKey::forNewSysuser($sysuser);
+
         if (empty($sysuser->server_id)) {
             $server = Server::where('type', 'shared')->withCount('sites')->orderBy('sites_count', 'asc')->first();
             $sysuser->server_id = $server->id;

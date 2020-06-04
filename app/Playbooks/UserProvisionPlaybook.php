@@ -68,10 +68,12 @@ class UserProvisionPlaybook extends Playbook
         return array_merge(parent::vars(), [
             'user' => (string) $this->sysuser->name,
             'password' => (string) $this->sysuser->password,
-            'isolated' => (boolean) $this->sysuser->isolated,
+            'isolated' => (bool) $this->sysuser->isolated,
             'mysql_password' => (string) $this->sysuser->mysql_password,
             'full_name' => (string) $this->sysuser->full_name,
-            'email' => (string) $this->sysuser->email
+            'email' => (string) $this->sysuser->email,
+            'private_key' => (string) $this->sysuser->private_key,
+            'public_key' => (string) $this->sysuser->public_key
         ]);
     }
 

@@ -74,6 +74,16 @@ class Sysuser extends Resource
                 ->sortable()
                 ->rules(\App\Sysuser::$validationRules['email']),
 
+            Boolean::make('Isolated')
+                ->rules(\App\Sysuser::$validationRules['isolated']),
+
+            BelongsTo::make('Server')
+                ->searchable()
+                ->withoutTrashed()
+                ->nullable()
+                ->hideWhenUpdating()
+                ->help('A random server will be assigned when this field is left empty.'),
+
             Textarea::make('Password')
                 ->rows(1)
                 ->sortable()
@@ -88,15 +98,9 @@ class Sysuser extends Resource
                 ->hideWhenCreating()
                 ->rules(\App\Sysuser::$validationRules['mysql_password']),
 
-            Boolean::make('Isolated')
-                ->rules(\App\Sysuser::$validationRules['isolated']),
-
-            BelongsTo::make('Server')
-                ->searchable()
-                ->withoutTrashed()
-                ->nullable()
-                ->hideWhenUpdating()
-                ->help('A random server will be assigned when this field is left empty.'),
+            Textarea::make('Public Key', 'public_key')
+                ->exceptOnForms()
+                ->hideFromIndex(),
 
             \App\Sysuser::getNovaStatusField($this),
 

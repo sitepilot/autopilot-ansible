@@ -8,9 +8,8 @@ use Symfony\Component\Process\Process;
 class SecureShellKey
 {
     /**
-     * Create a new SSH key for a new user.
+     * Create a new SSH key for a new server.
      *
-     * @param  string  $password
      * @return object
      */
     public static function forNewServer()
@@ -18,6 +17,18 @@ class SecureShellKey
         return app()->environment('testing')
             ? static::forTesting()
             : static::make();
+    }
+
+    /**
+     * Create a new SSH key for a new system user.
+     *
+     * @return object
+     */
+    public static function forNewSysuser(Sysuser $sysuser)
+    {
+        return app()->environment('testing')
+            ? static::forTesting()
+            : static::make("{$sysuser->name}@sitepilot.io");
     }
 
     /**
@@ -38,7 +49,7 @@ class SecureShellKey
      *
      * @return object
      */
-    public static function make()
+    public static function make($email = "worker@sitepilot.io")
     {
         $name = Str::random(20);
 
