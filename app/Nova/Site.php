@@ -92,6 +92,10 @@ class Site extends Resource
                 ->exceptOnForms(),
 
             Text::make('Aliases', function () {
+                if(count($this->domains) < 1) {
+                    return '—';
+                }
+
                 $domains = '';
                 $count = $more = 0;
 
