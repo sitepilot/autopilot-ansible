@@ -66,8 +66,13 @@ class Site extends Resource
                 ->hideWhenUpdating()
                 ->rules(\App\Site::$validationRules['name']),
 
-            Text::make('Domain')
-                ->exceptOnForms(),
+            BelongsTo::make('System User', 'sysuser', Sysuser::class)
+                ->searchable()
+                ->hideWhenUpdating()
+                ->showCreateRelationButton()
+                ->withoutTrashed()
+                ->nullable()
+                ->help('A new systemuser will be created when this field is left empty.'),
 
             Select::make('PHP Version')
                 ->options([
@@ -77,24 +82,36 @@ class Site extends Resource
                 ->displayUsingLabels()
                 ->rules(\App\Site::$validationRules['php_version']),
 
-            Text::make('Aliases', function () {
-                $domains = '';
-                foreach ($this->domains as $domain) {
-                    $domains .= (!empty($domains) ? ', ' : '') . $domain->name;
-                }
-                return $domains;
-            }),
-
             Boolean::make('Certificate', 'certficate')
                 ->exceptOnForms(),
 
-            BelongsTo::make('User', 'sysuser', Sysuser::class)
-                ->searchable()
-                ->hideWhenUpdating()
-                ->showCreateRelationButton()
-                ->withoutTrashed()
-                ->nullable()
-                ->help('A new systemuser will be created when this field is left empty.'),
+            Text::make('Domain', function () {
+                return "<a href=\"https://{$this->domain}\" target=\"_blank\" class=\"no-underline dim text-primary font-bold\">{$this->domain}</a>";
+            })
+                ->asHtml()
+                ->exceptOnForms(),
+
+            Text::make('Aliases', function () {
+                $domains = '';
+                $count = $more = 0;
+
+                foreach ($this->domains as $domain) {
+                    if ($count < 2) {
+                        $domains .= (!empty($domains) ? ', ' : '') . "<a href=\"https://{$domain->name}\" target=\"_blank\" class=\"no-underline dim text-primary font-bold\">{$domain->name}</a>";
+                    } else {
+                        $more++;
+                    }
+                    $count++;
+                }
+
+                if ($more) {
+                    $domains .= ", +$more";
+                }
+
+                return $domains;
+            })
+                ->asHtml()
+                ->onlyOnIndex(),
 
             \App\Site::getNovaStatusField($this),
 
