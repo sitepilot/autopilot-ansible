@@ -16,6 +16,7 @@
       - ncdu
       - gnupg
       - cron
+      - nano
       - mysql-client
 
 - name: "install : install required packages"
