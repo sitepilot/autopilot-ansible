@@ -2,6 +2,7 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\GenerateKeypairAction;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
 use App\Nova\Actions\JobAction;
@@ -176,7 +177,8 @@ class Sysuser extends Resource
                 ->setFunctionName('provision')
                 ->confirmButtonText('Provision')
                 ->confirmText('Are you sure you want to provision the selected user(s)?')
-                ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.')
+                ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.'),
+            (new GenerateKeypairAction)
         ];
     }
 

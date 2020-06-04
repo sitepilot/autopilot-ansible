@@ -240,6 +240,16 @@ class Sysuser extends Model implements ProvisionableResource
     }
 
     /**
+     * Generate keypair.
+     *
+     * @return bool
+     */
+    public function generateKeypair()
+    {
+        return $this->keypair = SecureShellKey::forSysuser($this);
+    }
+
+    /**
      * Delete user from server.
      *
      * @return bool|PendingDispatch|mixed

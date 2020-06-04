@@ -17,7 +17,7 @@ class SysuserObserver
      */
     public function creating(Sysuser $sysuser)
     {
-        $sysuser->keypair = SecureShellKey::forNewSysuser($sysuser);
+        $sysuser->generateKeypair();
 
         if (empty($sysuser->server_id)) {
             $server = Server::where('type', 'shared')->withCount('sites')->orderBy('sites_count', 'asc')->first();
@@ -54,7 +54,9 @@ class SysuserObserver
             'email',
             'password',
             'mysql_password',
-            'isolated'
+            'isolated',
+            'private_key',
+            'public_key'
         ])) {
             $sysuser->provision();
         }
