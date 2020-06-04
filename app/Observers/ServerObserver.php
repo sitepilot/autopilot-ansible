@@ -16,7 +16,7 @@ class ServerObserver
      */
     public function creating(Server $server)
     {
-        $server->keypair = SecureShellKey::forNewServer($server);
+        $server->generateKeypair();
 
         if (!$server->isUnmanaged()) {
             // Generate passwords

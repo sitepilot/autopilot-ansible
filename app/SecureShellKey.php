@@ -12,7 +12,7 @@ class SecureShellKey
      *
      * @return object
      */
-    public static function forNewServer()
+    public static function forServer()
     {
         return app()->environment('testing')
             ? static::forTesting()
@@ -24,7 +24,7 @@ class SecureShellKey
      *
      * @return object
      */
-    public static function forNewSysuser(Sysuser $sysuser)
+    public static function forSysuser(Sysuser $sysuser)
     {
         return app()->environment('testing')
             ? static::forTesting()
