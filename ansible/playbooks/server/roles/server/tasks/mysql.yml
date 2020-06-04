@@ -114,3 +114,9 @@
     hour: "*"
     minute: "0"
     job: "/opt/sitepilot/scripts/mysql-backup.sh > /dev/null"
+
+- name: "mysql : ensure column statistics is disabled in mysqldump config"
+  lineinfile:
+    path: /etc/mysql/conf.d/mysqldump.cnf
+    regexp: "^column-statistics="
+    line: column-statistics = 0
