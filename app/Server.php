@@ -365,7 +365,7 @@ class Server extends Model implements ProvisionableResource
      * @param  string  $value
      * @return string
      */
-    public function getBackupS3Secret($value)
+    public function getBackupS3SecretAttribute($value)
     {
         try {
             return decrypt($value);
@@ -380,7 +380,7 @@ class Server extends Model implements ProvisionableResource
      * @param  string  $value
      * @return string
      */
-    public function setBackupS3Secret($value)
+    public function setBackupS3SecretAttribute($value)
     {
         $this->attributes['backup_s3_secret'] = encrypt($value);
     }
@@ -391,7 +391,7 @@ class Server extends Model implements ProvisionableResource
      * @param  string  $value
      * @return string
      */
-    public function getBackupPassword($value)
+    public function getBackupPasswordAttribute($value)
     {
         try {
             return decrypt($value);
@@ -406,7 +406,7 @@ class Server extends Model implements ProvisionableResource
      * @param  string  $value
      * @return string
      */
-    public function setBackupPassword($value)
+    public function setBackupPasswordAttribute($value)
     {
         $this->attributes['backup_password'] = encrypt($value);
     }
