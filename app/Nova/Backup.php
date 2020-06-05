@@ -2,22 +2,23 @@
 
 namespace App\Nova;
 
+use App\Nova\Actions\BackupRestoreAction;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\BelongsTo;
 
-class Task extends Resource
+class Backup extends Resource
 {
     /**
      * The model the resource corresponds to.
      *
      * @var string
      */
-    public static $model = \App\Task::class;
+    public static $model = \App\Backup::class;
 
     /**
      * The logical group associated with the resource.
@@ -39,7 +40,7 @@ class Task extends Resource
      * @var array
      */
     public static $search = [
-        'id',
+        'id'
     ];
 
     /**
@@ -51,38 +52,17 @@ class Task extends Resource
     public function fields(Request $request)
     {
         return [
-            ID::make()->sortable(),
+            DateTime::make('created_at'),
 
-            MorphTo::make('Provisionable'),
+            MorphTo::make('Backupable'),
 
             BelongsTo::make('Server'),
 
-            Text::make('Name'),
+            Text::make('Path'),
 
-            Text::make('User'),
+            \App\Backup::getNovaStatusField($this),
 
-            Text::make('Status', function () {
-                return '<span>' . ucfirst($this->status) . '</span>';
-            })
-                ->asHtml(),
-
-            Text::make('Exit Code', function () {
-                return '<span style="' . ($this->exit_code > 0 ? 'color: red;' : '') . '">' . $this->exit_code . '</span>';
-            })
-                ->asHtml(),
-
-            Text::make('Playbook')
-                ->onlyOnDetail(),
-
-            Code::make('Output')->language('shell'),
-
-            Code::make('Variables', 'vars')->json(),
-
-            DateTime::make('Start', 'created_at')
-                ->exceptOnForms(),
-
-            DateTime::make('End', 'updated_at')
-                ->exceptOnForms(),
+            HasMany::make('Tasks', 'tasks', Task::class)
         ];
     }
 
@@ -93,7 +73,7 @@ class Task extends Resource
      */
     public static function menuPosition()
     {
-        return 90;
+        return 50;
     }
 
     /**
@@ -137,6 +117,11 @@ class Task extends Resource
      */
     public function actions(Request $request)
     {
-        return [];
+        return [
+            (new BackupRestoreAction)
+                ->exceptOnIndex()
+                ->showOnTableRow()
+                ->canRunWhenReady($this),
+        ];
     }
 }

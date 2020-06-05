@@ -2,7 +2,6 @@
 
 namespace App\Nova;
 
-use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
 use App\Nova\Actions\JobAction;
@@ -124,12 +123,15 @@ class Key extends Resource
     {
         return [
             (new JobAction)
+                ->exceptOnIndex()
+                ->showOnTableRow()
                 ->setName('Provision Key')
                 ->setResourceName('key')
                 ->setFunctionName('provision')
                 ->confirmButtonText('Provision')
                 ->confirmText('Are you sure you want to provision the selected key(s)?')
                 ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.')
+                ->canRunWhenNotBusy($this),
         ];
     }
 }

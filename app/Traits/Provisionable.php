@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use App\Task;
+use App\Nova\Resource;
 use App\Playbooks\Playbook;
 use Illuminate\Support\Str;
 use Laravel\Nova\Fields\Status;
@@ -285,6 +286,48 @@ trait Provisionable
     }
 
     /**
+     * Determine if the resource is currently running.
+     *
+     * @return bool
+     */
+    public function isRunning()
+    {
+        return $this->status == 'running';
+    }
+
+    /**
+     * Mark the resource as running.
+     *
+     * @return $this
+     */
+    public function markAsRunning()
+    {
+        $this->status = 'running';
+        return $this->save();
+    }
+
+    /**
+     * Determine if the resource is currently restoring.
+     *
+     * @return bool
+     */
+    public function isRestoring()
+    {
+        return $this->status == 'restoring';
+    }
+
+    /**
+     * Mark the resource as restoring.
+     *
+     * @return $this
+     */
+    public function markAsRestoring()
+    {
+        $this->status = 'restoring';
+        return $this->save();
+    }
+
+    /**
      * Determine if the resource is busy processing other requests.
      *
      * @return bool
@@ -298,7 +341,10 @@ trait Provisionable
             || (!in_array('stopped', $exclude) && $this->isStopped())
             || (!in_array('starting', $exclude) && $this->isStarting())
             || (!in_array('testing', $exclude) && $this->isTesting())
-            || (!in_array('cert-renew', $exclude) && $this->isCertRenew());
+            || (!in_array('cert-renew', $exclude) && $this->isCertRenew())
+            || (!in_array('cert-request', $exclude) && $this->isCertRequest())
+            || (!in_array('running', $exclude) && $this->isRunning())
+            || (!in_array('restoring', $exclude) && $this->isRestoring());
     }
 
     /**
@@ -307,7 +353,7 @@ trait Provisionable
      * @param Resource $resource
      * @return static
      */
-    public static function getNovaStatusField($resource)
+    public static function getNovaStatusField(Resource $resource)
     {
         return Status::make(
             'Status',
@@ -315,7 +361,7 @@ trait Provisionable
                 return Str::studly($resource->status);
             }
         )
-            ->loadingWhen(['Connecting', 'Provisioning', 'Destroying', 'Stopping', 'Starting', 'Testing', 'CertRenew'])
+            ->loadingWhen(['Connecting', 'Provisioning', 'Destroying', 'Stopping', 'Starting', 'Testing', 'CertRenew', 'CertRequest', 'Running', 'Restoring'])
             ->failedWhen(['Error']);
     }
 

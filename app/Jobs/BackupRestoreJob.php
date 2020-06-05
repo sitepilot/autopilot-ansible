@@ -3,25 +3,24 @@
 namespace App\Jobs;
 
 use Exception;
-use App\Site;
+use App\Backup;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
-use App\Playbooks\SiteProvisionPlaybook;
-use App\Playbooks\UserProvisionPlaybook;
+use App\Playbooks\BackupRestorePlaybook;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class SiteProvisionJob implements ShouldQueue
+class BackupRestoreJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * The site instance.
+     * The backup instance.
      *
-     * @var Site
+     * @var Backup
      */
-    public $site;
+    public $backup;
 
     /**
      * The number of times the job may be attempted.
@@ -35,16 +34,16 @@ class SiteProvisionJob implements ShouldQueue
      *
      * @var int
      */
-    public $timeout = 360;
+    public $timeout = 960;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Site $site)
+    public function __construct(Backup $backup)
     {
-        $this->site = $site;
+        $this->backup = $backup;
     }
 
     /**
@@ -54,23 +53,23 @@ class SiteProvisionJob implements ShouldQueue
      */
     public function handle()
     {
-        if ($this->site->isProvisioning()) {
+        if ($this->backup->isRestoring()) {
             return $this->delete();
         }
 
-        if ($this->site->server->isReady() && $this->site->sysuser->isReady() && !$this->site->isBusy()) {
-            $this->site->markAsProvisioning();
+        if ($this->backup->server->isReady() && !$this->backup->isBusy()) {
+            $this->backup->markAsRestoring();
+            $this->backup->backupable->markAsRestoring();
 
-            $task = $this->site->run(
-                new SiteProvisionPlaybook($this->site)
+            $task = $this->backup->run(
+                new BackupRestorePlaybook($this->backup)
             );
 
             if ($task->successful()) {
-                $this->site->markAsReady();
+                $this->backup->markAsReady();
+                $this->backup->backupable->markAsReady();
                 return $this->delete();
             }
-
-            $this->site->markAsError();
         }
 
         $this->release(30);
@@ -84,6 +83,6 @@ class SiteProvisionJob implements ShouldQueue
      */
     public function failed($exception)
     {
-        $this->site->markAsError();
+        //
     }
 }

@@ -1,0 +1,36 @@
+---
+- hosts: "all"
+  vars:
+    backup_s3_key: ""
+    backup_s3_secret: ""
+    backup_s3_bucket: ""
+    backup_password: ""
+    backup_tag: ""
+  tasks:
+    - name: "backup/destroy : remove backups from repository"
+      command: "restic -r s3:{{ backup_s3_bucket}} --tag {{ backup_tag }} snapshots --json"
+      environment:
+        AWS_ACCESS_KEY_ID: "{{ backup_s3_key }}"
+        AWS_SECRET_ACCESS_KEY: "{{ backup_s3_secret }}"
+        RESTIC_PASSWORD: "{{ backup_password }}"
+      register: snapshot_info
+
+    - set_fact:
+        snapshot: "{{ snapshot_info.stdout|from_json }}"
+
+    - name: "backup/destroy : remove backups from repository"
+      command: "restic -r s3:{{ backup_s3_bucket}} forget {{ snapshot[0].id }}"
+      environment:
+        AWS_ACCESS_KEY_ID: "{{ backup_s3_key }}"
+        AWS_SECRET_ACCESS_KEY: "{{ backup_s3_secret }}"
+        RESTIC_PASSWORD: "{{ backup_password }}"
+      register: destroy_info
+      when:
+        - snapshot[0].id is defined
+        - snapshot[0].id | length > 0
+
+    - name: "backup/destroy : show destroy info"
+      debug:
+        msg: "{{ destroy_info.stdout }}"
+      when:
+        - destroy_info.stdout is defined

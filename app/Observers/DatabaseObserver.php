@@ -7,7 +7,6 @@ use Illuminate\Support\Str;
 
 class DatabaseObserver
 {
-
     /**
      * Handle the database "creating" event.
      *
@@ -16,6 +15,8 @@ class DatabaseObserver
      */
     public function creating(Database $database)
     {
+        if (!empty($database->site)) $database->sysuser_id = $database->site->sysuser_id;
+
         $unique = true;
         while ($unique) {
             $database->name = $database->sysuser->name . '_db' . ucfirst(Str::random(4));
@@ -52,7 +53,9 @@ class DatabaseObserver
      */
     public function updated(Database $database)
     {
-        //
+        if ($database->wasChanged(['password'])) {
+            $database->provision();
+        }
     }
 
     /**

@@ -165,20 +165,28 @@ class Sysuser extends Resource
     {
         return [
             (new JobAction)
+                ->exceptOnIndex()
+                ->showOnTableRow()
                 ->setName('Test User')
                 ->setResourceName('user')
                 ->setFunctionName('test')
                 ->confirmButtonText('Run Tests')
                 ->confirmText('Are you sure you want to test the selected user(s)?')
-                ->setSuccessMessage('Autopilot will test your {{resourceName}} in a few seconds.'),
+                ->setSuccessMessage('Autopilot will test your {{resourceName}} in a few seconds.')
+                ->canRunWhenReady($this),
             (new JobAction)
+                ->exceptOnIndex()
+                ->showOnTableRow()
                 ->setName('Provision User')
                 ->setResourceName('user')
                 ->setFunctionName('provision')
                 ->confirmButtonText('Provision')
                 ->confirmText('Are you sure you want to provision the selected user(s)?')
-                ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.'),
+                ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.')
+                ->canRunWhenNotBusy($this),
             (new GenerateKeypairAction)
+                ->exceptOnIndex()
+                ->showOnTableRow()
         ];
     }
 

@@ -4,12 +4,14 @@ namespace App\Providers;
 
 use App\Key;
 use App\Site;
+use App\Backup;
 use App\Domain;
 use App\Server;
 use App\Sysuser;
 use App\Database;
 use App\Observers\KeyObserver;
 use App\Observers\SiteObserver;
+use App\Observers\BackupObserver;
 use App\Observers\DomainObserver;
 use App\Observers\ServerObserver;
 use App\Observers\SysuserObserver;
@@ -42,5 +44,6 @@ class AppServiceProvider extends ServiceProvider
         Site::observe(SiteObserver::class);
         Domain::observe(DomainObserver::class);
         Database::observe(DatabaseObserver::class);
+        Backup::observe(BackupObserver::class);
     }
 }

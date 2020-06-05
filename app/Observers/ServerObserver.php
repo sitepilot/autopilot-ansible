@@ -38,6 +38,9 @@ class ServerObserver
             if (empty($server->smtp_relay_domain)) $server->smtp_relay_domain = 'mg.example.com';
             if (empty($server->smtp_relay_user)) $server->smtp_relay_user = 'postmaster@mg.example.com';
             if (empty($server->smtp_relay_password)) $server->smtp_relay_password = 'supersecret';
+
+            // Backup configuration
+            if (empty($server->backup_password)) $server->backup_password = Str::random(12);
         }
     }
 
@@ -74,7 +77,11 @@ class ServerObserver
             'smtp_relay_domain',
             'smtp_relay_user',
             'smtp_relay_password',
-            'admin_password'
+            'admin_password',
+            'backup_s3_key',
+            'backup_s3_secret',
+            'backup_s3_bucket',
+            'backup_password'
         ])) {
             $server->provision();
         }

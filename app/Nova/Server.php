@@ -180,6 +180,8 @@ class Server extends Resource
 
             new Panel('SMTP Relay Configuration', $this->smtpRelayConfigurationFields()),
 
+            new Panel('Backup Configuration', $this->backupConfigurationFields()),
+
             HasMany::make('Users', 'sysusers', Sysuser::class),
             HasMany::make('Keys', 'keys', Key::class),
             HasMany::make('Tasks', 'tasks', Task::class),
@@ -268,6 +270,39 @@ class Server extends Resource
     }
 
     /**
+     * Get the backup configuration fields for the resource.
+     *
+     * @return array
+     */
+    protected function backupConfigurationFields()
+    {
+        return [
+            Text::make('S3 Key', 'backup_s3_key')
+                ->hideFromIndex()
+                ->hideWhenCreating()
+                ->rules(\App\Server::$validationRules['backup_s3_key']),
+
+            Text::make('S3 Secret', 'backup_s3_secret')
+                ->onlyOnForms()
+                ->hideWhenCreating()
+                ->rules(\App\Server::$validationRules['backup_s3_secret']),
+
+            Text::make('S3 Bucket', 'backup_s3_bucket')
+                ->hideFromIndex()
+                ->hideWhenCreating()
+                ->rules(\App\Server::$validationRules['backup_s3_bucket']),
+
+            Text::make('Password', 'backup_password')
+                ->hideFromIndex()
+                ->hideWhenCreating()
+                ->readonly(function ($request) {
+                    return $request->isUpdateOrUpdateAttachedRequest();
+                })
+                ->rules(\App\Server::$validationRules['backup_password']),
+        ];
+    }
+
+    /**
      * Returns the menu position.
      *
      * @return int
@@ -320,40 +355,55 @@ class Server extends Resource
     {
         return [
             (new JobAction)
+                ->exceptOnIndex()
+                ->showOnTableRow()
                 ->setName('Test Server')
                 ->setResourceName('server')
                 ->setFunctionName('test')
                 ->confirmButtonText('Run Tests')
                 ->confirmText('Are you sure you want to test the selected server(s)?')
-                ->setSuccessMessage('Autopilot will test your {{resourceName}} in a few seconds.'),
+                ->setSuccessMessage('Autopilot will test your {{resourceName}} in a few seconds.')
+                ->canRunWhenReady($this),
             (new JobAction)
+                ->exceptOnIndex()
+                ->showOnTableRow()
                 ->setName('Stop Server')
                 ->setResourceName('server')
                 ->setFunctionName('stop')
                 ->confirmButtonText('Stop')
                 ->confirmText('Are you sure you want to stop the selected server(s)?')
-                ->setSuccessMessage('Autopilot will stop your {{resourceName}} in a few seconds.'),
+                ->setSuccessMessage('Autopilot will stop your {{resourceName}} in a few seconds.')
+                ->canRunWhenNotBusy($this),
             (new JobAction)
+                ->exceptOnIndex()
+                ->showOnTableRow()
                 ->setName('Start Server')
                 ->setResourceName('server')
                 ->setFunctionName('start')
                 ->confirmButtonText('Start')
                 ->confirmText('Are you sure you want to start the selected server(s)?')
-                ->setSuccessMessage('Autopilot will start your {{resourceName}} in a few seconds.'),
+                ->setSuccessMessage('Autopilot will start your {{resourceName}} in a few seconds.')
+                ->canRunWhenNotBusy($this),
             (new JobAction)
+                ->exceptOnIndex()
+                ->showOnTableRow()
                 ->setName('Provision Server')
                 ->setResourceName('server')
                 ->setFunctionName('provision')
                 ->confirmButtonText('Provision')
                 ->confirmText('Are you sure you want to provision the selected server(s)?')
-                ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.'),
+                ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.')
+                ->canRunWhenNotBusy($this),
             (new JobAction)
+                ->exceptOnIndex()
+                ->showOnTableRow()
                 ->setName('Renew Certificates')
                 ->setResourceName('server')
                 ->setFunctionName('certRenew')
                 ->confirmButtonText('Renew Certificates')
                 ->confirmText('Are you sure you want to renew certificates on the selected server(s)?')
-                ->setSuccessMessage('Autopilot will renew certificates on your {{resourceName}} in a few seconds.'),
+                ->setSuccessMessage('Autopilot will renew certificates on your {{resourceName}} in a few seconds.')
+                ->canRunWhenReady($this),
         ];
     }
 }
