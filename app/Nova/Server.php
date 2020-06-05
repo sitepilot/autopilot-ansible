@@ -293,7 +293,7 @@ class Server extends Resource
                 ->rules(\App\Server::$validationRules['backup_s3_bucket']),
 
             Text::make('Password', 'backup_password')
-                ->hideFromIndex()
+                ->onlyOnForms()
                 ->hideWhenCreating()
                 ->readonly(function ($request) {
                     return $request->isUpdateOrUpdateAttachedRequest();
