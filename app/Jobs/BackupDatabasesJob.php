@@ -23,7 +23,9 @@ class BackupDatabasesJob implements ShouldQueue
         $databases = Database::where('status', 'ready')->get();
 
         foreach ($databases as $database) {
-            $database->backups()->create();
+            if ($database->server->backupConfigured()) {
+                $database->backups()->create();
+            }
         }
     }
 }

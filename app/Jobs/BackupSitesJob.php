@@ -23,7 +23,9 @@ class BackupSitesJob implements ShouldQueue
         $sites = Site::where('status', 'ready')->get();
 
         foreach ($sites as $sites) {
-            $sites->backups()->create();
+            if ($sites->server->backupConfigured()) {
+                $sites->backups()->create();
+            }
         }
     }
 }

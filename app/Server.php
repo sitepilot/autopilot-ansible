@@ -256,6 +256,19 @@ class Server extends Model implements ProvisionableResource
     }
 
     /**
+     * Check if server is configurated for backups.
+     *
+     * @return boolean
+     */
+    public function backupConfigured()
+    {
+        return !empty($this->backup_s3_key)
+            && !empty($this->backup_s3_secret)
+            && !empty($this->backup_s3_bucket)
+            && !empty($this->backup_password);
+    }
+
+    /**
      * Get private key attribute.
      *
      * @param  string  $value
