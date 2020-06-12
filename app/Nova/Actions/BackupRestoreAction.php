@@ -19,6 +19,20 @@ class BackupRestoreAction extends Action
     public $name = 'Restore';
 
     /**
+     * The text to be used for the action's confirm button.
+     *
+     * @var string
+     */
+    public $confirmButtonText = 'Restore';
+
+    /**
+     * The text to be used for the action's confirmation text.
+     *
+     * @var string
+     */
+    public $confirmText = 'Are you sure you want to restore the selected resource?';
+
+    /**
      * Perform the action on the given models.
      *
      * @param  \Laravel\Nova\Fields\ActionFields  $fields
