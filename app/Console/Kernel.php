@@ -30,7 +30,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->call(function () {
             BackupDatabasesJob::dispatch();
-        })->hourly();
+        })->twiceDaily(1, 13);
 
         $schedule->call(function () {
             BackupSitesJob::dispatch();
