@@ -295,9 +295,7 @@ class Server extends Resource
             Text::make('Password', 'backup_password')
                 ->onlyOnForms()
                 ->hideWhenCreating()
-                ->readonly(function ($request) {
-                    return $request->isUpdateOrUpdateAttachedRequest();
-                })
+                ->help('Notice: do not change this password if the backup repository has already been initialized.')
                 ->rules(\App\Server::$validationRules['backup_password']),
         ];
     }
