@@ -61,6 +61,10 @@ class Domain extends Resource
         return [
             Text::make('Name')
                 ->sortable()
+                ->displayUsing(function ($domain) {
+                    return "<a href='https://{$domain}' class='no-underline dim text-primary font-bold' target='_blank'>{$domain}</a>";
+                })
+                ->asHtml()
                 ->rules(\App\Domain::$validationRules['name']),
 
             BelongsTo::make('Site')
