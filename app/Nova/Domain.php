@@ -5,6 +5,7 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
 use App\Nova\Actions\JobAction;
+use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\BelongsTo;
 
 class Domain extends Resource
@@ -67,6 +68,8 @@ class Domain extends Resource
                 ->withoutTrashed(),
 
             \App\Domain::getNovaStatusField($this),
+
+            HasMany::make('Tasks', 'tasks', Task::class)
         ];
     }
 
