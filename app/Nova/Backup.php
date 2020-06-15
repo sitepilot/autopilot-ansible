@@ -2,14 +2,13 @@
 
 namespace App\Nova;
 
-use App\Nova\Actions\BackupRestoreAction;
-use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\BelongsTo;
+use App\Nova\Actions\BackupRestoreAction;
 
 class Backup extends Resource
 {
@@ -35,6 +34,13 @@ class Backup extends Resource
     public static $title = 'id';
 
     /**
+     * Indicates if the resource should be globally searchable.
+     *
+     * @var bool
+     */
+    public static $globallySearchable = false;
+
+    /**
      * The columns that should be searched.
      *
      * @var array
@@ -52,7 +58,7 @@ class Backup extends Resource
     public function fields(Request $request)
     {
         return [
-            DateTime::make('created_at'),
+            DateTime::make('Date', 'created_at'),
 
             MorphTo::make('Backupable'),
 
