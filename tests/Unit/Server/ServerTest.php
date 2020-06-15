@@ -54,4 +54,24 @@ class ServerTest extends TestCase
         $this->assertEquals($server->fresh()->status, 'destroyed');
         $this->assertLastTask();
     }
+
+    public function test_loadbalancer_is_provisioned_on_create()
+    {
+        $server = self::getServer(true, [
+            'address' => 'autopilot-test'
+        ]);
+
+        $this->assertEquals($server->fresh()->status, 'ready');
+        $this->assertLastTask();
+    }
+
+    public function test_loadbalancer_is_destroyed_on_delete()
+    {
+        $server = self::getServer();
+
+        $server->delete();
+
+        $this->assertEquals($server->fresh()->status, 'destroyed');
+        $this->assertLastTask();
+    }
 }
