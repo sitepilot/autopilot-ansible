@@ -1,6 +1,7 @@
 ---
 - hosts: "all"
   vars:
+    # Required parameters, commented so Ansible fails when a parameter isn't present.
     # config_name: ""
     # domain: ""
     path_vhost: "/opt/sitepilot/services/caddy/vhosts/{{ config_name }}.conf"
