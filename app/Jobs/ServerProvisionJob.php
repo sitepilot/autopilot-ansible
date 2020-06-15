@@ -23,6 +23,13 @@ class ServerProvisionJob implements ShouldQueue
     public $server;
 
     /**
+     * The ansible tags.
+     *
+     * @var array
+     */
+    public $tags;
+
+    /**
      * The number of times the job may be attempted.
      *
      * @var int
@@ -41,9 +48,10 @@ class ServerProvisionJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Server $server)
+    public function __construct(Server $server, $tags = [])
     {
         $this->server = $server;
+        $this->tags = $tags;
     }
 
     /**
@@ -66,13 +74,11 @@ class ServerProvisionJob implements ShouldQueue
         if ($this->server->isReadyForProvisioning() && !$this->server->isBusy(['connecting'])) {
             $this->server->markAsProvisioning();
 
-            if (!$this->server->isUnmanaged()) {
-                $task = $this->server->run(
-                    new ServerProvisionPlaybook($this->server)
-                );
-            }
+            $task = $this->server->run(
+                new ServerProvisionPlaybook($this->server, $this->tags)
+            );
 
-            if ($this->server->isUnmanaged() || $task->successful()) {
+            if ($task->successful()) {
                 $this->server->markAsReady();
                 return $this->delete();
             }

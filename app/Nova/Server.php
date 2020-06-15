@@ -12,6 +12,8 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Textarea;;
 
+use Laravel\Nova\Fields\BelongsToMany;
+
 class Server extends Resource
 {
     /**
@@ -127,7 +129,7 @@ class Server extends Resource
                 ->options([
                     'shared' => 'Shared',
                     'dedicated' => 'Dedicated',
-                    'unmanaged' => 'Unmanaged'
+                    'loadbalancer' => 'Loadbalancer'
                 ])
                 ->displayUsingLabels()
                 ->rules(\App\Server::$validationRules['type']),
@@ -184,7 +186,7 @@ class Server extends Resource
 
             HasMany::make('Users', 'sysusers', Sysuser::class),
             HasMany::make('Keys', 'keys', Key::class),
-            HasMany::make('Tasks', 'tasks', Task::class),
+            BelongsToMany::make('Tasks')
         ];
     }
 
@@ -361,7 +363,7 @@ class Server extends Resource
                 ->confirmButtonText('Run Tests')
                 ->confirmText('Are you sure you want to test the selected server(s)?')
                 ->setSuccessMessage('Autopilot will test your {{resourceName}} in a few seconds.')
-                ->canRunWhenReady($this),
+                ->canRunWhenReady($this, ['shared', 'dedicated']),
             (new JobAction)
                 ->exceptOnIndex()
                 ->showOnTableRow()
@@ -401,7 +403,7 @@ class Server extends Resource
                 ->confirmButtonText('Renew Certificates')
                 ->confirmText('Are you sure you want to renew certificates on the selected server(s)?')
                 ->setSuccessMessage('Autopilot will renew certificates on your {{resourceName}} in a few seconds.')
-                ->canRunWhenReady($this),
+                ->canRunWhenReady($this, ['shared', 'dedicated']),
         ];
     }
 }

@@ -1,0 +1,34 @@
+---
+- name: "caddy : add repository"
+  copy:
+    dest: "/etc/apt/sources.list.d/caddy-fury.list"
+    content: |
+      deb [trusted=yes] https://apt.fury.io/caddy/ /
+
+- name: "caddy : install caddy server"
+  apt:
+    name: >
+      caddy
+    state: present
+    update_cache: yes
+  notify: restart caddy
+
+- name: "caddy : enable on startup"
+  service:
+    name: caddy
+    enabled: true
+
+- name: "caddy : create folders"
+  file:
+    path: "{{ item.path }}"
+    state: directory
+    recurse: "{{ item.recurse }}"
+  loop:
+    - path: /opt/sitepilot/services/caddy/vhosts
+      recurse: true
+
+- name: "caddy : generate config"
+  template:
+    src: caddyfile.j2
+    dest: /etc/caddy/Caddyfile
+  notify: restart caddy

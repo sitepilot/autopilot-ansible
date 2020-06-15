@@ -53,7 +53,7 @@ trait InteractsWithAnsible
      */
     protected function runPlaybook($timeout = 60)
     {
-        $inventoryFile = $this->server->inventoryPath();
+        $inventoryFile = $this->inventoryPath();
         $playbookFile = base_path($this->playbook);
 
         return ShellProcessRunner::run(
@@ -77,6 +77,10 @@ trait InteractsWithAnsible
 
         if (is_array($this->vars)) {
             $cmd = array_merge($cmd, ["--extra-vars", json_encode($this->vars)]);
+        }
+
+        if (is_array($this->tags) && count($this->tags)) {
+            $cmd = array_merge($cmd, ["--tags", implode(",", $this->tags)]);
         }
 
         return (new Process($cmd, null, ['DEFAULT_LOCAL_TMP' => '/tmp/ansible/']))->setTimeout($timeout);

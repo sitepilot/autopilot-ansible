@@ -1,0 +1,16 @@
+---
+- hosts: "all"
+  vars:
+    # config_name: ""
+    # domain: ""
+    path_vhost: "/opt/sitepilot/services/caddy/vhosts/{{ config_name }}.conf"
+  tasks:
+    - name: "domain/destroy : {{ domain }} : remove proxy vhost"
+      file:
+        path: "{{ path_vhost }}"
+        state: absent
+
+    - name: "domain/destroy : {{ domain }} : reload proxy server"
+      service:
+        name: caddy
+        state: reloaded

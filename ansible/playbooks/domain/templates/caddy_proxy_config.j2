@@ -1,0 +1,15 @@
+# {{ sitepilot_managed }}
+
+{{ domain }} {
+    tls {{ email }} {
+        on_demand
+    }
+
+    reverse_proxy / {
+        to {{ backends | join(' ') }}
+
+        lb_policy first 
+        health_path /
+        health_port 80
+    }
+}

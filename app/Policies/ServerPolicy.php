@@ -7,7 +7,7 @@ use App\User;
 use App\Server;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class TaskPolicy
+class ServerPolicy
 {
     use HandlesAuthorization;
 
@@ -26,10 +26,10 @@ class TaskPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\User  $user
-     * @param  \App\Task  $task
+     * @param  \App\Server  $server
      * @return mixed
      */
-    public function view(User $user, Task $task)
+    public function view(User $user, Server $server)
     {
         return true;
     }
@@ -42,55 +42,55 @@ class TaskPolicy
      */
     public function create(User $user)
     {
-        return false;
+        return true;
     }
 
     /**
      * Determine whether the user can update the model.
      *
      * @param  \App\User  $user
-     * @param  \App\Task  $task
+     * @param  \App\Server  $server
      * @return mixed
      */
-    public function update(User $user, Task $task)
+    public function update(User $user, Server $server)
     {
-        return false;
+        return true;
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\User  $user
-     * @param  \App\Task  $task
+     * @param  \App\Server  $server
      * @return mixed
      */
-    public function delete(User $user, Task $task)
+    public function delete(User $user, Server $server)
     {
-        return false;
+        return true;
     }
 
     /**
      * Determine whether the user can restore the model.
      *
      * @param  \App\User  $user
-     * @param  \App\Task  $task
+     * @param  \App\Server  $server
      * @return mixed
      */
-    public function restore(User $user, Task $task)
+    public function restore(User $user, Server $server)
     {
-        return false;
+        return true;
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\User  $user
-     * @param  \App\Task  $task
+     * @param  \App\Server  $server
      * @return mixed
      */
-    public function forceDelete(User $user, Task $task)
+    public function forceDelete(User $user, Server $server)
     {
-        return false;
+        return true;
     }
 
     /**
@@ -101,7 +101,7 @@ class TaskPolicy
      * @param  \App\Server $server
      * @return mixed
      */
-    public function attachServer(User $user, Task $task, Server $server)
+    public function attachTask(User $user, Server $server, Task $task)
     {
         return false;
     }
@@ -114,7 +114,7 @@ class TaskPolicy
      * @param  \App\Server $server
      * @return mixed
      */
-    public function detachServer(User $user, Task $task, Server $server)
+    public function detachTask(User $user, Server $server, Task $task)
     {
         return false;
     }
@@ -126,7 +126,7 @@ class TaskPolicy
      * @param  \App\Task $task
      * @return mixed
      */
-    public function attachAnyServer(User $user, Task $task)
+    public function attachAnyTask(User $user, Server $server)
     {
         return false;
     }

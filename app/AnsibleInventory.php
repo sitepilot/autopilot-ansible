@@ -2,20 +2,22 @@
 
 namespace App;
 
+use Illuminate\Support\Collection;
+
 class AnsibleInventory
 {
     /**
-     * Store a inventory file for a given server.
+     * Store a inventory file for multiple servers.
      *
-     * @param  Server  $server
+     * @param  array  $servers
      * @return string
      */
-    public static function storeFor(Server $server)
+    public static function storeForServers(Collection $servers)
     {
-        return tap(storage_path('app/inventories/' . md5("autopilot-inventory-" . $server->id)), function ($path) use ($server) {
+        return tap(storage_path('app/inventories/' . md5("autopilot-inventory-" . uniqid())), function ($path) use ($servers) {
             static::ensureDirectoryExists();
             static::ensureFileExists($path, view('ansible.inventory', [
-                'server' => $server
+                'servers' => $servers
             ])->render(), 0600);
         });
     }

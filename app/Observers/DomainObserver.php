@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Site;
 use App\Domain;
 
 class DomainObserver
@@ -15,6 +16,8 @@ class DomainObserver
     public function created(Domain $domain)
     {
         $domain->site->provision();
+
+        $domain->provision();
     }
 
     /**
@@ -28,6 +31,17 @@ class DomainObserver
         if ($domain->wasChanged(['name'])) {
             $domain->site->provision();
         }
+
+        if ($domain->wasChanged(['site_id'])) {
+            $oldSite = Site::find($domain->getOriginal('site_id'));
+            if ($oldSite) {
+                $oldSite->provision();
+            }
+            $domain->site->provision();
+        }
+        if ($domain->wasChanged(['name', 'site_id'])) {
+            $domain->provision();
+        }
     }
 
     /**
@@ -39,7 +53,7 @@ class DomainObserver
     public function deleted(Domain $domain)
     {
         $domain->site->provision();
-        $domain->forceDelete(); // #toDo: remove when using a DNS provider
+        $domain->deleteFromServer();
     }
 
     /**

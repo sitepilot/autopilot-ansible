@@ -1,0 +1,42 @@
+---
+- include: ssmtp.yml
+  tags: "ssmtp"
+
+- include: docker.yml
+  tags: "docker"
+
+- include: mysql.yml
+  tags: "mysql"
+
+- include: redis.yml
+  tags: "redis"
+
+- include: olsws.yml
+  tags: "olsws"
+
+- include: php.yml
+  tags: "php"
+
+- include: composer.yml
+  tags: "composer"
+
+- include: wpcli.yml
+  tags: "wpcli"
+
+- include: wordmove.yml
+  tags: "wordmove"
+
+- include: pma.yml
+  tags: "pma"
+
+- include: health.yml
+  tags: "health"
+
+- include: fail2ban.yml
+  tags: "fail2ban"
+
+- include: nodejs.yml
+  tags: "nodjs"
+
+- include: certbot.yml
+  tags: "certbot"

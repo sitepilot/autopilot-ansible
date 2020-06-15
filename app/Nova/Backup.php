@@ -73,7 +73,7 @@ class Backup extends Resource
      */
     public static function menuPosition()
     {
-        return 50;
+        return 60;
     }
 
     /**

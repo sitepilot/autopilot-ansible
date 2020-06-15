@@ -1,4 +1,5 @@
 ---
+# -------- GENERAL -------- #
 - include: variables.yml
   tags: "always"
 
@@ -23,53 +24,24 @@
 - include: sshd.yml
   tags: "sshd"
 
-- include: ssmtp.yml
-  tags: "ssmtp"
-
 - include: firewall.yml
   tags: "firewall"
-
-- include: docker.yml
-  tags: "docker"
-
-- include: mysql.yml
-  tags: "mysql"
-
-- include: redis.yml
-  tags: "redis"
-
-- include: olsws.yml
-  tags: "olsws"
-
-- include: php.yml
-  tags: "php"
-
-- include: composer.yml
-  tags: "composer"
-
-- include: wpcli.yml
-  tags: "wpcli"
-
-- include: wordmove.yml
-  tags: "wordmove"
 
 - include: restic.yml
   tags: "restic"
 
-- include: pma.yml
-  tags: "pma"
+# -------- WEBSERVER -------- #
+- name: "include webserver tasks"
+  include_tasks: main-webserver.yml
+  when:
+    - server_type == 'webserver'
 
-- include: health.yml
-  tags: "health"
+# -------- LOADBALANCER -------- #
+- name: "include loadbalancer tasks"
+  include_tasks: main-loadbalancer.yml
+  when:
+    - server_type == 'loadbalancer'
 
-- include: fail2ban.yml
-  tags: "fail2ban"
-
-- include: nodejs.yml
-  tags: "nodejs"
-
-- include: certbot.yml
-  tags: "certbot"
-
+# -------- CLEANUP -------- #
 - include: cleanup.yml
   tags: "cleanup"

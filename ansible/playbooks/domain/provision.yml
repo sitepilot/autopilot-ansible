@@ -1,0 +1,19 @@
+---
+- hosts: "all"
+  vars:
+    # Required parameters, commented so Ansible fails when a parameter isn't present.
+    # config_name: ""
+    # domain: ""
+    # email: ""
+    # backends: []
+    path_vhost: "/opt/sitepilot/services/caddy/vhosts/{{ config_name }}.conf"
+  tasks:
+    - name: "domain/provision : {{ domain }} : generate proxy vhost"
+      template:
+        src: ./templates/caddy_proxy_config.j2
+        dest: "{{ path_vhost }}"
+
+    - name: "domain/provision : {{ domain }} : reload proxy server"
+      service:
+        name: caddy
+        state: reloaded
