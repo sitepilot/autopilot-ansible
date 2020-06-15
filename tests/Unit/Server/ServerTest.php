@@ -57,9 +57,7 @@ class ServerTest extends TestCase
 
     public function test_loadbalancer_is_provisioned_on_create()
     {
-        $server = self::getServer(true, [
-            'address' => 'autopilot-test'
-        ]);
+        $server = self::getServer(true, [], ['loadbalancer']);
 
         $this->assertEquals($server->fresh()->status, 'ready');
         $this->assertLastTask();

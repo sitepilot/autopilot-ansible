@@ -20,3 +20,10 @@ $factory->state(\App\Server::class, 'ready', function (Faker $faker) {
         'status' => 'ready'
     ];
 });
+
+// Set type to loadbalancer
+$factory->state(\App\Server::class, 'loadbalancer', function (Faker $faker) {
+    return [
+        'type' => 'loadbalancer'
+    ];
+});
