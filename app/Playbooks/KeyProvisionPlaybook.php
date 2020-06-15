@@ -34,7 +34,7 @@ class KeyProvisionPlaybook extends Playbook
      * @return void
      */
     public $serverTypes = [
-        'shared', 'dedicated'
+        'shared', 'dedicated', 'loadbalancer'
     ];
 
     /**
