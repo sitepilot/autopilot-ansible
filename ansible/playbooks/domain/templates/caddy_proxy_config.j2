@@ -5,7 +5,7 @@
         on_demand
     }
 
-    reverse_proxy / {
+    reverse_proxy {
         to {{ backends | join(' ') }}
 
         lb_policy first 
