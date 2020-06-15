@@ -21,12 +21,19 @@ class ServerProvisionPlaybook extends Playbook
     public $server;
 
     /**
+     * The ansible tags.
+     *
+     * @var array
+     */
+    public $tags;
+
+    /**
      * Allowed server types the playbook can run on.
      *
      * @return void
      */
     public $serverTypes = [
-        'shared', 'dedicated'
+        'shared', 'dedicated', 'loadbalancer'
     ];
 
     /**
@@ -35,9 +42,10 @@ class ServerProvisionPlaybook extends Playbook
      * @param  Server  $restore
      * @return void
      */
-    public function __construct(Server $server)
+    public function __construct(Server $server, $tags = [])
     {
         $this->server = $server;
+        $this->tags = $tags;
     }
 
     /**
@@ -73,8 +81,19 @@ class ServerProvisionPlaybook extends Playbook
             'smtp_relay_password' => (string) $this->server->smtp_relay_password,
             'backup_s3_key' => (string) $this->server->backup_s3_key,
             'backup_s3_secret' => (string) $this->server->backup_s3_secret,
-            'backup_password' => (string) $this->server->backup_password
+            'backup_password' => (string) $this->server->backup_password,
+            'server_type' => (string) $this->server->type == 'shared' || $this->server->type == 'dedicated' ? 'webserver' : $this->server->type
         ]);
+    }
+
+    /**
+     * Get the tags for the playbook.
+     *
+     * @return array
+     */
+    public function tags()
+    {
+        return array_merge(parent::tags(), $this->tags);
     }
 
     /**

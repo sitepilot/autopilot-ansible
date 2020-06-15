@@ -3,24 +3,25 @@
 namespace App\Jobs;
 
 use Exception;
-use App\Site;
+use App\Domain;
+use App\Server;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
-use App\Playbooks\SiteProvisionPlaybook;
 use Illuminate\Queue\InteractsWithQueue;
+use App\Playbooks\DomainProvisionPlaybook;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 
-class SiteProvisionJob implements ShouldQueue
+class DomainProvisionJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * The site instance.
+     * The domain instance.
      *
-     * @var Site
+     * @var Domain
      */
-    public $site;
+    public $domain;
 
     /**
      * The number of times the job may be attempted.
@@ -41,9 +42,9 @@ class SiteProvisionJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(Site $site)
+    public function __construct(Domain $domain)
     {
-        $this->site = $site;
+        $this->domain = $domain;
     }
 
     /**
@@ -53,23 +54,21 @@ class SiteProvisionJob implements ShouldQueue
      */
     public function handle()
     {
-        if ($this->site->isProvisioning()) {
-            return $this->delete();
-        }
+        if (!$this->domain->isBusy()) {
+            $this->domain->markAsProvisioning();
 
-        if ($this->site->server->isReady() && $this->site->sysuser->isReady() && !$this->site->isBusy()) {
-            $this->site->markAsProvisioning();
-
-            $task = $this->site->run(
-                new SiteProvisionPlaybook($this->site)
+            $task = $this->domain->run(
+                new DomainProvisionPlaybook($this->domain),
+                [],
+                Server::where('type', 'loadbalancer')->get()
             );
 
             if ($task->successful()) {
-                $this->site->markAsReady();
+                $this->domain->markAsReady();
                 return $this->delete();
             }
 
-            $this->site->markAsError();
+            $this->domain->markAsError();
         }
 
         $this->release(30);
@@ -83,6 +82,6 @@ class SiteProvisionJob implements ShouldQueue
      */
     public function failed($exception)
     {
-        $this->site->markAsError();
+        $this->domain->markAsError();
     }
 }

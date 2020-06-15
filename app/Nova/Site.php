@@ -86,13 +86,7 @@ class Site extends Resource
             Boolean::make('Certificate', 'certficate')
                 ->exceptOnForms(),
 
-            Text::make('Domain', function () {
-                return "<a href=\"https://{$this->domain}\" target=\"_blank\" class=\"no-underline dim text-primary font-bold\">{$this->domain}</a>";
-            })
-                ->asHtml()
-                ->exceptOnForms(),
-
-            Text::make('Aliases', function () {
+            Text::make('Domains', function () {
                 if (count($this->domains) < 1) {
                     return '—';
                 }
@@ -120,7 +114,7 @@ class Site extends Resource
 
             \App\Site::getNovaStatusField($this),
 
-            HasMany::make('Domain Aliases', 'domains', Domain::class),
+            HasMany::make('Domains', 'domains', Domain::class),
             HasMany::make('Databases', 'databases', Database::class),
             HasMany::make('Backups', 'backups', Backup::class),
             HasMany::make('Tasks', 'tasks', Task::class)

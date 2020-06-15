@@ -39,7 +39,7 @@
   notify:
     - restart olsws
 
-- name: "olsws: enable on startup"
+- name: "olsws : enable on startup"
   service:
     name: lsws
     enabled: true
@@ -96,8 +96,7 @@
   template:
     src: olsws_default_vhost.j2
     dest: /usr/local/lsws/conf/vhosts/default.conf
-  notify:
-    - restart olsws
+  notify: restart olsws
 
 - name: "olsws : generate httpd config"
   template:

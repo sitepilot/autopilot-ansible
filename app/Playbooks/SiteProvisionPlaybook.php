@@ -65,16 +65,16 @@ class SiteProvisionPlaybook extends Playbook
      */
     public function vars()
     {
-        $aliases = [];
+        $domains = [];
         foreach ($this->site->domains as $domain) {
-            $aliases[] = $domain->name;
+            $domains[] = $domain->name;
         }
 
         return array_merge(parent::vars(), [
             'user' => (string) $this->site->sysuser->name,
             'site' => (string) $this->site->name,
             'domain' => (string) $this->site->domain,
-            'aliases' => (array) $aliases,
+            'domains' => (array) $domains,
             'ssl' => (boolean) $this->site->certificate,
             'php_version' => (integer) $this->site->php_version
         ]);

@@ -3,10 +3,12 @@
 namespace App\Traits;
 
 use App\Task;
+use App\Server;
 use App\Nova\Resource;
 use App\Playbooks\Playbook;
 use Illuminate\Support\Str;
 use Laravel\Nova\Fields\Status;
+use Illuminate\Support\Collection;
 
 trait Provisionable
 {
@@ -18,9 +20,9 @@ trait Provisionable
      * @param string $jobClass
      * @return void
      */
-    public function dispatchJob($jobClass)
+    public function dispatchJob($jobClass, $tags = [])
     {
-        return $jobClass::dispatch($this->withTrashed()->find($this->id));
+        return $jobClass::dispatch($this->withTrashed()->find($this->id), $tags);
     }
 
     /**
@@ -372,32 +374,55 @@ trait Provisionable
      * @param  array     $options
      * @return Task
      */
-    public function run(Playbook $playbook, array $options = [])
+    public function run(Playbook $playbook, array $options = [], Collection $servers = null)
     {
         if (!array_key_exists('timeout', $options)) {
             $options['timeout'] = $playbook->timeout();
         }
 
-        if (!$playbook->allowedToRun()) {
-            return $this->tasks()->create([
-                'name' => $playbook->name(),
-                'user' => $playbook->sshAs,
-                'options' => $options,
-                'playbook' => (string) $playbook,
-                'vars' => $playbook->vars(),
-                'output' => 'The dispatched task is not allowed to run on the server.',
-                'status' => 'forbidden',
-                'exit_code' => 403
-            ]);
+        if (!$servers) {
+            if (get_class($this) == Server::class) {
+                $servers = [$this];
+            } else {
+                $servers = [$this->server];
+            }
         }
 
-        return $this->tasks()->create([
+        foreach ($servers as $server) {
+            if (!$playbook->allowedToRun($server)) {
+                return $this->tasks()->create([
+                    'name' => $playbook->name(),
+                    'user' => $playbook->sshAs,
+                    'options' => $options,
+                    'playbook' => (string) $playbook,
+                    'vars' => $playbook->vars(),
+                    'tags' => $playbook->tags(),
+                    'output' => "The dispatched task is not allowed to run on server: {$server->name}.",
+                    'status' => 'forbidden',
+                    'exit_code' => 403
+                ]);
+            }
+        }
+
+        $task = $this->tasks()->create([
             'name' => $playbook->name(),
             'user' => $playbook->sshAs,
             'options' => $options,
             'playbook' => (string) $playbook,
             'vars' => $playbook->vars(),
+            'tags' => $playbook->tags(),
             'output' => '',
-        ])->run();
+        ]);
+
+        $serverIds = [];
+        if ($servers) {
+            foreach ($servers as $server) {
+                $serverIds[] = $server->id;
+            }
+        }
+
+        $task->servers()->sync($serverIds);
+
+        return $task->run();
     }
 }

@@ -3,7 +3,6 @@
 namespace App;
 
 use App\SecureShellKey;
-use App\AnsibleInventory;
 use App\Jobs\ServerStopJob;
 use App\Jobs\ServerTestJob;
 use App\Jobs\ServerStartJob;
@@ -76,7 +75,7 @@ class Server extends Model implements ProvisionableResource
         'address' => ['required_if:provider,custom'],
         'ipv6_address' => ['nullable', 'ipv6'],
         'private_address' => ['nullable', 'ipv4'],
-        'type' => ['required_if:provider,custom', 'in:shared,dedicated,unmanaged'],
+        'type' => ['required_if:provider,custom', 'in:shared,dedicated,loadbalancer'],
         'port' => ['required', 'numeric'],
         'user' => ['required', 'min:3'],
         'admin_password' => ['nullable', 'min:8'],
@@ -144,7 +143,7 @@ class Server extends Model implements ProvisionableResource
      */
     public function tasks()
     {
-        return $this->hasMany(Task::class, 'server_id');
+        return $this->belongsToMany(Task::class);
     }
 
     /**
@@ -178,13 +177,13 @@ class Server extends Model implements ProvisionableResource
     }
 
     /**
-     * Determine if the server is a unmanaged hosting server.
+     * Determine if the server is a loadbalancer.
      * 
      * @return boolean
      */
-    public function isUnmanaged()
+    public function isLoadbalancer()
     {
-        return $this->type == 'unmanaged';
+        return $this->type == 'loadbalancer';
     }
 
     /**
@@ -243,16 +242,6 @@ class Server extends Model implements ProvisionableResource
     public function keyPath()
     {
         return SecureShellKey::storeFor($this);
-    }
-
-    /**
-     * Get the path to the server's inventory file.
-     *
-     * @return string
-     */
-    public function inventoryPath()
-    {
-        return AnsibleInventory::storeFor($this);
     }
 
     /**
@@ -443,9 +432,9 @@ class Server extends Model implements ProvisionableResource
      *
      * @return bool|PendingDispatch|mixed
      */
-    public function provision()
+    public function provision($tags = [])
     {
-        return $this->dispatchJob(ServerProvisionJob::class);
+        return $this->dispatchJob(ServerProvisionJob::class, $tags);
     }
 
     /**

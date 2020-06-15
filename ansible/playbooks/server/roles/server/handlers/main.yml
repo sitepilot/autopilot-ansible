@@ -4,6 +4,11 @@
     name: lsws
     state: restarted
 
+- name: restart caddy
+  service:
+    name: caddy
+    state: restarted
+
 - name: restart ssh server
   service:
     name: sshd

@@ -1,8 +1,9 @@
 ---
 - hosts: "all"
   vars:
-    user: ""
-    site: ""
+    # Required parameters, commented so Ansible fails when a parameter isn't present.
+    # user: ""
+    # site: ""
     path: "/opt/sitepilot/users/{{ user }}/{{ site }}"
     path_vhost: "/usr/local/lsws/conf/vhosts/{{ site }}.conf"
   tasks:

@@ -25,11 +25,11 @@ class Action extends NovaAction
      * @param Resource $resource
      * @return $this
      */
-    public function canRunWhenReady(Resource $resource)
+    public function canRunWhenReady(Resource $resource, $types = [])
     {
-        $this->canSee(function ($request) use ($resource) {
-            return $resource->resource->exists && $resource->isReady()
-                || optional($request->findModelQuery()->first())->isReady()
+        $this->canSee(function ($request) use ($resource, $types) {
+            return $resource->resource->exists && $resource->isReady() && (!count($types) || in_array($resource->type, $types))
+                || optional($request->findModelQuery()->first())->isReady() && (!count($types) || in_array(optional($request->findModelQuery()->first())->type, $types))
                 || request()->isMethod('post') && request('action');
         });
 
@@ -44,11 +44,11 @@ class Action extends NovaAction
      * @param Resource $resource
      * @return $this
      */
-    public function canRunWhenNotBusy(Resource $resource)
+    public function canRunWhenNotBusy(Resource $resource, $types = [])
     {
-        $this->canSee(function ($request) use ($resource) {
-            return $resource->resource->exists && $resource->isBusy() === false
-                || optional($request->findModelQuery()->first())->isBusy() === false
+        $this->canSee(function ($request) use ($resource, $types) {
+            return $resource->resource->exists && $resource->isBusy() === false && (!count($types) || in_array($resource->type, $types))
+                || optional($request->findModelQuery()->first())->isBusy() === false && (!count($types) || in_array(optional($request->findModelQuery()->first())->type, $types))
                 || request()->isMethod('post') && request('action');
         });
 

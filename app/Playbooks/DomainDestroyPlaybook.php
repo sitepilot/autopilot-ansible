@@ -2,31 +2,23 @@
 
 namespace App\Playbooks;
 
-use App\Server;
-use App\WpInstall;
+use App\Domain;
 
-class WpInstallConnectPlaybook extends Playbook
+class DomainDestroyPlaybook extends Playbook
 {
     /**
      * The displayable name of the playbook.
      *
      * @var string
      */
-    public $name = 'Check WordPress Connection';
+    public $name = 'Destroy Domain';
 
     /**
-     * The server instance.
+     * The domain instance.
      *
-     * @var Server
+     * @var Domain
      */
-    public $server;
-
-    /**
-     * The WordPress install instance.
-     *
-     * @var WpInstall
-     */
-    public $wpInstall;
+    public $domain;
 
     /**
      * Allowed server types the playbook can run on.
@@ -34,19 +26,18 @@ class WpInstallConnectPlaybook extends Playbook
      * @return void
      */
     public $serverTypes = [
-        'shared', 'dedicated'
+        'loadbalancer'
     ];
 
     /**
      * Create a new playbook instance.
      *
-     * @param  Server  $restore
+     * @param  Domain  $restore
      * @return void
      */
-    public function __construct(WpInstall $wpInstall)
+    public function __construct(Domain $domain)
     {
-        $this->wpInstall = $wpInstall;
-        $this->server = $wpInstall->server;
+        $this->domain = $domain;
     }
 
     /**
@@ -56,7 +47,7 @@ class WpInstallConnectPlaybook extends Playbook
      */
     public function playbook()
     {
-        return 'ansible/playbooks/wordpress/connect.yml';
+        return 'ansible/playbooks/domain/destroy.yml';
     }
 
     /**
@@ -67,7 +58,8 @@ class WpInstallConnectPlaybook extends Playbook
     public function vars()
     {
         return array_merge(parent::vars(), [
-            'path' => (string) $this->wpInstall->getPath()
+            'config_name' => (string) 'autopilot-domain-' . $this->domain->id,
+            'domain' => (string) $this->domain->name
         ]);
     }
 
@@ -78,6 +70,6 @@ class WpInstallConnectPlaybook extends Playbook
      */
     public function timeout()
     {
-        return 20;
+        return 300;
     }
 }

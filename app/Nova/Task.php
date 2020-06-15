@@ -9,6 +9,7 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\MorphTo;
 use Laravel\Nova\Fields\DateTime;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\BelongsToMany;
 
 class Task extends Resource
 {
@@ -55,8 +56,6 @@ class Task extends Resource
 
             MorphTo::make('Provisionable'),
 
-            BelongsTo::make('Server'),
-
             Text::make('Name'),
 
             Text::make('User'),
@@ -78,11 +77,15 @@ class Task extends Resource
 
             Code::make('Variables', 'vars')->json(),
 
+            Code::make('Tags', 'tags')->json(),
+
             DateTime::make('Start', 'created_at')
                 ->exceptOnForms(),
 
             DateTime::make('End', 'updated_at')
                 ->exceptOnForms(),
+
+            BelongsToMany::make('Servers')
         ];
     }
 

@@ -33,6 +33,7 @@ class Task extends Model
      */
     protected $casts = [
         'vars' => 'json',
+        'tags' => 'json'
     ];
 
     /**
@@ -56,33 +57,14 @@ class Task extends Model
         'vars' => '[]'
     ];
 
-    /**
-     * Boot the model.
-     *
-     * @return void
-     */
-    public static function boot()
-    {
-        parent::boot();
-
-        self::creating(function (Task $task) {
-            if ($task->server_id && !$task->provisionable_id) {
-                $task->provisionable_id = $task->server_id;
-                $task->provisionable_type = Server::class;
-            } else {
-                $task->server_id = $task->provisionable->server->id;
-            }
-        });
-    }
-
     /** 
-     * Get the server that owns the task.
+     * Get the servers where the task needs to run on.
      * 
      * @return Server
      */
-    public function server()
+    public function servers()
     {
-        return $this->belongsTo(Server::class, 'server_id');
+        return $this->belongsToMany(Server::class);
     }
 
     /**
@@ -113,6 +95,16 @@ class Task extends Model
     public function timeout()
     {
         return (int) ($this->options['timeout'] ?? self::DEFAULT_TIMEOUT);
+    }
+
+    /**
+     * Get the path to the task's inventory file.
+     *
+     * @return string
+     */
+    public function inventoryPath()
+    {
+        return AnsibleInventory::storeForServers($this->servers);
     }
 
     /**

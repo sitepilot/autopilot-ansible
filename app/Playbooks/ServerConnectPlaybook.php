@@ -26,7 +26,7 @@ class ServerConnectPlaybook extends Playbook
      * @return void
      */
     public $serverTypes = [
-        'shared', 'dedicated', 'unmanaged'
+        'shared', 'dedicated', 'loadbalancer'
     ];
 
     /**

@@ -1,17 +1,17 @@
 ---
 - hosts: "all"
   vars:
-    user: ""
-    site: ""
-    domain: ""
-    aliases: []
-    email: ""
-    ssl: true
+    # Required parameters, commented so Ansible fails when a parameter isn't present.
+    # user: ""
+    # site: ""
+    # domains: []
+    # email: ""
+    # ssl: true
     path: "/opt/sitepilot/users/{{ user }}/{{ site }}"
     path_vhost: "/usr/local/lsws/conf/vhosts/{{ site }}.conf"
   tasks:
     - name: "site/cert : {{ user }} : {{ site }} : request ssl certificate"
-      command: "certbot certonly --noninteractive --agree-tos --email {{ email }} --cert-name {{ site }} --webroot -w {{ path }}/public -d {{ domain }} {{ '-d ' + aliases|join(' -d ') if aliases is defined and aliases|length>0 else '' }}"
+      command: "certbot certonly --noninteractive --agree-tos --email {{ email }} --cert-name {{ site }} --webroot -w {{ path }}/public {{ '-d ' + domains|join(' -d ') if domains is defined and domains|length>0 else '' }}"
 
     - name: "site/cert : {{ user }} : {{ site }} : regenerate vhost configuration"
       template:

@@ -2,6 +2,8 @@
 
 namespace App\Playbooks;
 
+use App\Server;
+
 class Playbook
 {
     /**
@@ -14,11 +16,9 @@ class Playbook
     /**
      * Allowed server types the playbook can run on.
      *
-     * @return void
+     * @var array
      */
-    public $serverTypes = [
-        //
-    ];
+    public $serverTypes = [];
 
     /**
      * Get the name of the playbook.
@@ -58,10 +58,6 @@ class Playbook
     public function vars()
     {
         return [
-            'ansible_user' => (string) $this->server->user,
-            'ansible_host' => (string) $this->server->address,
-            'ansible_port' => (string) $this->server->port,
-            'ansible_ssh_private_key_file' => (string) $this->server->keyPath(),
             'ansible_ssh_common_args' => '-o StrictHostKeyChecking=no',
             'ansible_python_interpreter' => '/usr/bin/python3',
             'sitepilot_managed' => 'WARNING: This file is managed by Sitepilot, any changes will be overwritten (updated at: {{ansible_date_time.date}} {{ansible_date_time.time}}).'
@@ -69,13 +65,24 @@ class Playbook
     }
 
     /**
+     * Get the tags for the playbook.
+     *
+     * @return array
+     */
+    public function tags()
+    {
+        return [];
+    }
+
+    /**
      * Checks if the playbook is allowed to run on the server.
      *
+     * @param Server $server
      * @return boolean
      */
-    public function allowedToRun()
+    public function allowedToRun(Server $server)
     {
-        return in_array($this->server->type, $this->serverTypes);
+        return in_array($server->type, $this->serverTypes);
     }
 
     /**
