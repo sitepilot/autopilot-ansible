@@ -60,10 +60,10 @@ class DomainProvisionPlaybook extends Playbook
         $backends = [];
 
         if (!empty($this->domain->site->server->private_address)) {
-            $backends[] = $this->domain->site->server->private_address;
+            $backends[] = $this->domain->site->server->private_address . ':443';
         }
 
-        $backends[] =  $this->domain->site->server->address;
+        $backends[] =  $this->domain->site->server->address . ':443';
 
         return array_merge(parent::vars(), [
             'config_name' => (string) 'autopilot-domain-' . $this->domain->id,
