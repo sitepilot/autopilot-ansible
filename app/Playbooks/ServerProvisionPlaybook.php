@@ -64,13 +64,16 @@ class ServerProvisionPlaybook extends Playbook
             'timezone' => (string) $this->server->timezone,
             'admin_email' => (string) $this->server->admin_email,
             'health_email' => (string) $this->server->health_email,
-            'php_post_max_size' => (integer) $this->server->php_post_max_size,
-            'php_upload_max_filesize' => (integer) $this->server->php_upload_max_filesize,
-            'php_memory_limit' => (integer) $this->server->php_memory_limit,
+            'php_post_max_size' => (int) $this->server->php_post_max_size,
+            'php_upload_max_filesize' => (int) $this->server->php_upload_max_filesize,
+            'php_memory_limit' => (int) $this->server->php_memory_limit,
             'smtp_relay_host' => (string) $this->server->smtp_relay_host,
             'smtp_relay_domain' => (string) $this->server->smtp_relay_domain,
             'smtp_relay_user' => (string) $this->server->smtp_relay_user,
-            'smtp_relay_password' => (string) $this->server->smtp_relay_password
+            'smtp_relay_password' => (string) $this->server->smtp_relay_password,
+            'backup_s3_key' => (string) $this->server->backup_s3_key,
+            'backup_s3_secret' => (string) $this->server->backup_s3_secret,
+            'backup_password' => (string) $this->server->backup_password
         ]);
     }
 

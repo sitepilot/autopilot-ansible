@@ -4,7 +4,6 @@ namespace App\Nova\Actions;
 
 use Illuminate\Support\Str;
 use Illuminate\Bus\Queueable;
-use Laravel\Nova\Actions\Action;
 use Illuminate\Support\Collection;
 use Laravel\Nova\Fields\ActionFields;
 use Illuminate\Queue\InteractsWithQueue;
@@ -72,18 +71,6 @@ class JobAction extends Action
     public function fields()
     {
         return [];
-    }
-
-    /**
-     * Set the name of the action.
-     *
-     * @var string
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
     }
 
     /**

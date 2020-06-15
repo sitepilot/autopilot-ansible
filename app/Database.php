@@ -52,34 +52,6 @@ class Database extends Model implements ProvisionableResource
     ];
 
     /**
-     * Boot the model.
-     *
-     * @return void
-     */
-    public static function boot()
-    {
-        parent::boot();
-
-        self::creating(function (Database $database) {
-            // Generate unique database name based on server user
-            $unique = true;
-            while ($unique) {
-                $database->name = $database->sysuser->name . '_db' . ucfirst(Str::random(4));
-                $unique = $database->where('name', $database->name)->count();
-            }
-
-            // Generate unique database user based on server user
-            $unique = true;
-            while ($unique) {
-                $database->user = $database->sysuser->name . '_u' . ucfirst(Str::random(4));
-                $unique = $database->where('user', $database->user)->count();
-            }
-
-            $database->password = Str::random(12);
-        });
-    }
-
-    /**
      * Get the server that owns the database.
      * 
      * @return BelongsTo
@@ -97,6 +69,16 @@ class Database extends Model implements ProvisionableResource
     public function sysuser()
     {
         return $this->belongsTo(Sysuser::class, 'sysuser_id');
+    }
+
+    /**
+     * Get the site that the database belongs to.
+     * 
+     * @return BelongsTo
+     */
+    public function site()
+    {
+        return $this->belongsTo(Site::class, 'site_id');
     }
 
     /**
@@ -123,6 +105,26 @@ class Database extends Model implements ProvisionableResource
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = encrypt($value);
+    }
+
+    /**
+     * Get the backup path for the resource.
+     * 
+     * @return string
+     */
+    public function getBackupPath()
+    {
+        return '/opt/sitepilot/backups/mysql/' . $this->name . '.sql';
+    }
+
+    /**
+     * Get the backups for the resource.
+     * 
+     * @return MorphMany
+     */
+    public function backups()
+    {
+        return $this->morphMany(Backup::class, 'backupable');
     }
 
     /**

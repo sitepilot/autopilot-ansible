@@ -90,13 +90,34 @@ class Site extends Model implements ProvisionableResource
     }
 
     /**
+     * Get the backups for the resource.
+     * 
+     * @return MorphMany
+     */
+    public function backups()
+    {
+        return $this->morphMany(Backup::class, 'backupable');
+    }
+
+    /**
      * Get the databases for the site.
      * 
      * @return HasMany
      */
     public function databases()
     {
-        return $this->sysuser->databases();
+        return $this->hasMany(Database::class, 'site_id');
+    }
+
+    /**
+     * Get the backup path for the resource.
+     * 
+     * 
+     * @return string
+     */
+    public function getBackupPath()
+    {
+        return '/opt/sitepilot/users/' . $this->sysuser->name . '/' . $this->name;
     }
 
     /**

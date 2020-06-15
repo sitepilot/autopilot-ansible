@@ -8,6 +8,7 @@ use App\Nova\Actions\JobAction;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
+use App\Nova\Actions\BackupAction;
 use Laravel\Nova\Fields\BelongsTo;
 
 class Site extends Resource
@@ -92,7 +93,7 @@ class Site extends Resource
                 ->exceptOnForms(),
 
             Text::make('Aliases', function () {
-                if(count($this->domains) < 1) {
+                if (count($this->domains) < 1) {
                     return '—';
                 }
 
@@ -120,6 +121,8 @@ class Site extends Resource
             \App\Site::getNovaStatusField($this),
 
             HasMany::make('Domain Aliases', 'domains', Domain::class),
+            HasMany::make('Databases', 'databases', Database::class),
+            HasMany::make('Backups', 'backups', Backup::class),
             HasMany::make('Tasks', 'tasks', Task::class)
         ];
     }
@@ -176,20 +179,33 @@ class Site extends Resource
     public function actions(Request $request)
     {
         return [
+            (new BackupAction)
+                ->exceptOnIndex()
+                ->showOnTableRow()
+                ->canRunWhenReady($this)
+                ->setName('Backup Site')
+                ->confirmText('Are you sure you want to backup the selected site?')
+                ->confirmButtonText('Backup'),
             (new JobAction)
+                ->exceptOnIndex()
+                ->showOnTableRow()
                 ->setName('Provision Site')
                 ->setResourceName('site')
                 ->setFunctionName('provision')
                 ->confirmButtonText('Provision')
                 ->confirmText('Are you sure you want to provision the selected site(s)?')
-                ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.'),
+                ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.')
+                ->canRunWhenNotBusy($this),
             (new JobAction)
+                ->exceptOnIndex()
+                ->showOnTableRow()
                 ->setName('Request Certificate')
                 ->setResourceName('site')
                 ->setFunctionName('certRequest')
                 ->confirmButtonText('Request Certificate')
                 ->confirmText('Are you sure you want to request certificates for the selected site(s)?')
                 ->setSuccessMessage('Autopilot will request a certificate for your {{resourceName}} in a few seconds.')
+                ->canRunWhenReady($this),
         ];
     }
 }

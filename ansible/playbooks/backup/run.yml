@@ -1,0 +1,53 @@
+---
+- hosts: "all"
+  vars:
+    backup_id: ""
+    backup_s3_key: ""
+    backup_s3_secret: ""
+    backup_s3_bucket: ""
+    backup_password: ""
+    backup_path: ""
+    backup_tag: ""
+    backup_resource_tag: ""
+    backup_database_name: ""
+  tasks:
+    - name: "backup/run : create database dump"
+      mysql_db:
+        state: dump
+        name: "{{ backup_database_name }}"
+        target: "{{ backup_path }}"
+        config_file: "/root/.my.cnf"
+        single_transaction: yes
+        login_host: "127.0.0.1"
+      when:
+        - backup_database_name is defined
+        - backup_database_name | length > 0
+
+    - name: "backup/run : initialize backup repository"
+      command: "restic -r s3:{{ backup_s3_bucket}} init"
+      environment:
+        AWS_ACCESS_KEY_ID: "{{ backup_s3_key }}"
+        AWS_SECRET_ACCESS_KEY: "{{ backup_s3_secret }}"
+        RESTIC_PASSWORD: "{{ backup_password }}"
+      ignore_errors: yes
+      no_log: yes
+
+    - name: "backup/run : backup files to repository"
+      command: "restic -r s3:{{ backup_s3_bucket}} --tag {{ backup_tag }} --tag {{ backup_resource_tag }} backup {{ backup_path }}"
+      environment:
+        AWS_ACCESS_KEY_ID: "{{ backup_s3_key }}"
+        AWS_SECRET_ACCESS_KEY: "{{ backup_s3_secret }}"
+        RESTIC_PASSWORD: "{{ backup_password }}"
+      register: backup_info
+
+    - name: "backup/run : show backup result"
+      debug:
+        msg: "{{ backup_info.stdout }}"
+
+    - name: "backup/run : remove database dump"
+      file:
+        state: absent
+        path: "{{ backup_path }}"
+      when:
+        - backup_database_name is defined
+        - backup_database_name | length > 0

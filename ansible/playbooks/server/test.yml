@@ -85,3 +85,9 @@
       become: true
       become_user: "{{ admin }}"
       changed_when: false
+
+    - name: "server/test : Restic is installed"
+      command: "restic version"
+      become: true
+      become_user: "{{ admin }}"
+      changed_when: false

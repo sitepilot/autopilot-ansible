@@ -53,6 +53,9 @@
 - include: wordmove.yml
   tags: "wordmove"
 
+- include: restic.yml
+  tags: "restic"
+
 - include: pma.yml
   tags: "pma"
 

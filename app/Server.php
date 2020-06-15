@@ -51,7 +51,7 @@ class Server extends Model implements ProvisionableResource
      * @var array
      */
     protected $fillable = [
-        'name', 'provider', 'region', 'size', 'address', 'ipv6_address', 'private_address', 'type', 'port', 'user',
+        'name', 'provider', 'region', 'size', 'address', 'ipv6_address', 'private_address', 'type', 'port', 'user', 'backup_s3_key', 'backup_s3_secret', 'backup_s3_bucket'
     ];
 
     /**
@@ -60,7 +60,7 @@ class Server extends Model implements ProvisionableResource
      * @var array
      */
     protected $hidden = [
-        'private_key', 'admin_password', 'mysql_password'
+        'private_key', 'admin_password', 'mysql_password', 'backup_s3_secret', 'backup_password'
     ];
 
     /**
@@ -91,6 +91,10 @@ class Server extends Model implements ProvisionableResource
         'smtp_relay_domain' => ['nullable', 'min:3'],
         'smtp_relay_user' => ['nullable', 'min:3'],
         'smtp_relay_password' => ['nullable', 'min:6'],
+        'backup_s3_key' => ['nullable', 'min:3', 'max:255'],
+        'backup_s3_secret' => ['nullable', 'min:3', 'max:255'],
+        'backup_s3_bucket' => ['nullable', 'min:3', 'max:255'],
+        'backup_password' => ['nullable', 'min:6', 'max:255'],
     ];
 
     /**
@@ -252,6 +256,19 @@ class Server extends Model implements ProvisionableResource
     }
 
     /**
+     * Check if server is configurated for backups.
+     *
+     * @return boolean
+     */
+    public function backupConfigured()
+    {
+        return !empty($this->backup_s3_key)
+            && !empty($this->backup_s3_secret)
+            && !empty($this->backup_s3_bucket)
+            && !empty($this->backup_password);
+    }
+
+    /**
      * Get private key attribute.
      *
      * @param  string  $value
@@ -353,6 +370,58 @@ class Server extends Model implements ProvisionableResource
     public function setSmtpRelayPasswordAttribute($value)
     {
         $this->attributes['smtp_relay_password'] = encrypt($value);
+    }
+
+    /**
+     * Get backup S3 secret attribute.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getBackupS3SecretAttribute($value)
+    {
+        try {
+            return decrypt($value);
+        } catch (DecryptException $e) {
+            return '';
+        }
+    }
+
+    /**
+     * Set backup S3 secret attribute.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setBackupS3SecretAttribute($value)
+    {
+        $this->attributes['backup_s3_secret'] = encrypt($value);
+    }
+
+    /**
+     * Get backup password attribute.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function getBackupPasswordAttribute($value)
+    {
+        try {
+            return decrypt($value);
+        } catch (DecryptException $e) {
+            return '';
+        }
+    }
+
+    /**
+     * Set backup password attribute.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setBackupPasswordAttribute($value)
+    {
+        $this->attributes['backup_password'] = encrypt($value);
     }
 
     /**

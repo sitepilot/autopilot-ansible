@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Jobs\BackupSitesJob;
+use App\Jobs\BackupDatabasesJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -25,6 +27,14 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('horizon:snapshot')->everyFiveMinutes();
+
+        $schedule->call(function () {
+            BackupDatabasesJob::dispatch();
+        })->twiceDaily(1, 13);
+
+        $schedule->call(function () {
+            BackupSitesJob::dispatch();
+        })->daily();
     }
 
     /**
