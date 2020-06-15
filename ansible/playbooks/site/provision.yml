@@ -1,12 +1,13 @@
 ---
 - hosts: "all"
   vars:
-    user: ""
-    site: ""
-    domain: ""
-    aliases: []
-    ssl: false
-    php_version: "74"
+    # Required parameters, commented so Ansible fails when a parameter isn't present.
+    # user: ""
+    # site: ""
+    # domain: ""
+    # domains: []
+    # ssl: false
+    # php_version: "74"
     path: "/opt/sitepilot/users/{{ user }}/{{ site }}"
     path_vhost: "/usr/local/lsws/conf/vhosts/{{ site }}.conf"
   tasks:

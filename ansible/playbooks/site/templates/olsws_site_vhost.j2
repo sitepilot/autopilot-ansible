@@ -14,8 +14,8 @@ vhTemplate vhost {
     vhDomain              {{ domain }}
     {% endif %}
     
-    {% if aliases is defined %}
-    vhAliases             {{ aliases|join(', ') }}
+    {% if domains is defined %}
+    vhAliases             {{ domains|join(', ') }}
     {% endif %}
   }
 }

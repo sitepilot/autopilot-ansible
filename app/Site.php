@@ -44,7 +44,6 @@ class Site extends Model implements ProvisionableResource
      */
     public static $validationRules = [
         'name' => ['required', 'alpha_dash', 'min:3', 'max:32', 'unique:sites,name,{{resourceId}}'],
-        'domain' => ['required', 'min:3', 'unique:domains,name'],
         'username' => ['required', 'min:3', 'unique:sysusers,name'],
         'php_version' => ['in:73,74']
     ];
@@ -72,11 +71,11 @@ class Site extends Model implements ProvisionableResource
     /**
      * Get the primary domain of the site.
      * 
-     * @return BelongsTo
+     * @return string
      */
     public function getDomainAttribute()
     {
-        return $this->name . env('APP_DEFAULT_DOMAIN');
+        return $this->name . '.local';
     }
 
     /**
