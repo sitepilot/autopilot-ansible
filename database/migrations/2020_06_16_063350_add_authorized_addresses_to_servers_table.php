@@ -14,7 +14,7 @@ class AddAuthorizedAddressesToServersTable extends Migration
     public function up()
     {
         Schema::table('servers', function (Blueprint $table) {
-            $table->text('authorized_addresses')->after('private_address');
+            $table->text('authorized_addresses')->nullable()->after('private_address');
         });
     }
 
