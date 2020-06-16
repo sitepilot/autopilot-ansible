@@ -153,6 +153,11 @@ class Server extends Resource
                 ->hideFromIndex()
                 ->rules(\App\Server::$validationRules['private_address']),
 
+            Text::make('Authorized Addresses')
+                ->hideFromIndex()
+                ->rules(\App\Server::$validationRules['authorized_addresses'])
+                ->help('A comma separated list of ip addresses which have shell access to isolated users.'),
+
             Textarea::make('Admin Password')
                 ->rows(1)
                 ->sortable()

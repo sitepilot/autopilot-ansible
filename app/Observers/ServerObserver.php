@@ -88,6 +88,12 @@ class ServerObserver
         }
 
         if ($server->wasChanged([
+            'authorized_addresses'
+        ])) {
+            $tags[] = 'sshd';
+        }
+
+        if ($server->wasChanged([
             'php_post_max_size',
             'php_upload_max_filesize',
             'php_memory_limit',

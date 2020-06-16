@@ -28,3 +28,5 @@ swap_swappiness: "60"
 pma_version: "5.0.1"
 pma_update_version: false
 pma_blowfish_secret: "9B3U6iQKBeaoki8n07HZckWxBKCrxlok"
+
+authorized_addresses: []

@@ -10,6 +10,7 @@ use App\Traits\Provisionable;
 use App\Jobs\ServerDestroyJob;
 use App\Jobs\ServerCertRenewJob;
 use App\Jobs\ServerProvisionJob;
+use App\Rules\CommaSeparatedIpsRule;
 use Illuminate\Database\Eloquent\Model;
 use App\Contracts\ProvisionableResource;
 use App\Playbooks\ServerConnectPlaybook;
@@ -28,9 +29,7 @@ class Server extends Model implements ProvisionableResource
      *
      * @var array
      */
-    protected $casts = [
-        //
-    ];
+    protected $casts = [];
 
     /**
      * The model's default values for attributes.
@@ -95,6 +94,20 @@ class Server extends Model implements ProvisionableResource
         'backup_s3_bucket' => ['nullable', 'min:3', 'max:255'],
         'backup_password' => ['nullable', 'min:6', 'max:255'],
     ];
+
+    /**
+     * Create a new Eloquent model instance.
+     *
+     * @param  array  $attributes
+     * @return void
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        // Extend validation rules
+        self::$validationRules['authorized_addresses'] = new CommaSeparatedIpsRule;
+    }
 
     /**
      * Get the sysusers for the server.
@@ -425,6 +438,28 @@ class Server extends Model implements ProvisionableResource
             'public_key' => trim($value->publicKey),
             'private_key' => encrypt(trim($value->privateKey)),
         ] + $this->attributes;
+    }
+
+    /**
+     * Set authorized addresses attribute.
+     *
+     * @param  string  $value
+     * @return string
+     */
+    public function setAuthorizedAddressesAttribute($value)
+    {
+        $this->attributes['authorized_addresses'] = implode(',', array_map('trim', explode(',', $value)));
+    }
+
+    /**
+     * Get authorized addresses attribute.
+     *
+     * @param  string  $value
+     * @return array
+     */
+    public function getAuthorizedAddressesAttribute($value)
+    {
+        return array_filter(array_map('trim', explode(',', $value)));
     }
 
     /**
