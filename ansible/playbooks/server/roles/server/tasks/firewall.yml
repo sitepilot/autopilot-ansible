@@ -28,7 +28,7 @@
     from_ip: "{{ item }}"
     comment: "node exporter"
   loop: "{{ authorized_addresses }}"
-  
+
 - name: "firewall : enable firewall"
   ufw:
     state: enabled
