@@ -35,6 +35,8 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             BackupSitesJob::dispatch();
         })->daily();
+
+        $schedule->command('monitor:config')->everyFiveMinutes();
     }
 
     /**

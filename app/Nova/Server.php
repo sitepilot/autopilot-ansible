@@ -155,6 +155,7 @@ class Server extends Resource
 
             Text::make('Authorized Addresses')
                 ->hideFromIndex()
+                ->hideWhenCreating()
                 ->rules(\App\Server::$validationRules['authorized_addresses'])
                 ->help('A comma separated list of ip addresses which have shell access to isolated users.'),
 

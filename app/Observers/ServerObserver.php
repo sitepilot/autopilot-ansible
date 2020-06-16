@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\Server;
-use App\SecureShellKey;
 use Illuminate\Support\Str;
 
 class ServerObserver
@@ -23,6 +22,7 @@ class ServerObserver
         if (empty($server->timezone)) $server->timezone = 'Europe/Amsterdam';
         if (empty($server->admin_email)) $server->admin_email = 'support@sitepilot.io';
         if (empty($server->health_email)) $server->health_email = 'health@sitepilot.io';
+        if (empty($server->authorized_addresses) && env('APP_AUTOPILOT_IPS', false)) $server->authorized_addresses =  env('APP_AUTOPILOT_IPS');
 
         // Backup configuration
         if (empty($server->backup_password)) $server->backup_password = Str::random(12);
@@ -91,6 +91,7 @@ class ServerObserver
             'authorized_addresses'
         ])) {
             $tags[] = 'sshd';
+            $tags[] = 'firewall';
         }
 
         if ($server->wasChanged([

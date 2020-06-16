@@ -30,6 +30,9 @@
 - include: restic.yml
   tags: "restic"
 
+- include: node-exporter.yml
+  tags: "node-exporter"
+
 # -------- WEBSERVER -------- #
 - name: "include webserver tasks"
   include_tasks: main-webserver.yml

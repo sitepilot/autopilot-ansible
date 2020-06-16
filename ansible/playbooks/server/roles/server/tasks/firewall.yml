@@ -23,6 +23,16 @@
   when:
     - ansible_ssh_host != 'autopilot-test'
 
+- name: "firewall : allow authorized addresses to query node exporter port"
+  ufw:
+    port: "9100"
+    rule: allow
+    from_ip: "{{ item }}"
+    comment: "node exporter"
+  loop: "{{ authorized_addresses }}"
+  when:
+    - ansible_ssh_host != 'autopilot-test'
+
 - name: "firewall : enable firewall"
   ufw:
     state: enabled
