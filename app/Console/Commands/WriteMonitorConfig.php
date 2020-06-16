@@ -42,23 +42,27 @@ class WriteMonitorConfig extends Command
     public function handle()
     {
         $servers = Server::where('status', 'ready')->get();
-
-        $content[] = new stdClass;
-        $content[0]->targets = [];
+        $content = [];
 
         foreach ($servers as $server) {
-            $content[0]->targets[] = $server->address . ':9100';
+            $item = new stdClass;
+            $item->labels = new stdClass;
+            $item->targets[] = $server->address . ':9100';
+            $item->labels->name = $server->name;
+            $content[] = $item;
         }
 
         Storage::disk('local')->put('monitor/servers.json', json_encode($content));
 
         $domains = Domain::where('status', 'ready')->get();
-
-        $content[] = new stdClass;
-        $content[0]->targets = [];
+        $content = [];
 
         foreach ($domains as $domain) {
-            $content[0]->targets[] = 'https://' . $domain->name;
+            $item = new stdClass;
+            $item->labels = new stdClass;
+            $item->targets[] = 'https://' . $domain->name;
+            $item->labels->name = $domain->name;
+            $content[] = $item;
         }
 
         Storage::disk('local')->put('monitor/domains.json', json_encode($content));
