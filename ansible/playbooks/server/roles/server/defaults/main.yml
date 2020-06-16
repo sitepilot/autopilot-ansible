@@ -31,3 +31,5 @@ pma_blowfish_secret: "9B3U6iQKBeaoki8n07HZckWxBKCrxlok"
 
 prometheus_node_exporter_version: 1.0.0
 prometheus_node_exporter_release_name: "node_exporter-{{ prometheus_node_exporter_version }}.linux-amd64"
+
+authorized_addresses: []

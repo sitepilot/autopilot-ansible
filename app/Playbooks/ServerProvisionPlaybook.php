@@ -82,7 +82,8 @@ class ServerProvisionPlaybook extends Playbook
             'backup_s3_key' => (string) $this->server->backup_s3_key,
             'backup_s3_secret' => (string) $this->server->backup_s3_secret,
             'backup_password' => (string) $this->server->backup_password,
-            'server_type' => (string) $this->server->type == 'shared' || $this->server->type == 'dedicated' ? 'webserver' : $this->server->type
+            'server_type' => (string) $this->server->type == 'shared' || $this->server->type == 'dedicated' ? 'webserver' : $this->server->type,
+            'authorized_addresses' => (array) $this->server->authorized_addresses
         ]);
     }
 
