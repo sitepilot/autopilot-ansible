@@ -3,7 +3,6 @@
 namespace App\Observers;
 
 use App\Server;
-use App\SecureShellKey;
 use Illuminate\Support\Str;
 
 class ServerObserver
