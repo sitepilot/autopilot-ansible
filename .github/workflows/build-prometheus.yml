@@ -1,9 +1,10 @@
-name: deploy-base
+---
+name: build-prometheus
 
 on:
   push:
     paths:
-      - "docker/base/**"
+      - "docker/prometheus/**"
 
 jobs:
   deploy:
@@ -11,10 +12,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
-      - name: Build and deploy Base image.
+      - name: Build and deploy Prometheus image.
         run: |
           if [[ ${GITHUB_REF##*/} = "master" ]]; then export DOCKER_TAG=latest; else export DOCKER_TAG=${GITHUB_REF##*/}; fi
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-          cd ${GITHUB_WORKSPACE}/docker/base/
-          docker build . --file Dockerfile --tag sitepilot/autopilot-base:$DOCKER_TAG
-          docker push sitepilot/autopilot-base:$DOCKER_TAG
+          cd ${GITHUB_WORKSPACE}/docker/prometheus/
+          docker build . --file Dockerfile --tag sitepilot/autopilot-prometheus:$DOCKER_TAG
+          docker push sitepilot/autopilot-prometheus:$DOCKER_TAG

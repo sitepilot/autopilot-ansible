@@ -1,4 +1,5 @@
-name: deploy-alertmanager
+---
+name: build-alertmanager
 
 on:
   push:

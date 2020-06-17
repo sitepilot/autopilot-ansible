@@ -1,5 +1,5 @@
 ---
-name: test-autopilot
+name: build-autopilot
 
 on:
   push:
