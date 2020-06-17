@@ -18,4 +18,4 @@ jobs:
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
           cd ${GITHUB_WORKSPACE}/docker/grafana/
           docker build . --file Dockerfile --tag sitepilot/autopilot-grafana:$DOCKER_TAG
-          docker push sitepilot/autopilot-blackbox:$DOCKER_TAG
+          docker push sitepilot/autopilot-grafana:$DOCKER_TAG
