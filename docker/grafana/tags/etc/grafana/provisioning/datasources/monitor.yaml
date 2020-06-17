@@ -1,0 +1,12 @@
+apiVersion: 1
+
+deleteDatasources:
+  - name: Autopilot Monitor
+    orgId: 1
+
+datasources:
+  - name: Autopilot Monitor
+    type: prometheus
+    url: http://autopilot:9090/monitor/prometheus/
+    isDefault: true
+    editable: false
