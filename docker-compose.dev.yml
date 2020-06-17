@@ -31,8 +31,8 @@ services:
       - "${APP_HTTPS_PORT:-8443}:443"
     restart: always
     environment:
-      WEBSERVER_USER_ID: ${APP_USER_ID}
-      WEBSERVER_USER_GID: ${APP_USER_GID}
+      WEBSERVER_USER_ID: ${APP_USER_ID:-1000}
+      WEBSERVER_USER_GID: ${APP_USER_GID:-1000}
       SET_VHOST_FILE_PERMISSIONS: "yes"
     volumes:
       - type: bind
