@@ -86,6 +86,7 @@
 
                 <div class="links">
                     <a href="{{ url('admin') }}">Admin</a>
+                    <a href="{{ url('status') }}">Status</a>
                 </div>
             </div>
         </div>
