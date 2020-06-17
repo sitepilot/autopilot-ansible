@@ -1,6 +1,10 @@
 # Autopilot
 
-![Test](https://github.com/sitepilot/autopilot/workflows/Test/badge.svg?branch=master)
+![Autopilot](https://github.com/sitepilot/autopilot/workflows/build-autopilot/badge.svg?branch=master)
+![Base](https://github.com/sitepilot/autopilot/workflows/build-base/badge.svg?branch=master)
+![Prometheus](https://github.com/sitepilot/autopilot/workflows/build-prometheus/badge.svg?branch=master)
+![Alertmanager](https://github.com/sitepilot/autopilot/workflows/build-alertmanager/badge.svg?branch=master)
+![Blackbox](https://github.com/sitepilot/autopilot/workflows/build-blackbox/badge.svg?branch=master)
 
 A tool for provisioning servers and maintaining WordPress sites.
 
