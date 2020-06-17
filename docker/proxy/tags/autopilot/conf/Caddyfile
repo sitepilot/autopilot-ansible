@@ -1,0 +1,22 @@
+:443 {
+    tls {PROXY_CERT_EMAIL} {
+        on_demand
+    }
+
+    root * /var/www/html/public
+
+    basicauth /monitor/*/ {
+        autopilot {PROXY_MONITOR_PASSWORD}
+    }
+    
+    reverse_proxy /monitor/ http://autopilot-grafana:3000
+    reverse_proxy /monitor/prometheus/ http://s100.sitepilot.io:80
+    reverse_proxy /monitor/alertmanager/ http://autopilot-alertmanager:9093
+    reverse_proxy /monitor/blackbox/ http://autopilot-blackbox:9115
+
+    php_fastcgi autopilot-php:9000
+
+    log {
+        output stdout
+    }
+}
