@@ -10,11 +10,11 @@
     }
     
     reverse_proxy /monitor/ http://autopilot-grafana:3000
-    reverse_proxy /monitor/prometheus/ http://s100.sitepilot.io:80
+    reverse_proxy /monitor/prometheus/ http://autopilot-prometheus:9090
     reverse_proxy /monitor/alertmanager/ http://autopilot-alertmanager:9093
     reverse_proxy /monitor/blackbox/ http://autopilot-blackbox:9115
 
-    php_fastcgi autopilot-php:9000
+    php_fastcgi autopilot:9000
 
     log {
         output stdout
