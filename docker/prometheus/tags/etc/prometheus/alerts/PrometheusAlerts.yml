@@ -7,5 +7,5 @@ groups:
         labels:
           severity: critical
         annotations:
-          summary: "{{ $labels.name }}: monitoring job `{{ $labels.job }}` is down"
-          description: "A monitoring job is down on node `{{ $labels.name }}`, please start the job manually."
+          summary: "{{ $labels.name }}: is down"
+          description: "Could not communicate with `{{ $labels.name }}`, please check the connection and `node_exporter` service."
