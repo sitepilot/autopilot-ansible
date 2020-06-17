@@ -5,8 +5,12 @@
 ![Prometheus](https://github.com/sitepilot/autopilot/workflows/build-prometheus/badge.svg?branch=master)
 ![Alertmanager](https://github.com/sitepilot/autopilot/workflows/build-alertmanager/badge.svg?branch=master)
 ![Blackbox](https://github.com/sitepilot/autopilot/workflows/build-blackbox/badge.svg?branch=master)
+![Grafana](https://github.com/sitepilot/autopilot/workflows/build-grafana/badge.svg?branch=master)
 
-A tool for provisioning servers and maintaining WordPress sites.
+You can use Autopilot for:
+* Provisioning web servers and load balancers.
+* Monitoring servers and sites using Prometheus.
+* Managing and maintaining WordPress websites.
 
 ![screenshot](screenshot.png)
 
@@ -34,13 +38,13 @@ Ubuntu 20.04 is the only supported operating system. Autopilot uses Ansible to u
 * Update Autopilot script: `curl -o ./autopilot https://raw.githubusercontent.com/sitepilot/autopilot/master/autopilot && chmod +x ./autopilot`.
 * Run `./autopilot update` to update the containers, packages and migrate the database.
  
-## Server Configuration
+## Web Server Configuration
 
 ### Packages & Services
 
-The following packages/services will be installed and configured on servers (together with dependencies):
+The following packages/services will be installed and configured on web servers (together with dependencies):
 
-* OpenLitespeed
+* OpenLitespeed (web server)
 * LSPHP 7.4
 * LSPHP 7.3
 * Composer
@@ -53,6 +57,8 @@ The following packages/services will be installed and configured on servers (tog
 * Docker Redis 5
 * Docker MariaDB 10.4
 * phpMyAdmin 5
+* Restic (for backups)
+* Node Exporter (for monitoring)
 
 Users are isolated and allowed to use SFTP with password authentication (chroot directory `/opt/sitepilot/users/%u`).
 
@@ -71,6 +77,21 @@ Users are isolated and allowed to use SFTP with password authentication (chroot 
 * Docker MySQL data folder: `/opt/sitepilot/services/mysql/data`.
 * Docker MySQL logs folder: `/opt/sitepilot/services/mysql/logs`.
 * Docker Redis data folder: `/opt/sitepilot/services/redis/data`.
+
+## Load Balancer Configuration
+
+### Packages & Services
+
+The following packages/services will be installed and configured on load balancer servers (together with dependencies):
+
+* Caddy Web Server (for proxy and auto ssl)
+* Restic (for backups)
+* UFW (firewall)
+* Node Exporter (for monitoring)
+
+### Filesystem
+
+* Caddy vhosts folder: `/opt/sitepilot/services/caddy/vhosts`.
 
 ## Development
 
