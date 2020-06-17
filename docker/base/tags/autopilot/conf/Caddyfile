@@ -1,0 +1,28 @@
+:443 {
+    tls {AUTOPILOT_CERT_EMAIL} {
+        on_demand
+    }
+
+    root * /var/www/html/public
+
+    file_server
+
+    basicauth /monitor/* {
+        autopilot {AUTOPILOT_MONITOR_PASSWORD}
+    }
+
+    basicauth /horizon/* {
+        autopilot {AUTOPILOT_MONITOR_PASSWORD}
+    }
+    
+    reverse_proxy /status* http://autopilot-grafana:3000
+    reverse_proxy /monitor/prometheus* http://127.0.0.1:9090
+    reverse_proxy /monitor/alertmanager* http://127.0.0.1:9093
+    reverse_proxy /monitor/blackbox* http://127.0.0.1:9115
+
+    php_fastcgi 127.0.0.1:9000
+
+    log {
+        output stdout
+    }
+}

@@ -1,125 +1,110 @@
-FROM ubuntu:20.04
+FROM caddy:alpine
 MAINTAINER Sitepilot <support@sitepilot.io>
 
 LABEL org.label-schema.vendor="Sitepilot" \
     org.label-schema.name="autopilot-base" \
-    org.label-schema.description="Docker base image which is used for Autopilot builds." \
-    org.label-schema.url="https://github.com/sitepilot/autopilot-base"
+    org.label-schema.description="Docker base image which is used to build Autopilot." \
+    org.label-schema.url="https://github.com/sitepilot/autopilot"
 
-# Build arguments
-ARG PHP_VER="74"
-ARG WEBSERVER_USER_ID=1000
-ARG WEBSERVER_USER_GID=1000
-ARG WEBSERVER_USER_NAME=autopilot
+EXPOSE 80
+EXPOSE 443
 
-ARG DEBIAN_FRONTEND=noninteractive
+ARG AUTOPILOT_USER_ID=1000
+ARG AUTOPILOT_USER_GID=1000
+ARG AUTOPILOT_USER_NAME=autopilot
 
-# Environment variables
-ENV SET_VHOST_FILE_PERMISSIONS="yes"
+ARG AUTOPILOT_PROMETHEUS_VERSION=2.19.0
+ARG AUTOPILOT_ALERTMANAGER_VERSION=0.21.0
+ARG AUTOPILOT_BLACKBOX_VERSION=0.16.0
 
-ENV PHP_VER=$PHP_VER
-ENV PHP_MEMORY_LIMIT="256M"
-ENV PHP_UPLOAD_MAX_FILESIZE="32M"
-ENV PHP_POST_MAX_SIZE="64M"
-ENV PHP_DISPLAY_ERRORS="on"
-ENV PHP_TIMEZONE="Europe/Amsterdam"
-ENV PHP_LSAPI_CHILDREN=10
+ENV AUTOPILOT_CERT_EMAIL="internal"
+ENV AUTOPILOT_MONITOR_PASSWORD="supersecret"
+ENV AUTOPILOT_USER_ID=$AUTOPILOT_USER_ID
+ENV AUTOPILOT_USER_GID=$AUTOPILOT_USER_GID
+ENV AUTOPILOT_USER_NAME=$AUTOPILOT_USER_NAME
 
-ENV WEBSERVER_USER_NAME=$WEBSERVER_USER_NAME
-ENV WEBSERVER_USER_ID=$WEBSERVER_USER_ID
-ENV WEBSERVER_USER_GID=$WEBSERVER_USER_GID
-ENV WEBSERVER_SERVER_NAME="webserver"
-ENV WEBSERVER_SSL_CERT="/autopilot/conf/cert/default.crt"
-ENV WEBSERVER_SSL_KEY="/autopilot/conf/cert/default.key"
-ENV WEBSERVER_TRUSTED_IPS="173.245.48.0/20T, 103.21.244.0/22T, 103.22.200.0/22T, 103.31.4.0/22T, 141.101.64.0/18T, 108.162.192.0/18T, 190.93.240.0/20T, 188.114.96.0/20T, 197.234.240.0/22T, 198.41.128.0/17T, 162.158.0.0/15T, 104.16.0.0/12T, 172.64.0.0/13T, 131.0.72.0/22T, 2400:cb00::/32T, 2606:4700::/32T, 2803:f800::/32T, 2405:b500::/32T, 2405:8100::/32T, 2a06:98c0::/29T, 2c0f:f248::/32T"
-ENV WEBSERVER_CACHE="off"
+ENV AUTOPILOT_MONITOR_SLACK_WEBHOOK="https://hooks.slack.com/services/xxxx/xxxx/xxxx"
 
-# When using Composer, disable the warning about running commands as root/super user
-ENV COMPOSER_ALLOW_SUPERUSER=1
+RUN apk add --update \
+        bash \
+        sudo \
+        ansible \
+        shadow \
+        php7-fpm \
+        php7-cli \
+        php7-mbstring \
+        php7-iconv \
+        php7-imap \
+        php7-common \
+        php7-curl \
+        php7-redis \
+        php7-json \
+        php7-openssl \
+        php7-phar \
+        php7-soap \
+        php7-zip \
+        php7-xml \
+        php7-opcache \
+        php7-pdo_mysql \
+        php7-pcntl \
+        php7-posix \
+        php7-dom \
+        php7-xmlwriter \
+        php7-tokenizer \
+        supervisor \
+        openssh \
+        curl \
+        wget \
+        nano \
+        tar \
+    && rm -rf /tmp/* /var/cache/apk/*
 
-# Enable openlitespeed repository
-RUN apt-get update \
-    && apt-get install -y wget software-properties-common \
-    && wget -O - http://rpms.litespeedtech.com/debian/enable_lst_debain_repo.sh | bash
+COPY tags /
+RUN chmod +x /autopilot/bin/*
 
-# Persistent runtime dependencies
-ARG DEPS="\
-    ansible \
-    lsphp$PHP_VER \
-    lsphp$PHP_VER-mysql \
-    lsphp$PHP_VER-imap \
-    lsphp$PHP_VER-curl \
-    lsphp$PHP_VER-common \
-    lsphp$PHP_VER-json \
-    lsphp$PHP_VER-redis \
-    lsphp$PHP_VER-intl \
-    openlitespeed \
-    supervisor \
-    git \
-    curl \
-    runit \
-    nano \
-    perl \
-    cron \
-    ssmtp \
-    less \
-    sudo \
-    unzip \
-    "
-
-# Install packages
-RUN set -e \
-    && apt-get update \
-    && apt-get install -y $DEPS \
-    && ln -s /usr/local/lsws/lsphp$PHP_VER/bin/php /usr/local/bin/php
-
-# Install composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php composer-setup.php \
     && mv composer.phar /usr/local/bin/composer \
     && php -r "unlink('composer-setup.php');"
 
-# Install PHPunit
 RUN wget https://phar.phpunit.de/phpunit.phar \
     && chmod +x phpunit.phar \
     && mv phpunit.phar /usr/local/bin/phpunit
 
-# Add configuration files
-COPY tags /
-RUN chmod -R +x /autopilot/bin/*
-RUN chmod -R +x /etc/service/*
-
-# Clean up APT when done
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# Setup user
-RUN addgroup --gid "$WEBSERVER_USER_GID" "$WEBSERVER_USER_NAME" \
+RUN addgroup --gid "$AUTOPILOT_USER_GID" "$AUTOPILOT_USER_NAME" \
     && adduser \
     --disabled-password \
     --gecos "" \
     --home "/var/www" \
-    --ingroup "$WEBSERVER_USER_NAME" \
+    --ingroup "$AUTOPILOT_USER_NAME" \
     --no-create-home \
-    --uid "$WEBSERVER_USER_ID" \
-    "$WEBSERVER_USER_NAME" \
-    && usermod -aG sudo $WEBSERVER_USER_NAME \
-    && echo "${WEBSERVER_USER_NAME} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+    --uid "$AUTOPILOT_USER_ID" \
+    "$AUTOPILOT_USER_NAME" \
+    && echo "${AUTOPILOT_USER_NAME} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-# Expose ports
-EXPOSE 80
-EXPOSE 443
+RUN curl -LO https://github.com/prometheus/prometheus/releases/download/v$AUTOPILOT_PROMETHEUS_VERSION/prometheus-$AUTOPILOT_PROMETHEUS_VERSION.linux-amd64.tar.gz \
+    && tar xvf prometheus-$AUTOPILOT_PROMETHEUS_VERSION.linux-amd64.tar.gz \
+    && mv prometheus-$AUTOPILOT_PROMETHEUS_VERSION.linux-amd64/prometheus /usr/local/bin/ \
+    && mv prometheus-$AUTOPILOT_PROMETHEUS_VERSION.linux-amd64/promtool /usr/local/bin/ \
+    && mv prometheus-$AUTOPILOT_PROMETHEUS_VERSION.linux-amd64/consoles /etc/prometheus/ \
+    && mv prometheus-$AUTOPILOT_PROMETHEUS_VERSION.linux-amd64/console_libraries /etc/prometheus/ \
+    && rm -rf prometheus-$AUTOPILOT_PROMETHEUS_VERSION.linux-amd64.tar.gz prometheus-$AUTOPILOT_PROMETHEUS_VERSION.linux-amd64
 
-# Set workdir
+RUN curl -LO https://github.com/prometheus/alertmanager/releases/download/v$AUTOPILOT_ALERTMANAGER_VERSION/alertmanager-$AUTOPILOT_ALERTMANAGER_VERSION.linux-amd64.tar.gz \
+    && tar xvf alertmanager-$AUTOPILOT_ALERTMANAGER_VERSION.linux-amd64.tar.gz \
+    && mv alertmanager-$AUTOPILOT_ALERTMANAGER_VERSION.linux-amd64/alertmanager /usr/local/bin/ \
+    && mv alertmanager-$AUTOPILOT_ALERTMANAGER_VERSION.linux-amd64/amtool /usr/local/bin/ \
+    && rm -rf alertmanager-$AUTOPILOT_PROMETHEUS_VERSION.linux-amd64.tar.gz alertmanager-$AUTOPILOT_ALERTMANAGER_VERSION.linux-amd64
+
+RUN curl -LO https://github.com/prometheus/blackbox_exporter/releases/download/v$AUTOPILOT_BLACKBOX_VERSION/blackbox_exporter-$AUTOPILOT_BLACKBOX_VERSION.linux-amd64.tar.gz \
+    && tar xvf blackbox_exporter-$AUTOPILOT_BLACKBOX_VERSION.linux-amd64.tar.gz \
+    && mv blackbox_exporter-$AUTOPILOT_BLACKBOX_VERSION.linux-amd64/blackbox_exporter /usr/local/bin/ \
+    && rm -rf blackbox_exporter-$AUTOPILOT_BLACKBOX_VERSION.linux-amd64.tar.gz blackbox_exporter-$AUTOPILOT_BLACKBOX_VERSION.linux-amd64
+
 WORKDIR /var/www
 
-# Set user
-USER $WEBSERVER_USER_NAME
+USER autopilot
 
-# Set volumes
-VOLUME ["/var/www"]
+ENTRYPOINT ["sudo", "--preserve-env", "/autopilot/bin/entrypoint"]
 
-# Set entrypoint
-ENTRYPOINT ["sudo", "-E", "/autopilot/bin/entrypoint"]
-
-# Start services
-CMD ["/autopilot/bin/runit-wrapper"]
+CMD ["sudo", "--preserve-env", "supervisord", "--nodaemon", "--configuration", "/etc/supervisord.conf"]
