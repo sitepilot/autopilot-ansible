@@ -1,0 +1,128 @@
+groups:
+  - name: Nodes
+    rules:
+      - alert: NodeOutOfMemory
+        expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100 < 10
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.name }}: is out of memory"
+          description: "Node memory is filling up (< 10% left). Value: {{ $value }}"
+
+      - alert: NodeMemoryUnderMemoryPressure
+        expr: rate(node_vmstat_pgmajfault[1m]) > 1000
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.name }}: is under memory pressure"
+          description: "The node is under heavy memory pressure. High rate of major page faults. Value: {{ $value }}."
+
+      - alert: NodeUnusualNetworkThroughputIn
+        expr: sum by (instance) (irate(node_network_receive_bytes_total[2m])) / 1024 / 1024 > 100
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.name }}: unusual incoming network throughput"
+          description: "The node's network interfaces are probably receiving too much data (> 100 MB/s). Value: {{ $value }}"
+
+      - alert: NodeUnusualNetworkThroughputOut
+        expr: sum by (instance) (irate(node_network_transmit_bytes_total[2m])) / 1024 / 1024 > 100
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.name }}: outgoing incoming network throughput"
+          description: "The node's network interfaces are probably sending too much data (> 100 MB/s). Value: {{ $value }}"
+
+      - alert: NodeUnusualDiskReadRate
+        expr: sum by (instance) (irate(node_disk_read_bytes_total[2m])) / 1024 / 1024 > 50
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.name }}: unusual disk read rate"
+          description: "Disk is probably reading too much data (> 50 MB/s). Value: {{ $value }}"
+
+      - alert: NodeUnusualDiskWriteRate
+        expr: sum by (instance) (irate(node_disk_written_bytes_total[2m])) / 1024 / 1024 > 50
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.name }}: unusual disk write rate"
+          description: "Disk is probably writing too much data (> 50 MB/s). Value: {{ $value }}"
+
+      - alert: NodeOutOfDiskSpace
+        expr: (node_filesystem_avail_bytes{mountpoint="/rootfs"}  * 100) / node_filesystem_size_bytes{mountpoint="/rootfs"} < 10
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.name }}: is out of disk space"
+          description: "Disk is almost full (< 10% left). Value: {{ $value }}"
+
+      - alert: NodeDiskWillFillIn4Hours
+        expr: predict_linear(node_filesystem_free_bytes{fstype!~"tmpfs"}[1h], 4 * 3600) < 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "{{ $labels.name }}: disk will fill in 4 hours"
+          description: "Disk will fill in 4 hours at current write rate. Value: {{ $value }}"
+
+      - alert: NodeOutOfInodes
+        expr: node_filesystem_files_free{mountpoint ="/rootfs"} / node_filesystem_files{mountpoint ="/rootfs"} * 100 < 10
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.name }}: out of inodes"
+          description: "Disk is almost running out of available inodes (< 10% left). Value: {{ $value }}"
+
+      - alert: NodeUnusualDiskReadLatency
+        expr: rate(node_disk_read_time_seconds_total[1m]) / rate(node_disk_reads_completed_total[1m]) > 100
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.name }}: unusual disk read latency"
+          description: "Disk latency is growing (read operations > 100ms). Value: {{ $value }}"
+
+      - alert: NodeUnusualDiskWriteLatency
+        expr: rate(node_disk_write_time_seconds_total[1m]) / rate(node_disk_writes_completed_total[1m]) > 100
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.name }}: unusual disk write latency"
+          description: "Disk latency is growing (write operations > 100ms). Value: {{ $value }}"
+
+      - alert: NodeHighCpuLoad
+        expr: 100 - (avg by(instance) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.name }}: high CPU load"
+          description: "CPU load is > 80%. Value: {{ $value }}"
+
+      - alert: NodeSwapIsFillingUp
+        expr: (1 - (node_memory_SwapFree_bytes / node_memory_SwapTotal_bytes)) * 100 > 80
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.name }}: swap is filling up"
+          description: "Swap is filling up (>80%). Value: {{ $value }}"
+
+      - alert: NodeSystemdServiceCrashed
+        expr: node_systemd_unit_state{state="failed"} == 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.name }}: systemd service has crashed"
+          description: "A SystemD service has crashed. Value: {{ $value }}"

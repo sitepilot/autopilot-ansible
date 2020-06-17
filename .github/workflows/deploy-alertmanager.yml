@@ -1,0 +1,20 @@
+name: deploy-alertmanager
+
+on:
+  push:
+    paths:
+      - "docker/alertmanager/**"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build and deploy Alertmanager image.
+        run: |
+          if [[ ${GITHUB_REF##*/} = "master" ]]; then export DOCKER_TAG=latest; else export DOCKER_TAG=${GITHUB_REF##*/}; fi
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          cd ${GITHUB_WORKSPACE}/docker/alertmanager/
+          docker build . --file Dockerfile --tag sitepilot/autopilot-alertmanager:$DOCKER_TAG
+          docker push sitepilot/autopilot-alertmanager:$DOCKER_TAG

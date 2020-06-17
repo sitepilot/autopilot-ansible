@@ -5,7 +5,7 @@ use Faker\Generator as Faker;
 $factory->define(\App\Key::class, function (Faker $faker) {
     return [
         'name' => $faker->email,
-        'key' => trim(file_get_contents(base_path('docker/ssh/test_key.pub'))),
+        'key' => trim(file_get_contents(base_path('docker/test/ssh/test_key.pub'))),
         'server_id' => factory(\App\Server::class)->states('ready')
     ];
 });

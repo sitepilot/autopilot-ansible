@@ -2,8 +2,10 @@
 name: Test
 
 on:
-  - push
-  - pull_request
+  push:
+    paths-ignore:
+      - "docker/**"
+  pull_request:
 
 jobs:
   build:

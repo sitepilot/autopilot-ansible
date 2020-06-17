@@ -39,8 +39,8 @@ class SecureShellKey
     protected static function forTesting()
     {
         return (object) [
-            'publicKey' => trim(file_get_contents(base_path('docker/ssh/test_key.pub'))),
-            'privateKey' => trim(file_get_contents(base_path('docker/ssh/test_key'))),
+            'publicKey' => trim(file_get_contents(base_path('docker/test/ssh/test_key.pub'))),
+            'privateKey' => trim(file_get_contents(base_path('docker/test/ssh/test_key'))),
         ];
     }
 

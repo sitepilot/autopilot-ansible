@@ -1,0 +1,11 @@
+groups:
+  - name: Prometheus
+    rules:
+      - alert: PrometheusTargetMissing
+        expr: up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "{{ $labels.name }}: monitoring job `{{ $labels.job }}` is down"
+          description: "A monitoring job is down on node `{{ $labels.name }}`, please start the job manually."

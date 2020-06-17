@@ -41,7 +41,7 @@ services:
         consistency: cached
 
   test:
-    build: ./docker
+    build: ./docker/test
     container_name: autopilot-test
     restart: always
     privileged: true
@@ -54,7 +54,7 @@ services:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
 
   test-lb:
-    build: ./docker
+    build: ./docker/test
     container_name: autopilot-test-lb
     restart: always
     privileged: true
