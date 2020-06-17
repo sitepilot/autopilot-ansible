@@ -1,0 +1,19 @@
+#!/bin/bash
+
+main() {
+  export > /env
+
+  trap "onterm" SIGINT SIGTERM 
+
+  echo "[INFO] Starting runit"
+  sudo /autopilot/bin/runsvdir-start &
+  wait "$!"
+}
+
+onterm() {
+  echo "[INFO] Exiting..."
+  sudo pkill -SIGHUP runsvdir-start
+  exit $?
+}
+
+main "$@"
