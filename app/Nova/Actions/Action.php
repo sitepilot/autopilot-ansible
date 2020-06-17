@@ -33,7 +33,9 @@ class Action extends NovaAction
                 || request()->isMethod('post') && request('action');
         });
 
-        $this->canRun(fn ($request, $model) => $model->isReady());
+        $this->canRun(function ($request, $model) {
+            return $model->isReady();
+        });
 
         return $this;
     }
@@ -52,7 +54,9 @@ class Action extends NovaAction
                 || request()->isMethod('post') && request('action');
         });
 
-        $this->canRun(fn ($request, $model) => $model->isBusy() === false);
+        $this->canRun(function ($request, $model) {
+            return $model->isBusy() === false;
+        });
 
         return $this;
     }
