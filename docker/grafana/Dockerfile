@@ -8,4 +8,6 @@ LABEL org.label-schema.vendor="Sitepilot" \
 
 EXPOSE 3000
 
+COPY tags /
+
 VOLUME ["/var/lib/grafana"]
