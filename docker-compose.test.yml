@@ -11,6 +11,7 @@ services:
       - "${APP_TEST_HTTPS_PORT:-20443}:443"
       - "${APP_TEST_LITESPEED_PORT:-22083}:2083"
       - "${APP_TEST_SSH_PORT:-20022}:22"
+      - "${APP_TEST_NODE_EXPORTER_PORT:-29100}:9100"
     volumes:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
 
@@ -22,5 +23,6 @@ services:
     ports:
       - "${APP_TEST_LB_HTTP_PORT:-30080}:80"
       - "${APP_TEST_LB_HTTPS_PORT:-30443}:443"
+      - "${APP_TEST_LB_NODE_EXPORTER_PORT:-39100}:9100"
     volumes:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
