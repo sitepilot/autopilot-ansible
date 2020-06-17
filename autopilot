@@ -12,14 +12,8 @@ init() {
     mkdir -p $BASE/data/mysql
     mkdir -p $BASE/data/redis    
     mkdir -p $BASE/data/vendor
-    
-    if [[ ! -e $BASE/data/app/monitor/servers.json ]]; then
-        touch $BASE/data/app/monitor/servers.json
-    fi
-
-    if [[ ! -e $BASE/data/app/monitor/domains.json ]]; then
-        touch $BASE/data/app/monitor/domains.json
-    fi
+    mkdir -p $BASE/data/prometheus 
+    mkdir -p $BASE/data/alertmanager 
 }
 
 start() {
