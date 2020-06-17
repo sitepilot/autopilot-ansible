@@ -8,7 +8,7 @@ alerting:
   alertmanagers:
     - static_configs:
         - targets:
-            - autopilot-monitor-alertmanager:9093
+            - autopilot-alertmanager:9093
 
 scrape_configs:
   - job_name: "servers"
@@ -29,4 +29,4 @@ scrape_configs:
       - source_labels: [__param_target]
         target_label: instance
       - target_label: __address__
-        replacement: autopilot-monitor-blackbox:9115
+        replacement: autopilot-blackbox:9115
