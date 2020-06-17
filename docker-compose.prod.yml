@@ -46,7 +46,7 @@ services:
     image: sitepilot/autopilot-grafana:${APP_GRAFANA_TAG:-latest}
     container_name: autopilot-grafana
     depends_on:
-      - prometheus
+      - autopilot
     restart: always
     volumes:
       - "grafana_data:/var/lib/grafana"
