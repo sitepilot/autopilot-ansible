@@ -6,7 +6,8 @@ rule_files:
 
 alerting:
   alertmanagers:
-    - static_configs:
+    - path_prefix: "monitor/alertmanager/"
+      static_configs:
         - targets:
             - 127.0.0.1:9093
 
