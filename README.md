@@ -10,6 +10,7 @@ You can use Autopilot for:
 * Managing and maintaining WordPress websites.
 
 ![screenshot](screenshot.png)
+![screenshot](screenshot-status.png)
 
 ## Requirements
 
