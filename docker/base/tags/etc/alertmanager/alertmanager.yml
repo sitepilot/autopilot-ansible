@@ -31,6 +31,6 @@ receivers:
     slack_configs:
       - api_url: "{AUTOPILOT_MONITOR_SLACK_WEBHOOK}"
         send_resolved: true
-        channel: "monitoring"
+        channel: "{AUTOPILOT_MONITOR_SLACK_CHANNEL}"
         title: "Autopilot Monitor"
         text: "{{ range .Alerts }}[{{ .Status | toUpper }}] {{ .Annotations.summary }}\n{{ .Annotations.description }}\n\n{{ end }}"

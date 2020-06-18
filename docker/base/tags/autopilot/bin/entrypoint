@@ -17,6 +17,7 @@ sed -i -e "s~{AUTOPILOT_MONITOR_PASSWORD}~${PASSWORD}~" \
     /etc/caddy/Caddyfile
 
 sed -i -e "s~{AUTOPILOT_MONITOR_SLACK_WEBHOOK}~${AUTOPILOT_MONITOR_SLACK_WEBHOOK}~" \
+    -e "s~{AUTOPILOT_MONITOR_SLACK_CHANNEL}~${AUTOPILOT_MONITOR_SLACK_CHANNEL}~" \
     /etc/alertmanager/alertmanager.yml
 
 sed -i -e "s~{AUTOPILOT_URL}~${AUTOPILOT_URL}~" \
