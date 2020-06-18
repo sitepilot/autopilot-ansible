@@ -8,4 +8,4 @@ LABEL org.label-schema.vendor="Sitepilot" \
 
 ADD . /var/www/html
 
-RUN sudo chown -R $AUTOPILOT_USER_NAME:$AUTOPILOT_USER_NAME /var/www/html
+RUN sudo chown -R $AUTOPILOT_USER_NAME:$AUTOPILOT_USER_NAME /var/www
