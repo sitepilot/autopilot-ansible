@@ -18,6 +18,10 @@ init() {
 
 start() {
     init
+
+    sed -i "s/APP_USER_ID=1000/APP_USER_ID=$(id -u)/" $BASE/.env
+    sed -i "s/APP_USER_GID=1000/APP_USER_GID=$(id -g)/" $BASE/.env
+
     docker-compose -f $BASE/docker-compose.yml --project-directory $BASE up -d --build
 }
 
