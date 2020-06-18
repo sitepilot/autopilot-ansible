@@ -7,5 +7,3 @@ LABEL org.label-schema.vendor="Sitepilot" \
     org.label-schema.url="https://github.com/sitepilot/autopilot"
 
 ADD . /var/www/html
-
-RUN sudo chown -R $AUTOPILOT_USER_NAME:$AUTOPILOT_USER_NAME /var/www/html
