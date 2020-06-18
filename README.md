@@ -4,10 +4,11 @@
 ![Base](https://github.com/sitepilot/autopilot/workflows/build-base/badge.svg?branch=master)
 ![Grafana](https://github.com/sitepilot/autopilot/workflows/build-grafana/badge.svg?branch=master)
 
-You can use Autopilot for:
-* Provisioning web servers and load balancers.
-* Monitoring servers and sites using Prometheus.
-* Managing and maintaining WordPress websites.
+Autopilot is used for managing the [Sitepilot](https://sitepilot.io) managed WordPress webhosting platform. With Autopilot you can:
+
+* Provision WordPress optimized web servers and load balancers.
+* Monitor server and site health of the provisioned servers.
+* Manage and maintain WordPress websites.
 
 ![screenshot](screenshot.png)
 ![screenshot](screenshot-status.png)
