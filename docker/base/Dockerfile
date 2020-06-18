@@ -101,6 +101,8 @@ RUN curl -LO https://github.com/prometheus/blackbox_exporter/releases/download/v
     && mv blackbox_exporter-$AUTOPILOT_BLACKBOX_VERSION.linux-amd64/blackbox_exporter /usr/local/bin/ \
     && rm -rf blackbox_exporter-$AUTOPILOT_BLACKBOX_VERSION.linux-amd64.tar.gz blackbox_exporter-$AUTOPILOT_BLACKBOX_VERSION.linux-amd64
 
+RUN echo "Set disable_coredump false" >> /etc/sudo.conf
+
 WORKDIR /var/www
 
 USER autopilot
