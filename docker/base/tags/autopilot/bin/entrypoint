@@ -12,12 +12,18 @@ generate() {
 PASSWORD=$(caddy hash-password --plaintext "$AUTOPILOT_MONITOR_PASSWORD")
 
 log "Generating configuration files..."
-sed -e "s~{AUTOPILOT_MONITOR_PASSWORD}~${PASSWORD}~" \
+sed -i -e "s~{AUTOPILOT_MONITOR_PASSWORD}~${PASSWORD}~" \
     -e "s~{AUTOPILOT_CERT_EMAIL}~${AUTOPILOT_CERT_EMAIL}~" \
-    /autopilot/conf/Caddyfile > /etc/caddy/Caddyfile
+    /etc/caddy/Caddyfile
 
-sed -e "s~{AUTOPILOT_MONITOR_SLACK_WEBHOOK}~${AUTOPILOT_MONITOR_SLACK_WEBHOOK}~" \
-    /autopilot/conf/alertmanager.yml > /etc/alertmanager/alertmanager.yml
+sed -i -e "s~{AUTOPILOT_MONITOR_SLACK_WEBHOOK}~${AUTOPILOT_MONITOR_SLACK_WEBHOOK}~" \
+    /etc/alertmanager/alertmanager.yml
+
+sed -i -e "s~{AUTOPILOT_URL}~${AUTOPILOT_URL}~" \
+    /etc/supervisor.d/alertmanager.ini
+
+sed -i -e "s~{AUTOPILOT_URL}~${AUTOPILOT_URL}~" \
+    /etc/supervisor.d/prometheus.ini
 
 log "Setting the right user and group id..."
 groupmod -g $AUTOPILOT_USER_GID $AUTOPILOT_USER_NAME
@@ -35,7 +41,7 @@ chown -R $AUTOPILOT_USER_NAME:$AUTOPILOT_USER_NAME /etc/blackbox_exporter
 CRONFILE=/autopilot/conf/crontabs/app
 if test -f "$CRONFILE"; then
     log "Loading crontab ($CRONFILE)..."
-    crontab $CRONFILE
+    crontab -u $AUTOPILOT_USER_NAME $CRONFILE
 fi
 
 exec "$@"
