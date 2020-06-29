@@ -52,11 +52,13 @@ class WriteMonitorConfig extends Command
             $item->labels->name =  $server->name;
             $content[] = $item;
 
-            $healthItem = new stdClass;
-            $healthItem ->labels = new stdClass; 
-            $healthItem->targets[] = 'http://' . $server->address . '/.sitepilot/health/';
-            $healthItem->labels->name = $server->name;
-            $health[] = $healthItem;
+            if (in_array($server->type, ['shared', 'dedicated'])) {
+                $healthItem = new stdClass;
+                $healthItem->labels = new stdClass;
+                $healthItem->targets[] = 'http://' . $server->address . '/.sitepilot/health/';
+                $healthItem->labels->name = $server->name;
+                $health[] = $healthItem;
+            }
         }
 
         Storage::disk('local')->put('monitor/servers.json', json_encode($content));
