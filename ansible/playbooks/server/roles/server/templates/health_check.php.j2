@@ -5,9 +5,11 @@ try {
     checkMySQL();
     checkRedis();
     checkMail();
-
+    
+    http_response_code(200);
     echo "[OK] - Load: $load";
 } catch (Exception $e) {
+    http_response_code(500);
     echo "[ERROR] - " . $e->getMessage();
 }
 
@@ -56,10 +58,7 @@ function checkRedis()
 function checkLoad()
 {
     $load = sys_getloadavg();
-    if ($load[1] > 5) {
-        throw new Exception("Server load is to high ($load[1]).");
-    }
-
+    
     return $load[1];
 }
 
