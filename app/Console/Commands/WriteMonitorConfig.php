@@ -43,16 +43,24 @@ class WriteMonitorConfig extends Command
     {
         $servers = Server::get();
         $content = [];
+        $health = [];
 
         foreach ($servers as $server) {
             $item = new stdClass;
             $item->labels = new stdClass;
             $item->targets[] = $server->address . ':9100';
-            $item->labels->name = $server->name;
+            $item->labels->name =  $server->name;
             $content[] = $item;
+
+            $healthItem = new stdClass;
+            $healthItem ->labels = new stdClass; 
+            $healthItem->targets[] = 'http://' . $server->address . '/.sitepilot/health/';
+            $healthItem->labels->name = $server->name;
+            $health[] = $healthItem;
         }
 
         Storage::disk('local')->put('monitor/servers.json', json_encode($content));
+        Storage::disk('local')->put('monitor/health.json', json_encode($health));
 
         $domains = Domain::get();
         $content = [];
