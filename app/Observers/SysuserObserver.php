@@ -4,7 +4,6 @@ namespace App\Observers;
 
 use App\Server;
 use App\Sysuser;
-use App\SecureShellKey;
 use Illuminate\Support\Str;
 
 class SysuserObserver
@@ -17,12 +16,16 @@ class SysuserObserver
      */
     public function creating(Sysuser $sysuser)
     {
-        $sysuser->generateKeypair();
-
         if (empty($sysuser->server_id)) {
-            $server = Server::where('type', 'shared')->withCount('sites')->orderBy('sites_count', 'asc')->first();
+            $server = Server::where('type', 'shared')
+                ->orderBy('sites_count', 'asc')
+                ->withCount('sites')
+                ->first();
+
             $sysuser->server_id = $server->id;
         }
+
+        $sysuser->generateKeypair();
 
         if (empty($sysuser->password)) $sysuser->password = Str::random(12);
         if (empty($sysuser->mysql_password)) $sysuser->mysql_password = Str::random(12);
