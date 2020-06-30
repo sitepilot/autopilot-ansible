@@ -60,7 +60,7 @@ class Sysuser extends Model implements ProvisionableResource
      * @var array
      */
     public static $validationRules = [
-        'name' => ['required', 'alpha_dash', 'min:3', 'max:32', 'unique:sysusers,name,{{resourceId}}'],
+        'name' => ['required', 'alpha_dash', 'min:3', 'max:32', 'not_in:root,admin,sitepilot,autopilot', 'unique:sysusers,name,{{resourceId}}'],
         'password' => ['nullable', 'min:8'],
         'mysql_password' => ['nullable', 'min:8'],
         'isolated' => ['boolean'],
