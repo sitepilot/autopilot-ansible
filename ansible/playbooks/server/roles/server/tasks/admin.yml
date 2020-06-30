@@ -34,7 +34,7 @@
     state: directory
     owner: "{{ admin }}"
     group: "{{ admin }}"
-    mode: "0750"
+    mode: "0711"
   loop:
     - "/home/{{ admin }}"
 
