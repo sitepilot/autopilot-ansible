@@ -130,6 +130,7 @@
   copy:
     src: /usr/local/lsws/conf/templates/lsphp74.conf
     dest: /usr/local/lsws/conf/templates/lsphp74-ssl.conf
+    remote_src: yes
 
 - name: "olsws : generate lsphp73 vhost template"
   template:
@@ -145,6 +146,7 @@
   copy:
     src: /usr/local/lsws/conf/templates/lsphp73.conf
     dest: /usr/local/lsws/conf/templates/lsphp73-ssl.conf
+    remote_src: yes
 
 - name: "olsws : generate admin password script"
   template:
