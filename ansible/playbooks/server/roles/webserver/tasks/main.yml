@@ -1,0 +1,24 @@
+---
+- include: openlitespeed.yml
+  tags: "openlitespeed"
+
+- include: php.yml
+  tags: "php"
+
+- include: health.yml
+  tags: "health"
+
+- include: pma.yml
+  tags: "pma"
+
+- include: composer.yml
+  tags: "composer"
+
+- include: nodejs.yml
+  tags: "nodejs"
+
+- include: wpcli.yml
+  tags: "wpcli"
+
+- include: wordmove.yml
+  tags: "wordmove"

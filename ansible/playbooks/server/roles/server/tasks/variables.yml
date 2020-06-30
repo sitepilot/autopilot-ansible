@@ -1,8 +1,0 @@
----
-- name: "variables : include role variables"
-  include_vars: "main.yml"
-
-- name: "variables : define Sitepilot managed"
-  set_fact:
-    sitepilot_managed: "{{ __sitepilot_managed }}"
-  when: sitepilot_managed is not defined

@@ -1,0 +1,5 @@
+---
+- name: reload openlitespeed
+  service:
+    name: lshttpd
+    state: reloaded
