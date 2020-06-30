@@ -24,6 +24,7 @@
       lsphp73-imap,
       lsphp73-curl,
       lsphp73-imagick,
+      lsphp73-ioncube,
       lsphp74,
       lsphp74-common,
       lsphp74-json,
@@ -124,18 +125,11 @@
   notify: reload openlitespeed
   vars:
     php_version: "74"
-    ssl: false
 
-- name: "olsws : generate lsphp74-ssl vhost template"
-  template:
-    src: olsws_vhost_template.j2
+- name: "olsws : create lsphp74-ssl vhost template (deprecated)"
+  copy:
+    src: /usr/local/lsws/conf/templates/lsphp74.conf
     dest: /usr/local/lsws/conf/templates/lsphp74-ssl.conf
-    owner: lsadm
-    group: lsadm
-  notify: reload openlitespeed
-  vars:
-    php_version: "74"
-    ssl: true
 
 - name: "olsws : generate lsphp73 vhost template"
   template:
@@ -146,18 +140,11 @@
   notify: reload openlitespeed
   vars:
     php_version: "73"
-    ssl: false
 
-- name: "olsws : generate lsphp73-ssl vhost template"
-  template:
-    src: olsws_vhost_template.j2
+- name: "olsws : create lsphp73-ssl vhost template (deprecated)"
+  copy:
+    src: /usr/local/lsws/conf/templates/lsphp73.conf
     dest: /usr/local/lsws/conf/templates/lsphp73-ssl.conf
-    owner: lsadm
-    group: lsadm
-  notify: reload openlitespeed
-  vars:
-    php_version: "73"
-    ssl: true
 
 - name: "olsws : generate admin password script"
   template:
