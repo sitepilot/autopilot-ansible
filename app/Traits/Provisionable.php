@@ -246,48 +246,6 @@ trait Provisionable
     }
 
     /**
-     * Determine if the resource is currently renewing certificates.
-     *
-     * @return bool
-     */
-    public function isCertRenew()
-    {
-        return $this->status == 'cert-renew';
-    }
-
-    /**
-     * Mark the resource as cert renew.
-     *
-     * @return $this
-     */
-    public function markAsCertRenew()
-    {
-        $this->status = 'cert-renew';
-        return $this->save();
-    }
-
-    /**
-     * Determine if the resource is currently requesting a certificate.
-     *
-     * @return bool
-     */
-    public function isCertRequest()
-    {
-        return $this->status == 'cert-request';
-    }
-
-    /**
-     * Mark the resource as cert request.
-     *
-     * @return $this
-     */
-    public function markAsCertRequest()
-    {
-        $this->status = 'cert-request';
-        return $this->save();
-    }
-
-    /**
      * Determine if the resource is currently running.
      *
      * @return bool
@@ -343,8 +301,6 @@ trait Provisionable
             || (!in_array('stopped', $exclude) && $this->isStopped())
             || (!in_array('starting', $exclude) && $this->isStarting())
             || (!in_array('testing', $exclude) && $this->isTesting())
-            || (!in_array('cert-renew', $exclude) && $this->isCertRenew())
-            || (!in_array('cert-request', $exclude) && $this->isCertRequest())
             || (!in_array('running', $exclude) && $this->isRunning())
             || (!in_array('restoring', $exclude) && $this->isRestoring());
     }
@@ -363,7 +319,7 @@ trait Provisionable
                 return Str::studly($resource->status);
             }
         )
-            ->loadingWhen(['Connecting', 'Provisioning', 'Destroying', 'Stopping', 'Starting', 'Testing', 'CertRenew', 'CertRequest', 'Running', 'Restoring'])
+            ->loadingWhen(['Connecting', 'Provisioning', 'Destroying', 'Stopping', 'Starting', 'Testing', 'Running', 'Restoring'])
             ->failedWhen(['Error']);
     }
 

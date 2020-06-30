@@ -399,17 +399,7 @@ class Server extends Resource
                 ->confirmButtonText('Provision')
                 ->confirmText('Are you sure you want to provision the selected server(s)?')
                 ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.')
-                ->canRunWhenNotBusy($this),
-            (new JobAction)
-                ->exceptOnIndex()
-                ->showOnTableRow()
-                ->setName('Renew Certificates')
-                ->setResourceName('server')
-                ->setFunctionName('certRenew')
-                ->confirmButtonText('Renew Certificates')
-                ->confirmText('Are you sure you want to renew certificates on the selected server(s)?')
-                ->setSuccessMessage('Autopilot will renew certificates on your {{resourceName}} in a few seconds.')
-                ->canRunWhenReady($this, ['shared', 'dedicated']),
+                ->canRunWhenNotBusy($this)
         ];
     }
 }

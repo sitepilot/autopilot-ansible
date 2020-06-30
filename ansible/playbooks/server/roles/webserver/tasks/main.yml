@@ -22,3 +22,6 @@
 
 - include: wordmove.yml
   tags: "wordmove"
+
+- include: cleanup.yml
+  tags: "cleanup"

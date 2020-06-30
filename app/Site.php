@@ -6,7 +6,6 @@ use App\Sysuser;
 use App\Jobs\SiteDestroyJob;
 use App\Traits\Provisionable;
 use App\Jobs\SiteProvisionJob;
-use App\Jobs\SiteCertRequestJob;
 use Illuminate\Database\Eloquent\Model;
 use App\Contracts\ProvisionableResource;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -137,16 +136,6 @@ class Site extends Model implements ProvisionableResource
     public function provision()
     {
         return $this->dispatchJob(SiteProvisionJob::class);
-    }
-
-    /**
-     * Dispatch certificate request job.
-     *
-     * @return bool|PendingDispatch|mixed
-     */
-    public function certRequest()
-    {
-        return $this->dispatchJob(SiteCertRequestJob::class);
     }
 
     /**

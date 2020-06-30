@@ -83,9 +83,6 @@ class Site extends Resource
                 ->displayUsingLabels()
                 ->rules(\App\Site::$validationRules['php_version']),
 
-            Boolean::make('Certificate', 'certficate')
-                ->exceptOnForms(),
-
             Text::make('Domains', function () {
                 if (count($this->domains) < 1) {
                     return '—';
@@ -189,17 +186,7 @@ class Site extends Resource
                 ->confirmButtonText('Provision')
                 ->confirmText('Are you sure you want to provision the selected site(s)?')
                 ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.')
-                ->canRunWhenNotBusy($this),
-            (new JobAction)
-                ->exceptOnIndex()
-                ->showOnTableRow()
-                ->setName('Request Certificate')
-                ->setResourceName('site')
-                ->setFunctionName('certRequest')
-                ->confirmButtonText('Request Certificate')
-                ->confirmText('Are you sure you want to request certificates for the selected site(s)?')
-                ->setSuccessMessage('Autopilot will request a certificate for your {{resourceName}} in a few seconds.')
-                ->canRunWhenReady($this),
+                ->canRunWhenNotBusy($this)
         ];
     }
 }

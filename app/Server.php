@@ -8,7 +8,6 @@ use App\Jobs\ServerTestJob;
 use App\Jobs\ServerStartJob;
 use App\Traits\Provisionable;
 use App\Jobs\ServerDestroyJob;
-use App\Jobs\ServerCertRenewJob;
 use App\Jobs\ServerProvisionJob;
 use App\Rules\CommaSeparatedIpsRule;
 use Illuminate\Database\Eloquent\Model;
@@ -500,16 +499,6 @@ class Server extends Model implements ProvisionableResource
     public function test()
     {
         return $this->dispatchJob(ServerTestJob::class);
-    }
-
-    /**
-     * Dispatch certificates renew job.
-     *
-     * @return bool|PendingDispatch|mixed
-     */
-    public function certRenew()
-    {
-        return $this->dispatchJob(ServerCertRenewJob::class);
     }
 
     /**

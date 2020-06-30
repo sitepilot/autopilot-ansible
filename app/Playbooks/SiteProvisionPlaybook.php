@@ -75,7 +75,6 @@ class SiteProvisionPlaybook extends Playbook
             'site' => (string) $this->site->name,
             'domain' => (string) $this->site->domain,
             'domains' => (array) $domains,
-            'ssl' => (boolean) $this->site->certificate,
             'php_version' => (integer) $this->site->php_version
         ]);
     }
