@@ -39,10 +39,11 @@
   notify:
     - reload openlitespeed
 
-- name: "olsws : enable on startup"
+- name: "olsws : enable and start openlitespeed"
   service:
     name: lsws
     enabled: true
+    state: started
 
 - name: "olsws : create folders"
   file:
