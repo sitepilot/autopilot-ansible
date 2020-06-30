@@ -11,7 +11,7 @@
       caddy
     state: present
     update_cache: yes
-  notify: restart caddy
+  notify: reload caddy
 
 - name: "caddy : enable on startup"
   service:
