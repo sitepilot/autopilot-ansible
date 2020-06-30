@@ -43,4 +43,4 @@
     dest: /opt/sitepilot/services/phpmyadmin/public/config.inc.php
   when: not pma_index.stat.exists
   notify:
-    - restart olsws
+    - reload openlitespeed
