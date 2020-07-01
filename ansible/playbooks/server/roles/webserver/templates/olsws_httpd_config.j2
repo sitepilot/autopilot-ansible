@@ -119,82 +119,6 @@ lsrecaptcha  {
   }
 }
 
-extprocessor lsphp {
-  type                    lsapi
-  address                 uds://opt/sitepilot/services/olsws/tmp/lsphp.sock
-  maxConns                10
-  env                     PHP_LSAPI_CHILDREN=10
-  env                     LSAPI_AVOID_FORK=200M
-  initTimeout             60
-  retryTimeout            0
-  persistConn             1
-  respBuffer              0
-  autoStart               1
-  path                    lsphp73/bin/lsphp
-  backlog                 100
-  instances               1
-  priority                0
-  memSoftLimit            2047M
-  memHardLimit            2047M
-  procSoftLimit           1400
-  procHardLimit           1500
-}
-
-scripthandler  {
-  add                     lsapi:lsphp php
-}
-
-railsDefaults  {
-  maxConns                1
-  env                     LSAPI_MAX_IDLE=60
-  initTimeout             60
-  retryTimeout            0
-  pcKeepAliveTimeout      60
-  respBuffer              0
-  backlog                 50
-  runOnStartUp            3
-  extMaxIdleTime          300
-  priority                3
-  memSoftLimit            2047M
-  memHardLimit            2047M
-  procSoftLimit           500
-  procHardLimit           600
-}
-
-wsgiDefaults  {
-  maxConns                5
-  env                     LSAPI_MAX_IDLE=60
-  initTimeout             60
-  retryTimeout            0
-  pcKeepAliveTimeout      60
-  respBuffer              0
-  backlog                 50
-  runOnStartUp            3
-  extMaxIdleTime          300
-  priority                3
-  memSoftLimit            2047M
-  memHardLimit            2047M
-  procSoftLimit           500
-  procHardLimit           600
-}
-
-nodeDefaults  {
-  maxConns                5
-  env                     LSAPI_MAX_IDLE=60
-  initTimeout             60
-  retryTimeout            0
-  pcKeepAliveTimeout      60
-  respBuffer              0
-  backlog                 50
-  runOnStartUp            3
-  extMaxIdleTime          300
-  priority                3
-  memSoftLimit            2047M
-  memHardLimit            2047M
-  procSoftLimit           500
-  procHardLimit           600
-}
-
 module cache {
   internal                1
   checkPrivateCache       1
@@ -215,7 +139,14 @@ module cache {
   storagepath /opt/sitepilot/services/olsws/tmp/cachedata
   ls_enabled            1
 }
- 
+
+module mod_security {
+  modsecurity  on
+  modsecurity_rules 
+  SecRuleEngine On
+  modsecurity_rules_file /opt/sitepilot/services/olsws/cwaf/rules.conf.main
+}
+
 listener http {
   address               [ANY]:80
   secure                0

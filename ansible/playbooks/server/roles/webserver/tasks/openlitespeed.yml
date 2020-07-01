@@ -13,6 +13,7 @@
   apt:
     name: >
       openlitespeed,
+      ols-modsecurity,
       lsphp73,
       lsphp73-common,
       lsphp73-json,

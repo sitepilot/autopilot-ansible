@@ -2,6 +2,9 @@
 - include: openlitespeed.yml
   tags: "openlitespeed"
 
+- include: modsecurity.yml
+  tags: "modsecurity"
+
 - include: php.yml
   tags: "php"
 
