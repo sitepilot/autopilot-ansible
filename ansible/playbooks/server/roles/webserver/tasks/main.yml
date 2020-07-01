@@ -5,6 +5,9 @@
 - include: modsecurity.yml
   tags: "modsecurity"
 
+- include: fail2ban.yml
+  tags: "fail2ban"
+
 - include: php.yml
   tags: "php"
 
