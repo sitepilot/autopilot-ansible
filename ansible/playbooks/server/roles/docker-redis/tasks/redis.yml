@@ -1,16 +1,14 @@
 ---
 - name: "redis : create service folders"
   file:
-    path: "{{ item.path }}"
+    path: "{{ item }}"
     owner: "{{ admin }}"
     group: "{{ admin }}"
     state: directory
-    recurse: "{{ item.recurse }}"
+    mode: "0700"
   loop:
-    - path: /opt/sitepilot/services/redis/
-      recurse: false
-    - path: /opt/sitepilot/services/redis/data/
-      recurse: false
+    - /opt/sitepilot/services/redis/
+    - /opt/sitepilot/services/redis/data/
 
 - name: "redis : get the admin UID"
   command: "id -u {{ admin }}"

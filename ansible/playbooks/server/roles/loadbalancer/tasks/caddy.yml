@@ -20,12 +20,15 @@
 
 - name: "caddy : create folders"
   file:
-    path: "{{ item.path }}"
+    path: "{{ item }}"
     state: directory
-    recurse: "{{ item.recurse }}"
+    owner: "caddy"
+    group: "caddy"
+    mode: "0700"
   loop:
-    - path: /opt/sitepilot/services/caddy/vhosts
-      recurse: true
+    - /opt/sitepilot/services/caddy
+    - /opt/sitepilot/services/caddy/vhosts
+    - /opt/sitepilot/services/caddy/logs
 
 - name: "caddy : generate config"
   template:

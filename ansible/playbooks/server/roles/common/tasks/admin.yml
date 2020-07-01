@@ -17,16 +17,13 @@
 
 - name: "admin : create folders"
   file:
-    path: "{{ item.path }}"
+    path: "{{ item }}"
     owner: "{{ admin }}"
     group: "{{ admin }}"
     state: directory
-    recurse: "{{ item.recurse }}"
+    mode: "0600"
   loop:
-    - path: "/home/{{ admin }}/.ssh"
-      recurse: false
-    - path: "/opt/sitepilot/services"
-      recurse: false
+    - "/home/{{ admin }}/.ssh"
 
 - name: "admin : set admin home dir permission"
   file:

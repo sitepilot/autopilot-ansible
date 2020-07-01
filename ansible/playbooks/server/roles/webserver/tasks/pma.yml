@@ -9,14 +9,13 @@
 
 - name: "phpmyadmin : create folders"
   file:
-    path: "{{ item.path }}"
+    path: "{{ item }}"
     owner: "{{ admin }}"
     group: "{{ admin }}"
     state: directory
-    recurse: "{{ item.recurse }}"
+    mode: "0700"
   loop:
-    - path: /opt/sitepilot/services/phpmyadmin/public
-      recurse: true
+    - /opt/sitepilot/services/phpmyadmin/public
 
 - name: "phpmyadmin : check if is installed"
   stat:

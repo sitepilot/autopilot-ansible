@@ -8,20 +8,16 @@
 
 - name: "mysql : create service folders"
   file:
-    path: "{{ item.path }}"
+    path: "{{ item }}"
     owner: "{{ admin }}"
     group: "{{ admin }}"
     state: directory
-    recurse: "{{ item.recurse }}"
+    mode: "0700"
   loop:
-    - path: /opt/sitepilot/services/mysql
-      recurse: false
-    - path: /opt/sitepilot/services/mysql/logs/
-      recurse: false
-    - path: /opt/sitepilot/services/mysql/data/
-      recurse: false
-    - path: /opt/sitepilot/services/mysql/conf/
-      recurse: false
+    - /opt/sitepilot/services/mysql
+    - /opt/sitepilot/services/mysql/logs/
+    - /opt/sitepilot/services/mysql/data/
+    - /opt/sitepilot/services/mysql/conf/
 
 - name: "mysql : get the admin UID"
   command: "id -u {{ admin }}"
@@ -58,7 +54,7 @@
     dest: "/root/.my.cnf"
     owner: root
     group: root
-    mode: 0600
+    mode: "0600"
   when: not root_my_cnf.stat.exists
 
 - name: "mysql : check if .my.cnf file exists for '{{ admin }}' user"
@@ -72,7 +68,7 @@
     dest: "/home/{{ admin }}/.my.cnf"
     owner: "{{ admin }}"
     group: "{{ admin }}"
-    mode: 0600
+    mode: "0600"
   when: not admin_my_cnf.stat.exists
 
 - name: "mysql : ensure '{{ admin }}' user has admin rights"
@@ -106,7 +102,7 @@
     dest: "/opt/sitepilot/scripts/mysql-backup.sh"
     owner: "root"
     group: "root"
-    mode: 0700
+    mode: "0700"
 
 - name: "mysql : configure backup cron"
   cron:

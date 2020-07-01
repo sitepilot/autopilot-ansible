@@ -4,4 +4,4 @@
     url: "https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar"
     dest: "/usr/local/bin/wp"
     force_basic_auth: true
-    mode: 0755
+    mode: "0755"
