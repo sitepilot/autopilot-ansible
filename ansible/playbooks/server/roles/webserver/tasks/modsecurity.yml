@@ -5,7 +5,7 @@
     owner: "{{ admin }}"
     group: "{{ admin }}"
     state: directory
-  notify: reload openlitepseed
+  notify: reload openlitespeed
 
 - name: "modsecurity : unpack cwaf rules"
   unarchive:
@@ -13,4 +13,4 @@
     dest: /opt/sitepilot/services/olsws/cwaf
     owner: "{{ admin }}"
     group: "{{ admin }}"
-  notify: reload openlitepseed
+  notify: reload openlitespeed
