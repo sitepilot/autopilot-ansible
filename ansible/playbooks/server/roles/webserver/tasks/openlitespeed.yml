@@ -53,25 +53,22 @@
     owner: "{{ admin }}"
     group: "{{ admin }}"
     state: directory
-    recurse: "{{ item.recurse }}"
+    mode: "{{ item.mode }}"
   loop:
-    # OpenLitespeed
     - path: /tmp/lshttpd
-      recurse: true
+      mode: "0755"
     - path: /opt/sitepilot/services/olsws
-      recurse: false
+      mode: "0700"
     - path: /opt/sitepilot/services/olsws/tmp
-      recurse: false
+      mode: "0700"
     - path: /opt/sitepilot/services/olsws/logs
-      recurse: false
-
-    # Default Vhost
+      mode: "0700"
     - path: /opt/sitepilot/services/default
-      recurse: false
+      mode: "0700"
     - path: /opt/sitepilot/services/default/public
-      recurse: false
+      mode: "0700"
     - path: /opt/sitepilot/services/default/logs
-      recurse: false
+      mode: "0700"
 
 - name: "olsws : generate an OpenSSL private key"
   openssl_privatekey:
@@ -165,7 +162,7 @@
     dest: "/opt/sitepilot/scripts/olsws-reload.sh"
     owner: "root"
     group: "root"
-    mode: 0700
+    mode: "0700"
 
 - name: "olsws : configure reload cron"
   cron:

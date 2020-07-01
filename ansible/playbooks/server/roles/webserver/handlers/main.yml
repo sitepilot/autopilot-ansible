@@ -3,8 +3,3 @@
   service:
     name: lshttpd
     state: restarted
-
-- name: reload fail2ban
-  service:
-    name: fail2ban
-    state: reloaded

@@ -3,3 +3,8 @@
   service:
     name: caddy
     state: reloaded
+
+- name: reload fail2ban
+  service:
+    name: fail2ban
+    state: reloaded

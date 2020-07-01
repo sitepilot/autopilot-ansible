@@ -67,6 +67,7 @@ class DomainProvisionPlaybook extends Playbook
 
         return array_merge(parent::vars(), [
             'config_name' => (string) 'autopilot-domain-' . $this->domain->id,
+            'site_name' => (string) $this->domain->site->name,
             'domain' => (string) $this->domain->name,
             'email' => (string) 'admin@' . $this->domain->name,
             'backends' => (array) $backends
