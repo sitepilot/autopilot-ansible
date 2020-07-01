@@ -31,3 +31,6 @@
 
 - include: node-exporter.yml
   tags: "node-exporter"
+
+- include: ssmtp.yml
+  tags: "ssmtp"
