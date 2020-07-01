@@ -42,7 +42,7 @@
 
 - name: "olsws : enable and start openlitespeed"
   service:
-    name: lsws
+    name: lshttpd
     enabled: true
     state: started
 
