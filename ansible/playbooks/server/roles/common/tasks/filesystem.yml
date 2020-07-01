@@ -19,5 +19,7 @@
       mode: "0711"
     - path: "/opt/sitepilot/backups"
       mode: "0711"
+    - path: "/opt/sitepilot/users"
+      mode: "0711"
     - path: "/opt/sitepilot/ansible"
       mode: "0777"
