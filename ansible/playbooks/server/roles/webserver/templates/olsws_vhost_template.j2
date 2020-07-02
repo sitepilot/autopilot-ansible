@@ -12,13 +12,29 @@ virtualHostConfig  {
 
   errorlog $VH_ROOT/logs/error.log {
     useServer             0
-    logLevel              WARN
-    rollingSize           10
+    logLevel              NOTICE
+    rollingSize           10M
+    keepDays              7
   }
 
   accesslog $VH_ROOT/logs/access.log {
     useServer             0
-    rollingSize           10
+    logFormat             %a %l %u %t "%r" %>s %O "%{Referer}i" "%{User-Agent}i"
+    logHeaders            5
+    rollingSize           10M
+    keepDays              7
+  }
+
+  accesslog $VH_ROOT/logs/transfer.log {
+    useServer             0
+    logFormat             %O
+    rollingSize           0
+  }
+
+  accesslog $VH_ROOT/logs/visitors.log {
+    useServer             0
+    logFormat             %a
+    rollingSize           0
   }
 
   scripthandler  {
