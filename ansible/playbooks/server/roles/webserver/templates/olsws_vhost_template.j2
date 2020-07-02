@@ -22,7 +22,10 @@ virtualHostConfig  {
   }
 
   scripthandler  {
-    add                   lsapi:$VH_NAME-lsphp{{ php_version | default('74') }} php
+    add                   lsapi:lsphp{{ php_version | default('74') }} inc
+    add                   lsapi:lsphp{{ php_version | default('74') }} php
+    add                   lsapi:lsphp{{ php_version | default('74') }} phtml
+    add                   lsapi:lsphp{{ php_version | default('74') }} php{{ php_version | default('74') }}
   }
 
   phpIniOverride  {
@@ -32,19 +35,7 @@ virtualHostConfig  {
     php_admin_value upload_max_filesize "{{ php_upload_max_filesize }}M"
     php_admin_value error_log $VH_ROOTlogs/php_error.log
     php_admin_value memory_limit "{{ php_memory_limit }}M"
-  }
-
-  extprocessor $VH_NAME-lsphp{{ php_version | default('74') }} {
-    type                  lsapi
-    address               uds://opt/sitepilot/services/olsws/tmp/$VH_NAME-lsphp{{ php_version | default('74') }}.sock
-    env                   PHP_LSAPI_CHILDREN=5
-    initTimeout           60
-    retryTimeout          0
-    respBuffer            1
-    autoStart             2
-    path                  lsphp{{ php_version | default('74') }}/bin/lsphp
-    backlog               100
-    instances             1
+    php_admin_value mail.log $VH_ROOTlogs/php_mail.log
   }
 
   context /.sitepilot/pma/ {

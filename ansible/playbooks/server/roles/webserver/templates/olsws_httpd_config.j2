@@ -147,6 +147,24 @@ module mod_security {
   modsecurity_rules_file /opt/sitepilot/services/olsws/cwaf/rules.conf.main
 }
 
+extProcessor lsphp74 {
+    type                            lsapi 
+    address                         uds://opt/sitepilot/services/olsws/tmp/lsphp74.sock 
+    autoStart                       1
+    path                            lsphp74/bin/lsphp
+    maxConns                        5
+    env                             PHP_LSAPI_CHILDREN=5
+}
+
+extProcessor lsphp73 {
+    type                            lsapi 
+    address                         uds://opt/sitepilot/services/olsws/tmp/lsphp73.sock 
+    autoStart                       1
+    path                            lsphp74/bin/lsphp
+    maxConns                        5
+    env                             PHP_LSAPI_CHILDREN=5
+}
+
 listener http {
   address               [ANY]:80
   secure                0
