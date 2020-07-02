@@ -54,10 +54,6 @@ class KeyProvisionJob implements ShouldQueue
      */
     public function handle()
     {
-        if ($this->key->isProvisioning()) {
-            return $this->delete();
-        }
-
         if ($this->key->server->isReady() && !$this->key->isBusy()) {
             $this->key->markAsProvisioning();
 

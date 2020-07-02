@@ -53,10 +53,6 @@ class SiteProvisionJob implements ShouldQueue
      */
     public function handle()
     {
-        if ($this->site->isProvisioning()) {
-            return $this->delete();
-        }
-
         if ($this->site->server->isReady() && $this->site->sysuser->isReady() && !$this->site->isBusy()) {
             $this->site->markAsProvisioning();
 
