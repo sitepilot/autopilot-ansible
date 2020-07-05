@@ -13,8 +13,9 @@
     owner: "{{ admin }}"
     group: "{{ admin }}"
     state: directory
-    mode: "0700"
+    mode: "0711"
   loop:
+    - /opt/sitepilot/services/phpmyadmin
     - /opt/sitepilot/services/phpmyadmin/public
 
 - name: "phpmyadmin : check if is installed"
@@ -43,3 +44,9 @@
   when: not pma_index.stat.exists
   notify:
     - reload openlitespeed
+
+- name: "phpmyadmin : set folder / file permissions"
+  command: "{{ item }}"
+  loop:
+    - "find /opt/sitepilot/services/phpmyadmin/public -type f -exec chmod 644 {} +"
+    - "find /opt/sitepilot/services/phpmyadmin/public -type d -exec chmod 755 {} +"
