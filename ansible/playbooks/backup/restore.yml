@@ -26,7 +26,6 @@
 
     - name: "backup/restore : set file permissions"
       file:
-        state: present
         path: "{{ backup_path }}"
         owner: "{{ backup_user }}"
         group: "{{ backup_user }}"
