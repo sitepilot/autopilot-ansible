@@ -29,7 +29,7 @@
         path: "{{ backup_path }}"
         owner: "{{ backup_user }}"
         group: "{{ backup_user }}"
-        recurse: true
+        recurse: "{{ backup_database_name | length == 0 }}"
 
     - name: "backup/restore : import database dump"
       mysql_db:
