@@ -58,4 +58,4 @@ jobs:
       - name: "Failure: debug journalctl."
         if: failure()
         run: |
-          ./autopilot exec journalctl -xe
+          docker exec autopilot-test journalctl -xe
