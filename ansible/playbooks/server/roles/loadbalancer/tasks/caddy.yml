@@ -30,6 +30,15 @@
     - /opt/sitepilot/services/caddy/vhosts
     - /opt/sitepilot/services/caddy/logs
 
+- name: "caddy : create access logfile if not exists"
+  file:
+    path: /opt/sitepilot/services/caddy/logs/access.log
+    state: touch
+    owner: "caddy"
+    group: "caddy"
+  loop:
+    - /opt/sitepilot/services/caddy/logs/access.log
+
 - name: "caddy : generate config"
   template:
     src: caddyfile.j2

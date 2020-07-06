@@ -69,7 +69,7 @@ class DomainProvisionPlaybook extends Playbook
             'config_name' => (string) 'autopilot-domain-' . $this->domain->id,
             'site_name' => (string) $this->domain->site->name,
             'domain' => (string) $this->domain->name,
-            'email' => (string) 'admin@' . $this->domain->name,
+            'email' => (string) app()->environment(['testing', 'development']) ? 'internal' : 'admin@' . $this->domain->name,
             'backends' => (array) $backends
         ]);
     }

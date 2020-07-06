@@ -6,7 +6,7 @@
     }
 
     log {
-        output file /opt/sitepilot/services/caddy/logs/{{ site_name }}.log {
+        output file /opt/sitepilot/services/caddy/logs/access.log {
             roll_size 1gb
             roll_keep 5
             roll_keep_for 720h
