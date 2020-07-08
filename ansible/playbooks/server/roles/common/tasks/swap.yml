@@ -9,7 +9,7 @@
 
 - name: "swap : ensure swap file exists"
   command: >
-    dd if=/dev/zero of={{ swap_path }} bs=1024 count={{ swap_size }}
+    fallocate -l {{ swap_size }} {{ swap_path }}
   args:
     creates: "{{ swap_path }}"
   register: swap_file_create

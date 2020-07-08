@@ -9,7 +9,7 @@ timezone: Europe/Amsterdam
 timezone_update: true
 
 swap_path: "/swapfile"
-swap_size: "1024"
+swap_size: "1G"
 swap_swappiness: "60"
 
 prometheus_node_exporter_version: 1.0.0
