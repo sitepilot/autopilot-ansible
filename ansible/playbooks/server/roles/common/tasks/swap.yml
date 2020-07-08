@@ -9,8 +9,9 @@
 
 - name: "swap : ensure swap file exists"
   command: >
-    dd if=/dev/zero of={{ swap_path }} bs=1M count={{ swap_size }}
-    creates='{{ swap_path }}'
+    dd if=/dev/zero of={{ swap_path }} bs=1024 count={{ swap_size }}
+  args:
+    creates: "{{ swap_path }}"
   register: swap_file_create
 
 - name: "swap : set permissions on swap file"
