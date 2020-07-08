@@ -11,6 +11,10 @@ start() {
     sed -i "s/APP_USER_ID=1000/APP_USER_ID=$(id -u)/" $BASE/.env
     sed -i "s/APP_USER_GID=1000/APP_USER_GID=$(id -g)/" $BASE/.env
 
+    if [ "$1" == 'install-test' ] || [ "$1" == 'install-dev' ]; then
+        docker-compose -f $BASE/docker-compose.test.yml --project-directory $BASE up -d --build
+    fi
+
     docker-compose -f $BASE/docker-compose.yml --project-directory $BASE up -d --build
 }
 
@@ -41,8 +45,6 @@ case "$1" in
     echo "DONE!"
     ;;
 'install'|'install-test'|'install-dev') echo "Installing Autopilot"
-    git pull origin master
-
     if [ "$1" == 'install' ]; then
         COMPOSER_PARAMS='--no-dev'
     fi
@@ -60,8 +62,6 @@ case "$1" in
     echo "DONE!"
     ;;
 'update'|'update-test'|'update-dev') echo "Updating Autopilot"
-    git pull origin master
-
     if [ "$1" == 'update' ]; then
         COMPOSER_PARAMS='--no-dev'
     fi

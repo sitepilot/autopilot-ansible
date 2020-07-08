@@ -86,36 +86,6 @@ services:
     volumes:
       - "./config/blackbox/blackbox.yml:/opt/bitnami/blackbox-exporter/conf/config.yml"
 
-  test:
-    build: ./docker/test
-    container_name: autopilot-test
-    restart: always
-    privileged: true
-    cap_add:
-      - NET_ADMIN
-    ports:
-      - "${APP_TEST_HTTP_PORT:-20080}:80"
-      - "${APP_TEST_HTTPS_PORT:-20443}:443"
-      - "${APP_TEST_LITESPEED_PORT:-22083}:2083"
-      - "${APP_TEST_SSH_PORT:-20022}:22"
-      - "${APP_TEST_NODE_EXPORTER_PORT:-29100}:9100"
-    volumes:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
-
-  test-lb:
-    build: ./docker/test
-    container_name: autopilot-test-lb
-    restart: always
-    privileged: true
-    cap_add:
-      - NET_ADMIN
-    ports:
-      - "${APP_TEST_LB_HTTP_PORT:-30080}:80"
-      - "${APP_TEST_LB_HTTPS_PORT:-30443}:443"
-      - "${APP_TEST_LB_NODE_EXPORTER_PORT:-39100}:9100"
-    volumes:
-      - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
-
 volumes:
   mysql_data:
   redis_data:
