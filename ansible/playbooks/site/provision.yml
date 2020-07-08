@@ -34,6 +34,4 @@
         - "find {{ path }} -type d -exec chmod 755 {} +"
 
     - name: "site/provision : {{ user }} : {{ site }} : reload web server"
-      service:
-        name: lshttpd
-        state: reloaded
+      command: "/usr/local/lsws/bin/lswsctrl reload"
