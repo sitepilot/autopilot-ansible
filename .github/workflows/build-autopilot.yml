@@ -34,7 +34,7 @@ jobs:
 
       - name: Run Autopilot installer.
         run: |
-          sudo chown -R $USER:$USER $GITHUB_WORKSPACE
+          sudo chown -R $USER:$USER .
           ./autopilot install-test ${{ secrets.NOVA_USERNAME }} ${{ secrets.NOVA_PASSWORD }}
 
       - name: Run unit tests.
