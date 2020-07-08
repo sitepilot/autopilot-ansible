@@ -24,6 +24,7 @@ $factory->state(\App\Server::class, 'ready', function (Faker $faker) {
 // Set type to loadbalancer
 $factory->state(\App\Server::class, 'loadbalancer', function (Faker $faker) {
     return [
-        'type' => 'loadbalancer'
+        'type' => 'loadbalancer',
+        'address' => 'autopilot-test-lb'
     ];
 });
