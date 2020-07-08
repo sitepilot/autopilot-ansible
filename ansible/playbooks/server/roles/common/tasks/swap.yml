@@ -24,7 +24,6 @@
 - name: "swap : make swap file if necessary"
   command: mkswap {{ swap_path }}
   when:
-    - ansible_ssh_host != 'autopilot-test'
     - swap_file_create is changed
   register: mkswap_result
 
