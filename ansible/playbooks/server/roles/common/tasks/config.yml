@@ -3,7 +3,6 @@
   hostname:
     name: "{{ hostname }}"
   when:
-    - ansible_ssh_host != 'autopilot-test'
     - hostname_update is defined
     - hostname_update|bool
 
@@ -11,7 +10,6 @@
   timezone:
     name: "{{ timezone }}"
   when:
-    - ansible_ssh_host != 'autopilot-test'
     - timezone_update is defined
     - timezone_update|bool
 

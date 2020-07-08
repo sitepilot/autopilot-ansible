@@ -57,8 +57,3 @@ jobs:
         if: failure()
         run: |
           ./autopilot exec cat storage/logs/laravel.log
-
-      - name: "Failure: debug journalctl."
-        if: failure()
-        run: |
-          docker exec autopilot-test journalctl -xe
