@@ -33,10 +33,13 @@ jobs:
           sudo sed -i 's/APP_ENV=local/APP_ENV=testing/' .env
 
       - name: Run Autopilot installer.
-        run: ./autopilot install-test ${{ secrets.NOVA_USERNAME }} ${{ secrets.NOVA_PASSWORD }}
+        run: |
+          ./autopilot install-test ${{ secrets.NOVA_USERNAME }} ${{ secrets.NOVA_PASSWORD }}
 
       - name: Run unit tests.
-        run: ./autopilot test
+        run: |
+          sudo modprobe ip6table_filter
+          ./autopilot test
 
       - name: Deploy image to Docker hub.
         run: |
