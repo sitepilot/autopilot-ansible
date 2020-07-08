@@ -39,3 +39,4 @@
     value: "{{ swap_swappiness }}"
     state: present
   when: mkswap_result is changed
+  ignore_errors: true # Can't change swappiness when running in Docker container

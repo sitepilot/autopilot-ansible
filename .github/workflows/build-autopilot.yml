@@ -52,8 +52,3 @@ jobs:
         if: failure()
         run: |
           ./autopilot task:debug
-
-      - name: "Failure: dump logs."
-        if: failure()
-        run: |
-          ./autopilot exec cat storage/logs/laravel.log
