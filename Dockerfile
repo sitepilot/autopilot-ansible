@@ -78,8 +78,6 @@ RUN addgroup --gid "$AUTOPILOT_USER_GID" "$AUTOPILOT_USER_NAME" \
 
 RUN echo "Set disable_coredump false" >> /etc/sudo.conf
 
-ADD . /var/www/html
-
 WORKDIR /var/www
 
 USER autopilot

@@ -2,7 +2,7 @@ version: "3.3"
 
 services:
   autopilot:
-    image: sitepilot/autopilot-base:${APP_DOCKER_TAG:-latest}
+    image: sitepilot/autopilot:${APP_DOCKER_TAG:-latest}
     container_name: autopilot
     depends_on:
       - mysql
