@@ -41,14 +41,14 @@ services:
     image: "bitnami/redis:6.0"
     container_name: autopilot-redis
     restart: always
+    environment:
+      ALLOW_EMPTY_PASSWORD: "yes"
     volumes:
       - redis_data:/bitnami/redis/data
 
   grafana:
     image: sitepilot/autopilot-grafana:${APP_GRAFANA_TAG:-latest}
     container_name: autopilot-grafana
-    depends_on:
-      - autopilot
     restart: always
     volumes:
       - "grafana_data:/var/lib/grafana"
