@@ -34,7 +34,7 @@ jobs:
 
       - name: Run Autopilot installer.
         run: |
-          chown -R . $USER:$USER
+          chown -R $USER:$USER .
           ./autopilot install-test ${{ secrets.NOVA_USERNAME }} ${{ secrets.NOVA_PASSWORD }}
 
       - name: Run unit tests.

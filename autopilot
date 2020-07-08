@@ -41,7 +41,7 @@ case "$1" in
     echo "DONE!"
     ;;
 'install'|'install-test'|'install-dev') echo "Installing Autopilot"
-    git pull 
+    git pull origin master
 
     if [ "$1" == 'install' ]; then
         COMPOSER_PARAMS='--no-dev'
@@ -60,8 +60,8 @@ case "$1" in
     echo "DONE!"
     ;;
 'update'|'update-test'|'update-dev') echo "Updating Autopilot"
-    git pull 
-    
+    git pull origin master
+
     if [ "$1" == 'update' ]; then
         COMPOSER_PARAMS='--no-dev'
     fi

@@ -16,16 +16,6 @@ sed -i -e "s~{AUTOPILOT_MONITOR_PASSWORD}~${PASSWORD}~" \
     -e "s~{AUTOPILOT_CERT_EMAIL}~${AUTOPILOT_CERT_EMAIL}~" \
     /etc/caddy/Caddyfile
 
-sed -i -e "s~{AUTOPILOT_MONITOR_SLACK_WEBHOOK}~${AUTOPILOT_MONITOR_SLACK_WEBHOOK}~" \
-    -e "s~{AUTOPILOT_MONITOR_SLACK_CHANNEL}~${AUTOPILOT_MONITOR_SLACK_CHANNEL}~" \
-    /etc/alertmanager/alertmanager.yml
-
-sed -i -e "s~{AUTOPILOT_URL}~${AUTOPILOT_URL}~" \
-    /etc/supervisor.d/alertmanager.ini
-
-sed -i -e "s~{AUTOPILOT_URL}~${AUTOPILOT_URL}~" \
-    /etc/supervisor.d/prometheus.ini
-
 log "Setting the right user and group id..."
 groupmod -g $AUTOPILOT_USER_GID $AUTOPILOT_USER_NAME
 usermod -u $AUTOPILOT_USER_ID $AUTOPILOT_USER_NAME
