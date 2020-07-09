@@ -52,12 +52,12 @@ case "$1" in
     start $1
 
     if [ ! -z "$2" ]; then
-        composer config http-basic.nova.laravel.com $2 $3
+        docker exec $IT -w /var/www/html autopilot composer config http-basic.nova.laravel.com $2 $3
     fi
 
-    composer install $COMPOSER_PARAMS
-    php artisan key:generate
-    php artisan migrate --seed
+    docker exec $IT -w /var/www/html autopilot composer install $COMPOSER_PARAMS
+    docker exec $IT -w /var/www/html autopilot php artisan key:generate
+    docker exec $IT -w /var/www/html autopilot php artisan migrate --seed
 
     echo "DONE!"
     ;;
@@ -70,8 +70,8 @@ case "$1" in
     stop
     start $1
 
-    composer install $COMPOSER_PARAMS
-    php artisan migrate --seed
+    docker exec $IT -w /var/www/html autopilot composer install $COMPOSER_PARAMS
+    docker exec $IT -w /var/www/html autopilot php artisan migrate --seed
 
     echo "DONE!"
     ;;
