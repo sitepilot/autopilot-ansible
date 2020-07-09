@@ -49,7 +49,7 @@ case "$1" in
         COMPOSER_PARAMS='--no-dev'
     fi
 
-    start
+    start $1
 
     if [ ! -z "$2" ]; then
         docker exec $IT -w /var/www/html autopilot composer config http-basic.nova.laravel.com $2 $3
@@ -68,7 +68,7 @@ case "$1" in
     
     pull
     stop
-    start
+    start $1
 
     docker exec $IT -w /var/www/html autopilot composer install $COMPOSER_PARAMS
     docker exec $IT -w /var/www/html autopilot php artisan migrate --seed
