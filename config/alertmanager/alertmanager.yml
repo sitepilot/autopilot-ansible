@@ -13,7 +13,7 @@ route:
 receivers:
   - name: "slack"
     slack_configs:
-      - api_url: "https://hooks.slack.com/services/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"
+      - api_url: "https://hooks.slack.com/services/xxxx/xxxx/xxxx"
         send_resolved: true
         channel: "autopilot-test"
         title: "Autopilot Monitor"
