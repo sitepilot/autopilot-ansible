@@ -52,6 +52,7 @@ RUN apk add --update \
         wget \
         nano \
         tar \
+        git \
     && rm -rf /tmp/* /var/cache/apk/*
 
 COPY docker/base/tags /
