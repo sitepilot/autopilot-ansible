@@ -75,7 +75,7 @@ jobs:
       - name: "Failure: dump tasks"
         if: failure()
         run: |
-          ./autopilot task:debug
+          php artisan task:debug
 
       - name: "Failure: dump logs"
         if: failure()
