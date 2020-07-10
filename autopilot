@@ -7,57 +7,19 @@ else
     IT=''
 fi
 
-start() {
-    sed -i "s/APP_USER_ID=1000/APP_USER_ID=$(id -u)/" $BASE/.env
-    sed -i "s/APP_USER_GID=1000/APP_USER_GID=$(id -g)/" $BASE/.env
-
-    if [ "$1" == 'install-test' ] || [ "$1" == 'install-dev' ]; then
-        docker-compose -f $BASE/docker-compose.test.yml --project-directory $BASE up -d --build
-    fi
-
-    docker-compose -f $BASE/docker-compose.yml --project-directory $BASE up -d --build
-}
-
-stop() {
-    docker-compose -f $BASE/docker-compose.yml --project-directory $BASE down
-}
-
-restart() {
-    init
-    docker-compose -f $BASE/docker-compose.yml --project-directory $BASE restart
-}
-
-pull() {
-    docker-compose -f $BASE/docker-compose.yml --project-directory $BASE pull
-}
-
 case "$1" in
-'start') echo "Starting Autopilot Containers"
-    start
-    echo "DONE!"
-    ;;
-'stop') echo "Stopping Autopilot Containers"
-    stop
-    echo "DONE!"
-    ;;
-'restart') echo "Restarting Autopilot Containers"
-    restart
-    echo "DONE!"
-    ;;
 'install'|'install-test'|'install-dev') echo "Installing Autopilot"
     if [ "$1" == 'install' ]; then
         COMPOSER_PARAMS='--no-dev'
     fi
 
-    start $1
-
     if [ ! -z "$2" ]; then
-        docker exec $IT -w /var/www/html autopilot composer config http-basic.nova.laravel.com $2 $3
+        composer config http-basic.nova.laravel.com $2 $3
     fi
 
-    docker exec $IT -w /var/www/html autopilot composer install $COMPOSER_PARAMS
-    docker exec $IT -w /var/www/html autopilot php artisan key:generate
-    docker exec $IT -w /var/www/html autopilot php artisan migrate --seed
+    composer install $COMPOSER_PARAMS
+    php artisan key:generate
+    php artisan migrate --seed
 
     echo "DONE!"
     ;;
@@ -65,20 +27,18 @@ case "$1" in
     if [ "$1" == 'update' ]; then
         COMPOSER_PARAMS='--no-dev'
     fi
-    
-    pull
-    stop
-    start $1
 
-    docker exec $IT -w /var/www/html autopilot composer install $COMPOSER_PARAMS
-    docker exec $IT -w /var/www/html autopilot php artisan migrate --seed
+    composer install $COMPOSER_PARAMS
+    php artisan migrate --seed
 
     echo "DONE!"
     ;;
-'exec')
-    docker exec $IT -w /var/www/html autopilot "${@:2}"
+'work') echo "Processing Queue"
+    php artisan horizon
+
+    echo "DONE!"
     ;;
 *)
-    docker exec $IT -w /var/www/html autopilot php artisan $@
+    php artisan $@
     ;;
 esac
