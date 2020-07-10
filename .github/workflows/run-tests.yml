@@ -67,6 +67,7 @@ jobs:
 
       - name: Execute tests
         run: |
+          sudo modprobe ip6table_filter
           DOCKER_TEST_LB_IP=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' test-lb` 
           DOCKER_TEST_WEB_IP=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' test-web`
           TEST_WEB_IP=$DOCKER_TEST_LB_IP TEST_LB_IP=$DOCKER_TEST_LB_IP php artisan test
