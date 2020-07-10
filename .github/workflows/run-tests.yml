@@ -24,14 +24,14 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
       test-web:
-        image: sitepilot/autopilot-test:latest
-        options: --privileged --cap-add NET_ADMIN
+        image: sitepilot/autopilot-test:20.04
+        options: --name test-web --privileged --cap-add NET_ADMIN
         volumes:
           - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
 
       test-lb:
-        image: sitepilot/autopilot-test:latest
-        options: --privileged --cap-add NET_ADMIN
+        image: sitepilot/autopilot-test:20.04
+        options: --name test-lb --privileged --cap-add NET_ADMIN
         volumes:
           - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
 
@@ -67,7 +67,9 @@ jobs:
 
       - name: Execute tests
         run: |
-          php artisan test
+          DOCKER_TEST_LB_IP=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' test-lb` 
+          DOCKER_TEST_WEB_IP=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' test-web`
+          TEST_WEB_IP=$DOCKER_TEST_LB_IP TEST_LB_IP=$DOCKER_TEST_LB_IP php artisan test
 
       - name: "Failure: dump tasks"
         if: failure()
