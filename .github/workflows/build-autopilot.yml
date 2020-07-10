@@ -33,10 +33,10 @@ jobs:
       - name: Install pip packages
         run: sudo pip install ansible-lint && sudo pip install yamllint
 
-      - name: Run Yaml lint on ansible folder.
+      - name: Run Yaml lint on ansible folder
         run: sudo yamllint -c tests/yamllint.yml ansible/
 
-      - name: Run Ansible lint on ansible folder.
+      - name: Run Ansible lint on ansible folder
         run: sudo ansible-lint -v --force-color ansible/
 
       - name: Run installer and tests
@@ -46,7 +46,7 @@ jobs:
           ./autopilot test
         env:
           APP_ENV: testing
-          DB_NAME: autopilot
+          DB_DATABASE: autopilot
           DB_USERNAME: root 
           DB_PORT: ${{ job.services.mysql.ports[3306] }}
 
