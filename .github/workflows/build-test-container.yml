@@ -16,5 +16,5 @@ jobs:
         run: |
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
           cd ${GITHUB_WORKSPACE}/docker/test/
-          docker build . --file Dockerfile --tag sitepilot/autopilot-test:latest
-          docker push sitepilot/autopilot-test:latest
+          docker build . --file Dockerfile --tag sitepilot/autopilot-test:20.04
+          docker push sitepilot/autopilot-test:20.04
