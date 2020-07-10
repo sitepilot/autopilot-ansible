@@ -46,6 +46,8 @@ jobs:
           ./autopilot test
         env:
           APP_ENV: testing
+          DB_NAME: autopilot
+          DB_USERNAME: root 
           DB_PORT: ${{ job.services.mysql.ports[3306] }}
 
       - name: "Failure: dump tasks"
