@@ -25,6 +25,7 @@ jobs:
 
     env:
       APP_ENV: testing
+      APP_KEY: base64:V78KNl8AZXSQ3p7Kapd8Gr/i7D1hJHbB72vsXSVuG1I=
       DB_PORT: 3307
 
     steps:
@@ -45,11 +46,15 @@ jobs:
       - name: Run Ansible lint on ansible folder
         run: sudo ansible-lint -v --force-color ansible/
 
-      - name: Run installer and tests
+      - name: Install dependencies
         run: |
-          sudo modprobe ip6table_filter
-          ./autopilot install-test ${{ secrets.NOVA_USERNAME }} ${{ secrets.NOVA_PASSWORD }}
-          ./autopilot test
+          composer config http-basic.nova.laravel.com ${{ secrets.NOVA_USERNAME }} ${{ secrets.NOVA_PASSWORD }}
+          composer install --prefer-dist --no-interaction --no-suggest
+          php artisan migrate --seed
+
+      - name: Execute tests
+        run: |
+          php artisan test
 
       - name: "Failure: dump tasks"
         if: failure()
