@@ -1,29 +1,28 @@
 # Autopilot
 
-![Autopilot](https://github.com/sitepilot/autopilot/workflows/build-autopilot/badge.svg?branch=master)
-![Base](https://github.com/sitepilot/autopilot/workflows/build-base/badge.svg?branch=master)
-![Grafana](https://github.com/sitepilot/autopilot/workflows/build-grafana/badge.svg?branch=master)
+![Autopilot](https://github.com/sitepilot/autopilot/workflows/run-tests/badge.svg)
 
-Autopilot is used for managing the [Sitepilot](https://sitepilot.io) managed WordPress webhosting platform. With Autopilot you can:
+Autopilot is a (cloud) webhosting control panel for managing multiple servers, sites and WordPress installations. We use Autopilot at [Sitepilot](https://sitepilot.io) for our managed WordPress webhosting platform. With Autopilot you can:
 
-* Provision WordPress optimized web servers and load balancers.
-* Monitor server and site health of the provisioned servers.
-* Manage and maintain WordPress websites.
+* Provision WordPress optimized (Openlitespeed) web servers and (Caddy) load balancers.
+* Monitor server and site health of the provisioned servers and sites.
+* Manage and maintain WordPress sites.
 
-![screenshot](screenshot.png)
-![screenshot](screenshot-status.png)
+Autopilot is build on top of [Laravel](https://laravel.com/) and uses [Ansible](https://www.ansible.com/) to provision servers, users, databases and sites on Ubuntu 20.04 LTS servers.
 
-## Requirements
+## Supported Server Providers
 
-Ubuntu 20.04 is the only supported operating system. Autopilot uses Ansible to provision servers, users, databases and sites. To use Autopilot you need:
+Autopilot supports the following server providers:
 
-* A server with Ubuntu 20.04.
-* A valid [Laravel Nova](https://nova.laravel.com/) license.
-* [Docker](https://www.docker.com/) & [Docker Compose](https://docs.docker.com/compose/install/)
+* [UpCloud](https://upcloud.com/signup/?promo=HGMAN9)
 
-### Optional
-* An [UpCloud]([https://](https://upcloud.com/signup/?promo=HGMAN9)) account for auto-provisioning servers.
- 
+If your preferred provider is not baked into Autopilot, you can always use the Custom VPS option. There are a few requirements to ensure that this works successfully:
+
+* The server your connecting to must be running a fresh installation of Ubuntu 20.04 x64.
+* Your server must be accessible by the Autopilot host.
+* There must be a root user with no password.
+* During the creation process, you may customize the SSH Port that is used (defaulted to 22).
+
 ## Web Server Configuration
 
 ### Packages & Services
@@ -83,35 +82,22 @@ The following packages/services will be installed and configured on load balance
 
 ## Monitoring
 
-Autopilot uses [Prometheus](https://prometheus.io/), [Alertmanager](https://prometheus.io/docs/alerting/latest/alertmanager/), [Blackbox Exporter](https://github.com/prometheus/blackbox_exporter) and [Grafana](https://grafana.com/) to monitor servers and sites. You can access these services through the following urls:
-
-* Grafana: `https://<autopilot-domain>/status/`.
-* Prometheus: `https://<autopilot-domain>/monitor/prometheus/`
-* Alertmanager: `https://<autopilot-domain>/monitor/alertmanager/`
-* Blackbox Exporter: `https://<autopilot-domain>/monitor/blackbox/`
+Autopilot uses [Prometheus](https://prometheus.io/), [Alertmanager](https://prometheus.io/docs/alerting/latest/alertmanager/), [Blackbox Exporter](https://github.com/prometheus/blackbox_exporter) and [Grafana](https://grafana.com/) to monitor servers and sites. These services are included in the [Autopilot Stack](https://github.com/sitepilot/autopilot-stack).
 
 ## Installation, Updates & Development
 
 ### Installation
 
-* Create a directory: `mkdir ~/autopilot && cd ~/autopilot`.
-* Download Autopilot script: `curl -o ./autopilot https://raw.githubusercontent.com/sitepilot/autopilot/master/autopilot && chmod +x ./autopilot`.
-* Download environment file and modify it to your needs: `curl -o ./.env https://raw.githubusercontent.com/sitepilot/autopilot/master/.env.example && nano ./.env`.
-* Run `./autopilot install` to start the containers, install packages and migrate the database. *NOTE: This will prompt for your Laravel Nova username and password.*
-* Navigate to `https://<SERVER IP>:<APP_HTTPS_PORT>` and login (default user: `admin@sitepilot.io`, default pass: `supersecret`).
-
-### Update
-
-* Navigate to the Autopilot installation folder: `cd ~/autopilot`.
-* Update Autopilot script: `curl -o ./autopilot https://raw.githubusercontent.com/sitepilot/autopilot/master/autopilot && chmod +x ./autopilot`.
-* Run `./autopilot update` to update the containers, packages and migrate the database.
+The recommended way to install Autopilot is using the preconfigured Autopilot Stack. [You can find the installation instructions here.](https://github.com/sitepilot/autopilot-stack)
 
 ### Development
 
 * Clone this repository.
 * Copy the example environment file and modify it to your needs: `cp .env.example .env`.
-* Start the containers, install packages and migrate the database: `./autopilot install-dev`. The Autopilot source files are mounted to the the `autopilot` container. *NOTE: This will prompt for your Laravel Nova username and password.*
-* Navigate to `https://<SERVER IP>:<APP_HTTPS_PORT>` and login (default user: `admin@sitepilot.io`, default pass: `supersecret`).
+* Install composer packages with `composer install`. *NOTE: This will prompt for your Laravel Nova username and password.*
+* Generate application key with `php artisan key:generate`.
+* Migrate and seed the database with `php artisan migrate --seed`.
+* Navigate to the application domain and login. Default user: `admin@sitepilot.io`, default password: `supersecret`.
 
 ## License
 
@@ -120,3 +106,8 @@ MIT / BSD
 ## Author
 
 Autopilot was created in 2020 by [Nick Jansen](https://nbejansen.com/).
+
+# Screenshots 
+
+![screenshot](screenshot.png)
+![screenshot](screenshot-status.png)
