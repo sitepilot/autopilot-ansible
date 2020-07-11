@@ -1,0 +1,2 @@
+* * * * * /usr/bin/php /var/www/html/artisan schedule:run >> /var/www/logs/cron.log 2>&1
+59 23 * * * rm -rf /var/www/logs/cron.log && touch /var/www/logs/cron.log
