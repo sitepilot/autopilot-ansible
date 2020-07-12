@@ -4,7 +4,7 @@
 
 Autopilot is a (cloud) webhosting control panel for managing multiple servers, sites and WordPress installations. We use Autopilot at [Sitepilot](https://sitepilot.io) for our managed WordPress webhosting platform. With Autopilot you can:
 
-* Provision WordPress optimized (Openlitespeed) web servers and (Caddy) load balancers.
+* Provision WordPress optimized web servers and load balancers.
 * Monitor server and site health of the provisioned servers and sites.
 * Manage and maintain WordPress sites.
 
@@ -18,10 +18,9 @@ Autopilot supports the following server providers:
 
 If your preferred provider is not baked into Autopilot, you can always use the Custom VPS option. There are a few requirements to ensure that this works successfully:
 
-* The server your connecting to must be running a fresh installation of Ubuntu 20.04 x64.
+* The server your connecting to must be running a fresh installation of Ubuntu 20.04 LTS.
 * Your server must be accessible by the Autopilot host.
 * There must be a root user with no password.
-* During the creation process, you may customize the SSH Port that is used (defaulted to 22).
 
 ## Web Server Configuration
 
@@ -79,25 +78,49 @@ The following packages/services will be installed and configured on load balance
 ### Filesystem
 
 * Caddy vhosts folder: `/opt/sitepilot/services/caddy/vhosts`.
+* Caddy logs folder: `/opt/sitepilot/services/caddy/logs`.
 
 ## Monitoring
 
 Autopilot uses [Prometheus](https://prometheus.io/), [Alertmanager](https://prometheus.io/docs/alerting/latest/alertmanager/), [Blackbox Exporter](https://github.com/prometheus/blackbox_exporter) and [Grafana](https://grafana.com/) to monitor servers and sites. These services are included in the [Autopilot Stack](https://github.com/sitepilot/autopilot-stack).
 
-## Installation, Updates & Development
+## Installation & Contributing
+
+### Licenses
+
+* [Laravel Nova License](https://nova.laravel.com/): Autopilot uses Laravel Nova for managing resources. A valid Laravel Nova license is required when installing Autopilot. Composer will prompt for the username and password to validate your license while installing packages.
 
 ### Installation
 
 The recommended way to install Autopilot is using the preconfigured Autopilot Stack. [You can find the installation instructions here.](https://github.com/sitepilot/autopilot-stack)
 
-### Development
+### Contributing
 
-* Clone this repository.
+Thank you for considering contributing to Autopilot! Follow these steps to install Autopilot on your server:
+
+* Clone this repository to your web server.
 * Copy the example environment file and modify it to your needs: `cp .env.example .env`.
-* Install composer packages with `composer install`. *NOTE: This will prompt for your Laravel Nova username and password.*
-* Generate application key with `php artisan key:generate`.
+* Install Composer packages with `composer install`. *NOTE: Composer will prompt for your Laravel Nova username and password to validate your license.*
+* Generate an application key with `php artisan key:generate`.
 * Migrate and seed the database with `php artisan migrate --seed`.
 * Navigate to the application domain and login. Default user: `admin@sitepilot.io`, default password: `supersecret`.
+
+#### Environment Requirements
+
+The following software must be installed on the server in order to manually install Autopilot:
+
+* PHP7.4
+* Ansible
+* Composer
+
+*NOTE: These packages are included in the Autopilot Docker container.*
+
+#### Commands
+
+* Autopilot uses [Laravel Horizon](https://laravel.com/docs/7.x/horizon) to process Redis queues. To start the configured queue workers run: `php artisan horizon`.
+* Autopilot uses [Laravel Task Scheduling](https://laravel.com/docs/7.x/scheduling) to schedule tasks. To test scheduled tasks run: `php artisan schedule:run`.
+
+*NOTE: These commands are preconfigured to run in the Autopilot Docker container.*
 
 ## License
 
@@ -107,7 +130,7 @@ MIT / BSD
 
 Autopilot was created in 2020 by [Nick Jansen](https://nbejansen.com/).
 
-# Screenshots 
+## Screenshots 
 
 ![screenshot](screenshot.png)
 ![screenshot](screenshot-status.png)
