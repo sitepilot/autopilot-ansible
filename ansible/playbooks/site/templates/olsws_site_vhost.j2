@@ -1,10 +1,6 @@
 # {{ sitepilot_managed }}
 vhTemplate vhost {
-  {% if ssl is defined and ssl|bool %}
-  templateFile            $SERVER_ROOT/conf/templates/lsphp{{ php_version | default('74') }}-ssl.conf
-  {% else %}
   templateFile            $SERVER_ROOT/conf/templates/lsphp{{ php_version | default('74') }}.conf
-  {% endif %}
   listeners               http, https
 
   member {{ site }} {

@@ -53,10 +53,6 @@ class UserProvisionJob implements ShouldQueue
      */
     public function handle()
     {
-        if ($this->sysuser->isProvisioning()) {
-            return $this->delete();
-        }
-
         if ($this->sysuser->server->isReady() && !$this->sysuser->isBusy()) {
             $this->sysuser->markAsProvisioning();
 

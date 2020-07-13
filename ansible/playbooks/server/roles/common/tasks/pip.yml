@@ -1,0 +1,7 @@
+---
+- name: "pip : install required Python packages"
+  pip:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - pyopenssl

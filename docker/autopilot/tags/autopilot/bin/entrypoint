@@ -1,0 +1,40 @@
+#!/bin/sh
+log() {
+    echo "[INFO] $1"
+}
+
+generate() {
+    SOURCE_FILE=$1
+    DEST_FILE=$2
+    cat $SOURCE_FILE | perl -p -e 's/\$\{([^}]+)\}/defined $ENV{$1} ? $ENV{$1} : $&/eg' > $DEST_FILE
+}
+
+PASSWORD=$(caddy hash-password --plaintext "$AUTOPILOT_MONITOR_PASSWORD")
+
+log "Generating configuration files..."
+sed -i -e "s~{AUTOPILOT_MONITOR_PASSWORD}~${PASSWORD}~" \
+    -e "s~{AUTOPILOT_CERT_EMAIL}~${AUTOPILOT_CERT_EMAIL}~" \
+    /etc/caddy/Caddyfile
+
+log "Setting the right user and group id..."
+groupmod -g $AUTOPILOT_USER_GID $AUTOPILOT_USER_NAME
+usermod -u $AUTOPILOT_USER_ID $AUTOPILOT_USER_NAME
+
+log "Setting the right file permissions..."
+chown $AUTOPILOT_USER_NAME:$AUTOPILOT_USER_NAME /var/www
+chown $AUTOPILOT_USER_NAME:$AUTOPILOT_USER_NAME /var/www/html
+chown -R $AUTOPILOT_USER_NAME:$AUTOPILOT_USER_NAME /var/www/logs
+chown -R $AUTOPILOT_USER_NAME:$AUTOPILOT_USER_NAME /config/composer/
+chown -R $AUTOPILOT_USER_NAME:$AUTOPILOT_USER_NAME /var/www/html/bootstrap/cache
+chown -R $AUTOPILOT_USER_NAME:$AUTOPILOT_USER_NAME /var/www/html/storage/framework
+
+touch /var/www/html/storage/logs/laravel.log
+chmod $AUTOPILOT_USER_NAME:$AUTOPILOT_USER_NAME /var/www/html/storage/logs/laravel.log
+
+CRONFILE=/autopilot/conf/crontabs/app
+if test -f "$CRONFILE"; then
+    log "Loading crontab ($CRONFILE)..."
+    crontab -u $AUTOPILOT_USER_NAME $CRONFILE
+fi
+
+exec "$@"

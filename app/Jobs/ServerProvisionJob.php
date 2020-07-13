@@ -61,10 +61,6 @@ class ServerProvisionJob implements ShouldQueue
      */
     public function handle()
     {
-        if ($this->server->isProvisioning()) {
-            return $this->delete();
-        }
-
         if (!$this->server->provider_server_id) {
             // Create server at server provider and wait
             $this->server->provider_server_id = $this->server->withProvider()->createServer();

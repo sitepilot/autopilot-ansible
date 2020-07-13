@@ -1,0 +1,23 @@
+admin: sitepilot
+admin_pass: "supersecret"
+admin_email: support@sitepilot.io
+
+hostname: undefined
+hostname_update: false
+
+timezone: Europe/Amsterdam
+timezone_update: true
+
+swap_path: "/swapfile"
+swap_size: "1G"
+swap_swappiness: "60"
+
+prometheus_node_exporter_version: 1.0.0
+prometheus_node_exporter_release_name: "node_exporter-{{ prometheus_node_exporter_version }}.linux-amd64"
+
+authorized_addresses: []
+
+smtp_relay_host: "smtp.eu.mailgun.org"
+smtp_relay_domain: "mg.example.com"
+smtp_relay_user: "postmaster@mg.example.com"
+smtp_relay_password: "supersecret"

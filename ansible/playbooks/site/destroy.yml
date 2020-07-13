@@ -20,6 +20,4 @@
         state: absent
 
     - name: "site/destroy : {{ user }} : {{ site }} : reload web server"
-      service:
-        name: lsws
-        state: restarted
+      command: "/usr/local/lsws/bin/lswsctrl reload"

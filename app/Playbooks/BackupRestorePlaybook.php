@@ -75,7 +75,8 @@ class BackupRestorePlaybook extends Playbook
             'backup_path' => (string) $this->backup->path,
             'backup_tag' => (string) $this->backup->getBackupTag(),
             'backup_resource_tag' => (string) $this->backup->getBackupResourceTag(),
-            'backup_database_name' => (string) ($this->backup->backupable_type == Database::class ? $this->backup->backupable->name : '')
+            'backup_database_name' => (string) ($this->backup->backupable_type == Database::class ? $this->backup->backupable->name : ''),
+            'backup_user' => (string) $this->backup->getBackupSysuser()
         ]);
     }
 

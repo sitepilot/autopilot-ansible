@@ -6,7 +6,6 @@
     # site: ""
     # domain: ""
     # domains: []
-    # ssl: false
     # php_version: "74"
     path: "/opt/sitepilot/users/{{ user }}/{{ site }}"
     path_vhost: "/usr/local/lsws/conf/vhosts/{{ site }}.conf"
@@ -35,6 +34,4 @@
         - "find {{ path }} -type d -exec chmod 755 {} +"
 
     - name: "site/provision : {{ user }} : {{ site }} : reload web server"
-      service:
-        name: lsws
-        state: restarted
+      command: "/usr/local/lsws/bin/lswsctrl reload"

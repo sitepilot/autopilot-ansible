@@ -1,0 +1,23 @@
+---
+- name: "health : create folders"
+  file:
+    path: "{{ item }}"
+    owner: "{{ admin }}"
+    group: "{{ admin }}"
+    state: directory
+    mode: "0711"
+  loop:
+    - /opt/sitepilot/services/health
+    - /opt/sitepilot/services/health/public
+
+- name: "health : generate health check script"
+  template:
+    src: health_check.php.j2
+    dest: /opt/sitepilot/services/health/public/index.php
+    mode: "0644"
+
+- name: "health : set folder / file permissions"
+  command: "{{ item }}"
+  loop:
+    - "find /opt/sitepilot/services/health/public -type f -exec chmod 644 {} +"
+    - "find /opt/sitepilot/services/health/public -type d -exec chmod 755 {} +"

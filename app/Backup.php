@@ -64,6 +64,16 @@ class Backup extends Model
     }
 
     /**
+     * Returns the backup system user.
+     *
+     * @return string
+     */
+    public function getBackupSysuser()
+    {
+        return $this->backupable->sysuser->name;
+    }
+
+    /**
      * Dispatch backup run job.
      *
      * @return bool|PendingDispatch|mixed

@@ -7,7 +7,7 @@
     backup_s3_bucket: ""
     backup_password: ""
     backup_path: ""
-    backup_path_tmp: "{{ backup_path }}-tmp"
+    backup_user: ""
     backup_tag: ""
     backup_resource_tag: ""
     backup_database_name: ""
@@ -23,6 +23,13 @@
     - name: "backup/restore : show restore info"
       debug:
         msg: "{{ restore_info.stdout }}"
+
+    - name: "backup/restore : set file permissions"
+      file:
+        path: "{{ backup_path }}"
+        owner: "{{ backup_user }}"
+        group: "{{ backup_user }}"
+        recurse: "{{ backup_database_name | length == 0 }}"
 
     - name: "backup/restore : import database dump"
       mysql_db:

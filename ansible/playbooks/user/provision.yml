@@ -63,7 +63,7 @@
         state: directory
         owner: "{{ user }}"
         group: "{{ user }}"
-        mode: "0750"
+        mode: "0711"
       loop:
         - "/home/{{ user }}"
 

@@ -1,0 +1,25 @@
+---
+- name: "root : create folders"
+  file:
+    path: "{{ item.path }}"
+    owner: "root"
+    group: "root"
+    state: directory
+    mode: "{{ item.mode }}"
+  loop:
+    - path: "/home"
+      mode: "0711"
+    - path: "/opt/sitepilot"
+      mode: "0711"
+    - path: "/opt/sitepilot/logs"
+      mode: "0711"
+    - path: "/opt/sitepilot/scripts"
+      mode: "0711"
+    - path: "/opt/sitepilot/services"
+      mode: "0711"
+    - path: "/opt/sitepilot/backups"
+      mode: "0711"
+    - path: "/opt/sitepilot/users"
+      mode: "0711"
+    - path: "/opt/sitepilot/ansible"
+      mode: "0777"

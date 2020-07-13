@@ -54,10 +54,6 @@ class DatabaseProvisionJob implements ShouldQueue
      */
     public function handle()
     {
-        if ($this->database->isProvisioning()) {
-            return $this->delete();
-        }
-
         if ($this->database->server->isReady() && !$this->database->isBusy()) {
             $this->database->markAsProvisioning();
 

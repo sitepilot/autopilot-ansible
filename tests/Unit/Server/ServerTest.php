@@ -35,16 +35,6 @@ class ServerTest extends TestCase
         $this->assertLastTask();
     }
 
-    public function test_server_can_renew_certificates()
-    {
-        $server = self::getServer();
-
-        $server->certRenew();
-
-        $this->assertEquals($server->fresh()->status, 'ready');
-        $this->assertLastTask();
-    }
-
     public function test_server_is_destroyed_on_delete()
     {
         $server = self::getServer();

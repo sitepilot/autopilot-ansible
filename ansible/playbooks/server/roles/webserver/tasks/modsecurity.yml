@@ -1,0 +1,16 @@
+---
+- name: "modsecurity : create cwaf folder"
+  file:
+    path: "/opt/sitepilot/services/olsws/cwaf"
+    owner: "{{ admin }}"
+    group: "{{ admin }}"
+    state: directory
+  notify: reload openlitespeed
+
+- name: "modsecurity : unpack cwaf rules"
+  unarchive:
+    src: "{{ role_path }}/files/cwaf_rules.tgz"
+    dest: /opt/sitepilot/services/olsws/cwaf
+    owner: "{{ admin }}"
+    group: "{{ admin }}"
+  notify: reload openlitespeed

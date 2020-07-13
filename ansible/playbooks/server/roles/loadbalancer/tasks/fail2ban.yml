@@ -1,0 +1,17 @@
+---
+- name: "fail2ban : install required packages"
+  apt:
+    name: "fail2ban"
+    state: present
+
+- name: "fail2ban : generate filter configuration"
+  template:
+    src: fail2ban_filter.j2
+    dest: /etc/fail2ban/filter.d/app.conf
+  notify: reload fail2ban
+
+- name: "fail2ban : generate jail configuration"
+  template:
+    src: fail2ban_jail.j2
+    dest: /etc/fail2ban/jail.d/app.conf
+  notify: reload fail2ban

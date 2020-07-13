@@ -1,0 +1,9 @@
+---
+- hosts: "all"
+  become: true
+  roles:
+    - "common"
+    - "webserver"
+    - "docker"
+    - "docker-mysql"
+    - "docker-redis"

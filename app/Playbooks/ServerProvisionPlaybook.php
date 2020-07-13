@@ -55,7 +55,11 @@ class ServerProvisionPlaybook extends Playbook
      */
     public function playbook()
     {
-        return 'ansible/playbooks/server/provision.yml';
+        if ($this->server->type == 'loadbalancer') {
+            return 'ansible/playbooks/server/loadbalancer.yml';
+        }
+
+        return 'ansible/playbooks/server/webserver.yml';
     }
 
     /**

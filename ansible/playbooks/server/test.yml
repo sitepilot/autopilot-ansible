@@ -46,6 +46,13 @@
           - 200
           - 500
 
+    - name: "server/test : check if modsecurity is installed"
+      uri:
+        url: https://127.0.0.1/test.sql
+        validate_certs: false
+        status_code:
+          - 403
+
     # Other Checks
     - name: "server/test : PHP 7.4 is installed"
       command: "php74 -v"

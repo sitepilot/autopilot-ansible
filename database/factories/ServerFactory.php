@@ -8,7 +8,7 @@ $factory->define(\App\Server::class, function (Faker $faker) {
         'provider' => 'custom',
         'type' => 'shared',
         'port' => 22,
-        'address' => 'autopilot-test',
+        'address' => env('TEST_WEB_IP', 'undefined'),
         'admin_password' => 'supersecret',
         'mysql_password' => 'supersecret'
     ];
@@ -24,6 +24,7 @@ $factory->state(\App\Server::class, 'ready', function (Faker $faker) {
 // Set type to loadbalancer
 $factory->state(\App\Server::class, 'loadbalancer', function (Faker $faker) {
     return [
-        'type' => 'loadbalancer'
+        'type' => 'loadbalancer',
+        'address' => env('TEST_LB_IP', 'undefined'),
     ];
 });

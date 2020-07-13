@@ -1,0 +1,20 @@
+---
+name: build-test-container
+
+on:
+  push:
+    paths:
+      - "docker/test/**"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Build and deploy test container image.
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          cd ${GITHUB_WORKSPACE}/docker/test/
+          docker build . --file Dockerfile --tag sitepilot/autopilot-test:20.04
+          docker push sitepilot/autopilot-test:20.04

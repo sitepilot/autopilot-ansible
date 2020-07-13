@@ -1,0 +1,81 @@
+# {{ sitepilot_managed }}
+vhRoot                    /opt/sitepilot/users/$VH_NAME
+configFile                $SERVER_ROOT/conf/vhosts/$VH_NAME.conf
+allowSymbolLink           1
+enableScript              1
+restrained                1
+setUIDMode                2
+
+virtualHostConfig  {
+  docRoot                 $VH_ROOT/public/
+  cgroups                 0
+
+  errorlog $VH_ROOT/logs/error.log {
+    useServer             0
+    logLevel              NOTICE
+    rollingSize           10M
+    keepDays              7
+  }
+
+  accesslog $VH_ROOT/logs/access.log {
+    useServer             0
+    logFormat             %a %l %u %t "%r" %>s %O "%{Referer}i" "%{User-Agent}i"
+    logHeaders            5
+    rollingSize           10M
+    keepDays              7
+  }
+
+  accesslog $VH_ROOT/logs/transfer.log {
+    useServer             0
+    logFormat             %O
+    rollingSize           0
+  }
+
+  accesslog $VH_ROOT/logs/visitors.log {
+    useServer             0
+    logFormat             %a
+    rollingSize           0
+  }
+
+  scripthandler  {
+    add                   lsapi:lsphp{{ php_version | default('74') }} inc
+    add                   lsapi:lsphp{{ php_version | default('74') }} php
+    add                   lsapi:lsphp{{ php_version | default('74') }} phtml
+    add                   lsapi:lsphp{{ php_version | default('74') }} php{{ php_version | default('74') }}
+  }
+
+  phpIniOverride  {
+    php_admin_value open_basedir "$VH_ROOT:/opt/sitepilot/services:/tmp"
+    php_admin_value date.timezone "{{ timezone }}"
+    php_admin_value post_max_size "{{ php_post_max_size }}M"
+    php_admin_value upload_max_filesize "{{ php_upload_max_filesize }}M"
+    php_admin_value error_log $VH_ROOTlogs/php_error.log
+    php_admin_value memory_limit "{{ php_memory_limit }}M"
+    php_admin_value mail.log $VH_ROOTlogs/php_mail.log
+  }
+
+  context /.sitepilot/pma/ {
+    location              /opt/sitepilot/services/phpmyadmin/public/
+    allowBrowse           1
+    addDefaultCharset     off
+    rewrite  {
+      enable              1
+      inherit             0
+    }
+  }
+
+  context /.sitepilot/health/ {
+    location              /opt/sitepilot/services/health/public/
+    allowBrowse           1
+    addDefaultCharset     off
+    rewrite  {
+      enable              1
+      inherit             0
+    }
+  }
+
+  rewrite  {
+    enable                1
+    autoLoadHtaccess      1
+  }
+}

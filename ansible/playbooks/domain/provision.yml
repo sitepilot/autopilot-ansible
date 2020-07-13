@@ -3,6 +3,7 @@
   vars:
     # Required parameters, commented so Ansible fails when a parameter isn't present.
     # config_name: ""
+    # site_name: ""
     # domain: ""
     # email: ""
     # backends: []

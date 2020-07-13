@@ -1,0 +1,36 @@
+---
+- include: swap.yml
+  tags: "swap"
+
+- include: config.yml
+  tags: "config"
+
+- include: upgrade.yml
+  tags: "upgrade"
+
+- include: install.yml
+  tags: "install"
+
+- include: pip.yml
+  tags: "pip"
+
+- include: filesystem.yml
+  tags: "filesystem"
+
+- include: admin.yml
+  tags: "admin"
+
+- include: sshd.yml
+  tags: "sshd"
+
+- include: firewall.yml
+  tags: "firewall"
+
+- include: restic.yml
+  tags: "restic"
+
+- include: node-exporter.yml
+  tags: "node-exporter"
+
+- include: ssmtp.yml
+  tags: "ssmtp"
