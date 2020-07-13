@@ -13,12 +13,12 @@ jobs:
 
     services:
       mysql:
-        image: mariadb:10.4
+        image: bitnami/mariadb:10.4
         env:
-          MYSQL_USER: autopilot
-          MYSQL_DATABASE: autopilot
-          MYSQL_PASSWORD: secret
-          MYSQL_ROOT_PASSWORD: supersecret
+          MARIADB_USER: autopilot
+          MARIADB_DATABASE: autopilot
+          MARIADB_PASSWORD: secret
+          MARIADB_ROOT_PASSWORD: supersecret
         ports:
           - 3307:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
