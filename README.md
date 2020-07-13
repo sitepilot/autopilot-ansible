@@ -122,6 +122,11 @@ The following software must be installed on the server in order to manually inst
 
 *NOTE: These commands are preconfigured to run in the Autopilot Docker container.*
 
+## Screenshots 
+
+![screenshot](screenshot.png)
+![screenshot](screenshot-status.png)
+
 ## License
 
 MIT / BSD
@@ -129,8 +134,3 @@ MIT / BSD
 ## Author
 
 Autopilot was created in 2020 by [Nick Jansen](https://nbejansen.com/).
-
-## Screenshots 
-
-![screenshot](screenshot.png)
-![screenshot](screenshot-status.png)
