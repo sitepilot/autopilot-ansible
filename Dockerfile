@@ -76,8 +76,6 @@ RUN echo "Set disable_coredump false" >> /etc/sudo.conf
 
 COPY . /var/www/html
 
-RUN chown -R autopilot:autopilot /var/www/html
-
 USER autopilot
 
 WORKDIR /var/www
