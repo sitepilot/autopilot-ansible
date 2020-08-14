@@ -58,7 +58,7 @@ class SiteObserver
      */
     public function deleted(Site $site)
     {
-        if (!$site->isDestroyed()) {
+        if (!$site->isForceDeleting()) {
             $site->deleteFromServer();
         }
     }

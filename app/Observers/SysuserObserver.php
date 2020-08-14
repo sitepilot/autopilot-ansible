@@ -73,7 +73,7 @@ class SysuserObserver
      */
     public function deleted(Sysuser $sysuser)
     {
-        if (!$sysuser->isDestroyed()) {
+        if (!$sysuser->isForceDeleting()) {
             $sysuser->deleteFromServer();
         }
     }

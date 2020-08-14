@@ -51,7 +51,7 @@ class KeyObserver
      */
     public function deleted(Key $key)
     {
-        if (!$key->isDestroyed()) {
+        if (!$key->isForceDeleting()) {
             $key->deleteFromServer();
         }
     }
