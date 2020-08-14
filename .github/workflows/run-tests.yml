@@ -85,7 +85,7 @@ jobs:
       - name: "Failure: dump webserver logs"
         if: failure()
         run: |
-          docker exec -it test-web cat /opt/sitepilot/services/olsws/logs/error.log
+          docker exec test-web cat /opt/sitepilot/services/olsws/logs/error.log
 
   deploy:
     runs-on: ubuntu-20.04
