@@ -2,21 +2,27 @@ version: "3.3"
 
 services:
   test-web:
-    build: sitepilot/autopilot-test:20.04
+    image: sitepilot/autopilot-test:20.04
     container_name: autopilot-test
     restart: always
     privileged: true
     cap_add:
       - NET_ADMIN
+    ports:
+      - "8080:80"
+      - "8443:443"
     volumes:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
 
   test-lb:
-    build: sitepilot/autopilot-test:20.04
+    image: sitepilot/autopilot-test:20.04
     container_name: autopilot-test-lb
     restart: always
     privileged: true
     cap_add:
       - NET_ADMIN
+    ports:
+      - "9080:80"
+      - "9443:443"
     volumes:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
