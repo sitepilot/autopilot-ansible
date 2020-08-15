@@ -80,7 +80,7 @@
     host: "%"
     config_file: "/root/.my.cnf"
   register: result
-  retries: 5
+  retries: 8
   delay: 10
   until: result is not failed
   no_log: true
