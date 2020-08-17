@@ -37,10 +37,6 @@ jobs:
           path: ~/.composer/cache/files
           key: composer-${{ hashFiles('composer.json') }}
 
-      - name: Install python3
-        run: |
-          ansible --version | grep "python version"
-
       - name: Install pip packages
         run: sudo pip install ansible-lint && sudo pip install yamllint
 
@@ -76,7 +72,7 @@ jobs:
       - name: "Failure: dump webserver logs"
         if: failure()
         run: |
-          docker exec test-web cat /opt/sitepilot/services/olsws/logs/error.log
+          docker exec autopilot-test cat /opt/sitepilot/services/olsws/logs/error.log
 
   deploy:
     runs-on: ubuntu-20.04
