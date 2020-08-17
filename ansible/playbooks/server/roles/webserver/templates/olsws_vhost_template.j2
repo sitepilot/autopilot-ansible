@@ -54,16 +54,6 @@ virtualHostConfig  {
     php_admin_value mail.log $VH_ROOTlogs/php_mail.log
   }
 
-  context /.sitepilot/pma/ {
-    location              /opt/sitepilot/services/phpmyadmin/public/
-    allowBrowse           1
-    addDefaultCharset     off
-    rewrite  {
-      enable              1
-      inherit             0
-    }
-  }
-
   context /.sitepilot/health/ {
     location              /opt/sitepilot/services/health/public/
     allowBrowse           1
@@ -77,5 +67,9 @@ virtualHostConfig  {
   rewrite  {
     enable                1
     autoLoadHtaccess      1
+    rules                 <<<END_rules
+RewriteRule /.sitepilot/pma/(.*) http://phpMyAdmin/$1 [P]
+RewriteRule /.sitepilot/node-exporter/(.*) http://nodeExporter/.sitepilot/node-exporter/$1 [P]
+    END_rules
   }
 }

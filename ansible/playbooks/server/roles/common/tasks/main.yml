@@ -23,14 +23,17 @@
 - include: sshd.yml
   tags: "sshd"
 
-- include: firewall.yml
-  tags: "firewall"
-
 - include: restic.yml
   tags: "restic"
 
-- include: node-exporter.yml
-  tags: "node-exporter"
-
 - include: ssmtp.yml
   tags: "ssmtp"
+
+- include: docker.yml
+  tags: "docker"
+
+- include: "docker-node-exporter.yml"
+  tags: "node-exporter"
+
+- include: firewall.yml
+  tags: "firewall"

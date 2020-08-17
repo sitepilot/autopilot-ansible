@@ -8,11 +8,17 @@
 - include: php.yml
   tags: "php"
 
+- include: docker-mysql.yml
+  tags: "mysql"
+
+- include: docker-pma.yml
+  tags: "pma"
+
+- include: docker-redis.yml
+  tags: "redis"
+
 - include: health.yml
   tags: "health"
-
-- include: pma.yml
-  tags: "pma"
 
 - include: composer.yml
   tags: "composer"

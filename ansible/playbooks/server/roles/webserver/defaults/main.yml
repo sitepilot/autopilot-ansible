@@ -1,6 +1,14 @@
-admin: "sitepilot"
+---
 health_email: health@sitepilot.io
 
-pma_version: "5.0.1"
-pma_update_version: false
-pma_blowfish_secret: "9B3U6iQKBeaoki8n07HZckWxBKCrxlok"
+php_post_max_size: 64M
+php_upload_max_filesize: 32M
+php_memory_limit: 256M
+
+mysql_image: bitnami/mariadb:10.4-debian-10
+mysql_root_pass: supersecret
+
+pma_image: bitnami/phpmyadmin:5-debian-10
+redis_image: bitnami/redis:6.0-debian-10
+
+sitepilot_managed: "WARNING: This file is managed by Sitepilot, any changes will be overwritten (updated at: {{ansible_date_time.date}} {{ansible_date_time.time}})."

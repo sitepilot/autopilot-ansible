@@ -1,0 +1,22 @@
+# {{ sitepilot_managed }}
+version: '3.3'
+
+services:
+
+  node-exporter-1:
+    image: prom/node-exporter:latest
+    container_name: node-exporter-1
+    privileged: true
+    restart: always
+    ports:
+      - '127.0.0.1:9100:9100'
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    entrypoint: /bin/node_exporter --web.telemetry-path="/.sitepilot/node-exporter/metrics"
+
+networks:
+  default:
+    external:
+      name: {{ docker_network_name }}

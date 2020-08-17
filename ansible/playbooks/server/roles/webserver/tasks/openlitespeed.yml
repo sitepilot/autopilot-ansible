@@ -59,7 +59,7 @@
     mode: "{{ item.mode }}"
   loop:
     - path: /tmp/lshttpd
-      mode: "0755"
+      mode: "0700"
     - path: /opt/sitepilot/services/olsws
       mode: "0700"
     - path: /opt/sitepilot/services/olsws/tmp

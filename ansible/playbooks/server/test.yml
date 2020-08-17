@@ -2,17 +2,8 @@
 - hosts: "all"
   vars:
     admin: "sitepilot"
-    admin_pass: ""
+    admin_pass: "secret"
   tasks:
-    # SSH Tests (when test public key is used)
-    - name: "server/test : copy private key"
-      copy:
-        src: ./ssh/test_key
-        dest: /root/.ssh/test_key
-        owner: root
-        group: root
-        mode: "0600"
-
     # MySQL Tests
     - name: "server/test : connect to MySQL as admin"
       command: "mysql -u {{ admin }} -p{{ admin_pass }} -h 127.0.0.1 -e 'show databases;'"
@@ -45,6 +36,11 @@
         status_code:
           - 200
           - 500
+
+    - name: "server/test : node-exporter is available"
+      uri:
+        url: https://127.0.0.1/.sitepilot/node-exporter/
+        validate_certs: false
 
     - name: "server/test : check if modsecurity is installed"
       uri:

@@ -1,0 +1,21 @@
+# {{ sitepilot_managed }}
+version: '3.3'
+
+services:
+  
+  pma-1:
+    image: '{{ pma_image }}'
+    container_name: pma-1
+    ports:
+      - '127.0.0.1:9001:8080'
+    environment:
+      DATABASE_HOST: mysql-1
+      PHP_POST_MAX_SIZE: 256M
+      PHP_UPLOAD_MAX_FILESIZE: 256M
+    volumes:
+      - "./conf/config.inc.php:/opt/bitnami/phpmyadmin/config.inc.php"
+
+networks:
+  default:
+    external:
+      name: {{ docker_network_name }}
