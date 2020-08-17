@@ -11,6 +11,8 @@ services:
     ports:
       - "8080:80"
       - "8443:443"
+      - "8083:2083"
+      - "8100:9100"
     volumes:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
     networks:
@@ -27,6 +29,7 @@ services:
     ports:
       - "9080:80"
       - "9443:443"
+      - "9100:9100"
     volumes:
       - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
     networks:
