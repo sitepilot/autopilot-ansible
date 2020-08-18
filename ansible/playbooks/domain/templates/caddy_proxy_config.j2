@@ -1,5 +1,4 @@
 # {{ sitepilot_managed }}
-
 {{ domain }}, www.{{ domain }} {
     tls {{ email }} {
         on_demand
@@ -18,8 +17,6 @@
         to {{ backends | join(' ') }}
 
         lb_policy first 
-        health_path /
-        health_port 443
 
         transport http {
             tls_insecure_skip_verify
