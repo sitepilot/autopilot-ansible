@@ -31,7 +31,7 @@ class DatabaseTest extends TestCase
 
         $database->delete();
 
-        $this->assertEquals($database->fresh()->status, 'destroyed');
+        $this->assertIsBool($database->trashed());
         $this->assertLastTask();
     }
 }

@@ -41,7 +41,7 @@ class ServerTest extends TestCase
 
         $server->delete();
 
-        $this->assertEquals($server->fresh()->status, 'destroyed');
+        $this->assertIsBool($server->trashed());
         $this->assertLastTask();
     }
 
@@ -59,7 +59,7 @@ class ServerTest extends TestCase
 
         $server->delete();
 
-        $this->assertEquals($server->fresh()->status, 'destroyed');
+        $this->assertIsBool($server->trashed());
         $this->assertLastTask();
     }
 }

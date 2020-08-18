@@ -32,7 +32,7 @@ class DomainTest extends TestCase
 
         $domain->delete();
 
-        $this->assertEquals($domain->fresh()->status, 'destroyed');
+        $this->assertIsBool($domain->trashed());
         $this->assertLastTask();
     }
 }

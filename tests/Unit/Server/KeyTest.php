@@ -31,7 +31,7 @@ class KeyTest extends TestCase
 
         $key->delete();
 
-        $this->assertEquals($key->fresh()->status, 'destroyed');
+        $this->assertIsBool($key->trashed());
         $this->assertLastTask();
     }
 
@@ -49,7 +49,7 @@ class KeyTest extends TestCase
 
         $key->delete();
 
-        $this->assertEquals($key->fresh()->status, 'destroyed');
+        $this->assertIsBool($key->trashed());
         $this->assertLastTask();
     }
 }

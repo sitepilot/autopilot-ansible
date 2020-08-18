@@ -378,8 +378,7 @@ class Server extends Resource
                 ->setFunctionName('stop')
                 ->confirmButtonText('Stop')
                 ->confirmText('Are you sure you want to stop the selected server(s)?')
-                ->setSuccessMessage('Autopilot will stop your {{resourceName}} in a few seconds.')
-                ->canRunWhenNotBusy($this),
+                ->setSuccessMessage('Autopilot will stop your {{resourceName}} in a few seconds.'),
             (new JobAction)
                 ->exceptOnIndex()
                 ->showOnTableRow()
@@ -388,8 +387,7 @@ class Server extends Resource
                 ->setFunctionName('start')
                 ->confirmButtonText('Start')
                 ->confirmText('Are you sure you want to start the selected server(s)?')
-                ->setSuccessMessage('Autopilot will start your {{resourceName}} in a few seconds.')
-                ->canRunWhenNotBusy($this),
+                ->setSuccessMessage('Autopilot will start your {{resourceName}} in a few seconds.'),
             (new JobAction)
                 ->exceptOnIndex()
                 ->showOnTableRow()

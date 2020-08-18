@@ -67,6 +67,7 @@ class DatabaseDestroyJob implements ShouldQueue
 
             if ($task->successful()) {
                 $this->database->markAsDestroyed();
+                $this->database->forceDelete();
                 return $this->delete();
             }
 

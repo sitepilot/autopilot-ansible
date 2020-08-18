@@ -65,6 +65,7 @@ class DomainDestroyJob implements ShouldQueue
 
             if ($task->successful()) {
                 $this->domain->markAsDestroyed();
+                $this->domain->forceDelete();
                 return $this->delete();
             }
 

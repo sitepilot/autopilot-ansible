@@ -60,6 +60,7 @@ class ServerDestroyJob implements ShouldQueue
 
         $this->server->withProvider()->deleteServer();
         $this->server->markAsDestroyed();
+        $this->server->forceDelete();
 
         $this->delete();
     }

@@ -53,7 +53,7 @@ class SysuserTest extends TestCase
 
         $sysuser->delete();
 
-        $this->assertEquals($sysuser->fresh()->status, 'destroyed');
+        $this->assertIsBool($sysuser->trashed());
         $this->assertLastTask();
     }
 }

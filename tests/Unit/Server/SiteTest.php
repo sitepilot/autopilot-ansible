@@ -31,7 +31,7 @@ class SiteTest extends TestCase
 
         $site->delete();
 
-        $this->assertEquals($site->fresh()->status, 'destroyed');
+        $this->assertIsBool($site->trashed());
         $this->assertLastTask();
     }
 }
