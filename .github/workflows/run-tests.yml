@@ -38,7 +38,7 @@ jobs:
           key: composer-${{ hashFiles('composer.json') }}
 
       - name: Install pip packages
-        run: sudo pips install ansible-lint && sudo pip install yamllint
+        run: sudo pip install ansible-lint && sudo pip install yamllint
 
       - name: Run Yaml lint on ansible folder
         run: sudo yamllint -c tests/yamllint.yml ansible/
@@ -68,11 +68,6 @@ jobs:
         if: failure()
         run: |
           cat storage/logs/laravel.log
-
-      - name: "Failure: dump webserver logs"
-        if: failure()
-        run: |
-          docker exec autopilot-test cat /opt/sitepilot/services/olsws/logs/error.log
 
       - name: Start SSH via Ngrok
         if: failure()
