@@ -94,11 +94,15 @@
   template:
     src: olsws_index.php.j2
     dest: /opt/sitepilot/services/default/public/index.php
+    owner: "{{ admin }}"
+    group: "{{ admin }}"
 
 - name: "olsws : generate default vhost configuration"
   template:
     src: olsws_default_vhost.j2
     dest: /usr/local/lsws/conf/vhosts/default.conf
+    owner: lsadm
+    group: lsadm
   notify: reload openlitespeed
 
 - name: "olsws : generate httpd config"
