@@ -36,7 +36,8 @@ class Domain extends Model
      * @var array
      */
     public static $validationRules = [
-        'name' => ['required', 'min:3', 'unique:domains,name,{{resourceId}}']
+        'name' => ['required', 'min:3', 'unique:domains,name,{{resourceId}}'],
+        'monitor' => ['boolean']
     ];
 
     /**

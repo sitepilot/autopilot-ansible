@@ -46,18 +46,20 @@ class WriteMonitorConfig extends Command
         $health = [];
 
         foreach ($servers as $server) {
-            $item = new stdClass;
-            $item->labels = new stdClass;
-            $item->targets[] = 'http://' . $server->address . ':/.sitepilot/node-exporter/';
-            $item->labels->name =  $server->name;
-            $content[] = $item;
+            if ($server->monitor) {
+                $item = new stdClass;
+                $item->labels = new stdClass;
+                $item->targets[] = 'http://' . $server->address . ':/.sitepilot/node-exporter/';
+                $item->labels->name =  $server->name;
+                $content[] = $item;
 
-            if (in_array($server->type, ['shared', 'dedicated'])) {
-                $healthItem = new stdClass;
-                $healthItem->labels = new stdClass;
-                $healthItem->targets[] = 'http://' . $server->address . '/.sitepilot/health/';
-                $healthItem->labels->name = $server->name;
-                $health[] = $healthItem;
+                if (in_array($server->type, ['shared', 'dedicated'])) {
+                    $healthItem = new stdClass;
+                    $healthItem->labels = new stdClass;
+                    $healthItem->targets[] = 'http://' . $server->address . '/.sitepilot/health/';
+                    $healthItem->labels->name = $server->name;
+                    $health[] = $healthItem;
+                }
             }
         }
 
@@ -68,11 +70,13 @@ class WriteMonitorConfig extends Command
         $content = [];
 
         foreach ($domains as $domain) {
-            $item = new stdClass;
-            $item->labels = new stdClass;
-            $item->targets[] = 'https://' . $domain->name;
-            $item->labels->name = $domain->name;
-            $content[] = $item;
+            if ($domain->monitor) {
+                $item = new stdClass;
+                $item->labels = new stdClass;
+                $item->targets[] = 'https://' . $domain->name;
+                $item->labels->name = $domain->name;
+                $content[] = $item;
+            }
         }
 
         Storage::disk('local')->put('monitor/domains.json', json_encode($content));
