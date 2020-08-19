@@ -26,6 +26,7 @@
       template:
         src: ./templates/olsws_site_vhost.j2
         dest: "{{ path_vhost }}"
+        mode: "0644"
 
     - name: "site/provision : {{ user }} : {{ site }} : set folder / file permissions"
       command: "{{ item }}"

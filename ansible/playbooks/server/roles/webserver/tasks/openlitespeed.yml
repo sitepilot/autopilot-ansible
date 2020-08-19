@@ -11,6 +11,7 @@
   apt_repository:
     repo: "deb https://rpms.litespeedtech.com/debian/ focal main"
     state: present
+    mode: "0644"
 
 - name: "olsws : install server and PHP packages"
   apt:
@@ -76,12 +77,14 @@
 - name: "olsws : generate an OpenSSL private key"
   openssl_privatekey:
     path: /usr/local/lsws/conf/cert/server.key
+    mode: "0644"
 
 - name: "olsws : generate an OpenSSL csr"
   openssl_csr:
     path: /usr/local/lsws/conf/cert/server.csr
     privatekey_path: /usr/local/lsws/conf/cert/server.key
     common_name: "{{ hostname }}"
+    mode: "0644"
 
 - name: "olsws : generate a self signed OpenSSL certificate"
   openssl_certificate:
@@ -89,6 +92,7 @@
     privatekey_path: /usr/local/lsws/conf/cert/server.key
     csr_path: /usr/local/lsws/conf/cert/server.csr
     provider: selfsigned
+    mode: "0644"
 
 - name: "olsws : generate default vhost index page"
   template:
@@ -96,6 +100,7 @@
     dest: /opt/sitepilot/services/default/public/index.php
     owner: "{{ admin }}"
     group: "{{ admin }}"
+    mode: "0644"
 
 - name: "olsws : generate default vhost configuration"
   template:
@@ -103,6 +108,7 @@
     dest: /usr/local/lsws/conf/vhosts/default.conf
     owner: lsadm
     group: lsadm
+    mode: "0644"
   notify: reload openlitespeed
 
 - name: "olsws : generate httpd config"
@@ -111,6 +117,7 @@
     dest: /usr/local/lsws/conf/httpd_config.conf
     owner: lsadm
     group: lsadm
+    mode: "0644"
   notify: reload openlitespeed
 
 - name: "olsws : generate olsws admin config"
@@ -119,6 +126,7 @@
     dest: /usr/local/lsws/admin/conf/admin_config.conf
     owner: lsadm
     group: lsadm
+    mode: "0644"
   notify: reload openlitespeed
 
 - name: "olsws : generate lsphp74 vhost template"
@@ -127,6 +135,7 @@
     dest: /usr/local/lsws/conf/templates/lsphp74.conf
     owner: lsadm
     group: lsadm
+    mode: "0644"
   notify: reload openlitespeed
   vars:
     php_version: "74"
@@ -136,6 +145,7 @@
     src: /usr/local/lsws/conf/templates/lsphp74.conf
     dest: /usr/local/lsws/conf/templates/lsphp74-ssl.conf
     remote_src: yes
+    mode: "0644"
 
 - name: "olsws : generate lsphp73 vhost template"
   template:
@@ -143,6 +153,7 @@
     dest: /usr/local/lsws/conf/templates/lsphp73.conf
     owner: lsadm
     group: lsadm
+    mode: "0644"
   notify: reload openlitespeed
   vars:
     php_version: "73"
@@ -152,6 +163,7 @@
     src: /usr/local/lsws/conf/templates/lsphp73.conf
     dest: /usr/local/lsws/conf/templates/lsphp73-ssl.conf
     remote_src: yes
+    mode: "0644"
 
 - name: "olsws : generate admin password script"
   template:

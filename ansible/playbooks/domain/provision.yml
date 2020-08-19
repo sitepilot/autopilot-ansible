@@ -13,6 +13,7 @@
       template:
         src: ./templates/caddy_proxy_config.j2
         dest: "{{ path_vhost }}"
+        mode: "0644"
 
     - name: "domain/provision : {{ domain }} : reload proxy server"
       service:

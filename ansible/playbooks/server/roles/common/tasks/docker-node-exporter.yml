@@ -13,6 +13,7 @@
   template:
     src: node_exporter_docker_compose.j2
     dest: /opt/sitepilot/services/node-exporter/docker-compose.yml
+    mode: "0600"
 
 - name: "node-exporter : start containers"
   docker_compose:

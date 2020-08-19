@@ -20,6 +20,7 @@
   template:
     src: mysql_docker_compose.j2
     dest: /opt/sitepilot/services/mysql/docker-compose.yml
+    mode: "0600"
 
 - name: "mysql : start containers"
   docker_compose:
@@ -65,7 +66,7 @@
   retries: 8
   delay: 10
   until: result is not failed
-  no_log: false
+  no_log: true
 
 - name: "mysql: create backup dir"
   file:
