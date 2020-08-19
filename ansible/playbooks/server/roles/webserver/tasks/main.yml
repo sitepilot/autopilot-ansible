@@ -5,6 +5,9 @@
 - include: modsecurity.yml
   tags: "modsecurity"
 
+- include: caddy.yml
+  tags: "caddy"
+
 - include: php.yml
   tags: "php"
 

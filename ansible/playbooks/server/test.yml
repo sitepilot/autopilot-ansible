@@ -10,18 +10,28 @@
       changed_when: false
 
     # HTTP Checks
-    - name: "server/test : web server is running (HTTP)"
+    - name: "server/test : caddy server is running (HTTP)"
       uri:
         url: http://127.0.0.1
+        validate_certs: false
 
-    - name: "server/test : web server is running (HTTPS)"
+    - name: "server/test : caddy server is running (HTTPS)"
       uri:
         url: https://127.0.0.1
         validate_certs: false
 
+    - name: "server/test : web server is running (HTTP)"
+      uri:
+        url: http://127.0.0.1:7081
+
+    - name: "server/test : web server is running (HTTPS)"
+      uri:
+        url: https://127.0.0.1:7082
+        validate_certs: false
+
     - name: "server/test : web server admin panel is running (HTTPS)"
       uri:
-        url: https://127.0.0.1:2083
+        url: https://127.0.0.1:7083
         validate_certs: false
 
     - name: "server/test : phpMyAdmin is available"
