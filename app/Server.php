@@ -81,7 +81,6 @@ class Server extends Model implements ProvisionableResource
         'timezone' => ['nullable', 'min:3'],
         'admin_email' => ['nullable', 'email'],
         'health_email' => ['nullable', 'email'],
-        'monitor' => ['boolean'],
         'php_post_max_size' => ['nullable', 'numeric', 'min:25', 'max:2048'],
         'php_upload_max_filesize' => ['nullable', 'numeric', 'min:25', 'max:1024'],
         'php_memory_limit' => ['nullable', 'numeric', 'min:64', 'max:2048'],
@@ -293,7 +292,9 @@ class Server extends Model implements ProvisionableResource
      */
     public function setPrivateKeyAttribute($value)
     {
-        $this->attributes['private_key'] = encrypt($value);
+        if ($value != $this->private_key) {
+            $this->attributes['private_key'] = encrypt($value);
+        }
     }
 
     /**
@@ -319,7 +320,9 @@ class Server extends Model implements ProvisionableResource
      */
     public function setAdminPasswordAttribute($value)
     {
-        $this->attributes['admin_password'] = encrypt($value);
+        if ($value != $this->admin_password) {
+            $this->attributes['admin_password'] = encrypt($value);
+        }
     }
 
     /**
@@ -345,7 +348,9 @@ class Server extends Model implements ProvisionableResource
      */
     public function setMysqlPasswordAttribute($value)
     {
-        $this->attributes['mysql_password'] = encrypt($value);
+        if ($value != $this->mysql_password) {
+            $this->attributes['mysql_password'] = encrypt($value);
+        }
     }
 
     /**
@@ -371,7 +376,9 @@ class Server extends Model implements ProvisionableResource
      */
     public function setSmtpRelayPasswordAttribute($value)
     {
-        $this->attributes['smtp_relay_password'] = encrypt($value);
+        if ($value != $this->smtp_relay_password) {
+            $this->attributes['smtp_relay_password'] = encrypt($value);
+        }
     }
 
     /**
@@ -397,7 +404,9 @@ class Server extends Model implements ProvisionableResource
      */
     public function setBackupS3SecretAttribute($value)
     {
-        $this->attributes['backup_s3_secret'] = encrypt($value);
+        if ($value != $this->backup_s3_secret) {
+            $this->attributes['backup_s3_secret'] = encrypt($value);
+        }
     }
 
     /**
@@ -423,7 +432,9 @@ class Server extends Model implements ProvisionableResource
      */
     public function setBackupPasswordAttribute($value)
     {
-        $this->attributes['backup_password'] = encrypt($value);
+        if ($value != $this->backup_password) {
+            $this->attributes['backup_password'] = encrypt($value);
+        }
     }
 
     /**
