@@ -72,7 +72,7 @@ trait InteractsWithAnsible
     protected function toProcess($inventoryFile, $playbookFile, $timeout)
     {
         $cmd = [
-            "ansible-playbook", $playbookFile, "-i", $inventoryFile, "-v"
+            "ansible-playbook", $playbookFile, "-i", $inventoryFile
         ];
 
         if (is_array($this->vars)) {
