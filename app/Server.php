@@ -81,6 +81,7 @@ class Server extends Model implements ProvisionableResource
         'timezone' => ['nullable', 'min:3'],
         'admin_email' => ['nullable', 'email'],
         'health_email' => ['nullable', 'email'],
+        'monitor' => ['boolean'],
         'php_post_max_size' => ['nullable', 'numeric', 'min:25', 'max:2048'],
         'php_upload_max_filesize' => ['nullable', 'numeric', 'min:25', 'max:1024'],
         'php_memory_limit' => ['nullable', 'numeric', 'min:64', 'max:2048'],
