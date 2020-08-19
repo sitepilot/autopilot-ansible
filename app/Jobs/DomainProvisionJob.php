@@ -60,7 +60,7 @@ class DomainProvisionJob implements ShouldQueue
             $task = $this->domain->run(
                 new DomainProvisionPlaybook($this->domain),
                 [],
-                Server::where('type', 'loadbalancer')->get()
+                Server::where('id', $this->domain->site->server->id)->get()
             );
 
             if ($task->successful()) {

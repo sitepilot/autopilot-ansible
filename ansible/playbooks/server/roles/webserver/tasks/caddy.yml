@@ -40,6 +40,12 @@
   loop:
     - /opt/sitepilot/services/caddy/logs/access.log
 
+- name: "caddy : add caddy user to sudo group"
+  user:
+    name: "caddy"
+    groups: sudo
+    append: yes
+
 - name: "caddy : generate config"
   template:
     src: caddyfile.j2

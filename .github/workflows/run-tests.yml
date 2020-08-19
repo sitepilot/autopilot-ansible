@@ -57,7 +57,7 @@ jobs:
         run: |
           sudo modprobe ip6table_filter
           docker-compose up -d
-          TEST_WEB_IP=172.25.1.1 TEST_LB_IP=172.25.1.2 php artisan test
+          TEST_WEB_IP=172.25.1.1 php artisan test
 
       - name: "Failure: dump tasks"
         if: failure()

@@ -26,7 +26,7 @@ class DomainProvisionPlaybook extends Playbook
      * @return void
      */
     public $serverTypes = [
-        'loadbalancer'
+        'shared', 'dedicated'
     ];
 
     /**
@@ -57,7 +57,7 @@ class DomainProvisionPlaybook extends Playbook
      */
     public function vars()
     {
-        $backends = [];
+        $backends[] = '127.0.0.1:7082';
 
         if (!empty($this->domain->site->server->private_address)) {
             $backends[] = $this->domain->site->server->private_address . ':443';
@@ -69,7 +69,7 @@ class DomainProvisionPlaybook extends Playbook
             'config_name' => (string) 'autopilot-domain-' . $this->domain->id,
             'site_name' => (string) $this->domain->site->name,
             'domain' => (string) $this->domain->name,
-            'email' => (string) app()->environment(['testing', 'development']) ? 'internal' : 'admin@' . $this->domain->name,
+            'email' => (string) app()->environment(['testing', 'local']) ? 'internal' : 'admin@' . $this->domain->name,
             'backends' => (array) $backends
         ]);
     }

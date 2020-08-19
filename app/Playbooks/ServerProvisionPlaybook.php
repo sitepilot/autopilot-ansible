@@ -33,7 +33,7 @@ class ServerProvisionPlaybook extends Playbook
      * @return void
      */
     public $serverTypes = [
-        'shared', 'dedicated', 'loadbalancer'
+        'shared', 'dedicated'
     ];
 
     /**
@@ -55,10 +55,6 @@ class ServerProvisionPlaybook extends Playbook
      */
     public function playbook()
     {
-        if ($this->server->type == 'loadbalancer') {
-            return 'ansible/playbooks/server/loadbalancer.yml';
-        }
-
         return 'ansible/playbooks/server/webserver.yml';
     }
 

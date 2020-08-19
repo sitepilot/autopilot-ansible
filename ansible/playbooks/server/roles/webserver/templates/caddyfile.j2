@@ -1,4 +1,9 @@
-:80 {    
+(config) {
+	header / Server "Sitepilot"
+}
+
+(webapps) {
+	reverse_proxy /.sitepilot/pma* http://127.0.0.1:9001
     reverse_proxy /.sitepilot/node-exporter* http://127.0.0.1:9100
 }
 

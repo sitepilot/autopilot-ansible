@@ -1,6 +1,0 @@
----
-- include: caddy.yml
-  tags: "caddy"
-
-- include: fail2ban.yml
-  tags: "fail2ban"

@@ -51,7 +51,7 @@ class Domain extends Model
     }
 
     /**
-     * Provision domain on loadbalancers.
+     * Provision domain on server(s).
      *
      * @return bool|PendingDispatch|mixed
      */
@@ -61,7 +61,7 @@ class Domain extends Model
     }
 
     /**
-     * Destroy domain on loadbalancers.
+     * Destroy domain on on server(s).
      *
      * @return bool|PendingDispatch|mixed
      */

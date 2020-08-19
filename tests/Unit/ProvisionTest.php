@@ -35,16 +35,6 @@ class ProvisionTest extends TestCase
         $this->assertLastTask();
     }
 
-    /* ========== Loadbalancer Tests ========== */
-
-    public function test_loadbalancer_is_provisioned_on_create()
-    {
-        $webServer = self::getLbServer();
-
-        $this->assertEquals($webServer->fresh()->status, 'ready');
-        $this->assertLastTask();
-    }
-
     /* ========== Sysuser Tests ========== */
 
     public function test_sysuser_is_provisioned_on_create()
@@ -175,16 +165,6 @@ class ProvisionTest extends TestCase
         $this->assertLastTask();
     }
 
-    public function test_loadbalancer_is_destroyed_on_delete()
-    {
-        $lbServer = self::getLbServer();
-
-        $lbServer->delete();
-
-        $this->assertIsBool($lbServer->trashed());
-        $this->assertLastTask();
-    }
-
     public function test_server_is_destroyed_on_delete()
     {
         $webServer = self::getWebServer();
@@ -203,15 +183,6 @@ class ProvisionTest extends TestCase
             return self::$webServer = factory(\App\Server::class)->create($attributes);
         } else {
             return self::$webServer->fresh();
-        }
-    }
-
-    public static function getLbServer($attributes = [])
-    {
-        if (!self::$lbServer) {
-            return self::$lbServer = factory(\App\Server::class)->states(['loadbalancer'])->create($attributes);
-        } else {
-            return self::$lbServer->fresh();
         }
     }
 

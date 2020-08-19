@@ -26,7 +26,7 @@ class DomainDestroyPlaybook extends Playbook
      * @return void
      */
     public $serverTypes = [
-        'loadbalancer'
+        'shared', 'dedicated'
     ];
 
     /**

@@ -130,8 +130,7 @@ class Server extends Resource
             Select::make('Type')
                 ->options([
                     'shared' => 'Shared',
-                    'dedicated' => 'Dedicated',
-                    'loadbalancer' => 'Loadbalancer'
+                    'dedicated' => 'Dedicated'
                 ])
                 ->displayUsingLabels()
                 ->rules(\App\Server::$validationRules['type']),

@@ -73,7 +73,7 @@ class Server extends Model implements ProvisionableResource
         'address' => ['required_if:provider,custom'],
         'ipv6_address' => ['nullable', 'ipv6'],
         'private_address' => ['nullable', 'ipv4'],
-        'type' => ['required_if:provider,custom', 'in:shared,dedicated,loadbalancer'],
+        'type' => ['required_if:provider,custom', 'in:shared,dedicated'],
         'port' => ['required', 'numeric'],
         'user' => ['required', 'min:3'],
         'admin_password' => ['nullable', 'min:8'],
@@ -187,16 +187,6 @@ class Server extends Model implements ProvisionableResource
     public function isDedicated()
     {
         return $this->type == 'dedicated';
-    }
-
-    /**
-     * Determine if the server is a loadbalancer.
-     * 
-     * @return boolean
-     */
-    public function isLoadbalancer()
-    {
-        return $this->type == 'loadbalancer';
     }
 
     /**

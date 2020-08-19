@@ -33,7 +33,7 @@ class KeyDestroyPlaybook extends Playbook
      * @return void
      */
     public $serverTypes = [
-        'shared', 'dedicated', 'loadbalancer'
+        'shared', 'dedicated'
     ];
 
     /**

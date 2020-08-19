@@ -18,5 +18,3 @@
       comment: "ssh"
     - port: 3306
       comment: "mysql"
-    - port: 2083
-      comment: "openlitespeed"

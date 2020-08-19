@@ -27,21 +27,19 @@ class ServerObserver
         // Backup configuration
         if (empty($server->backup_password)) $server->backup_password = Str::random(12);
 
-        if (!$server->isLoadbalancer()) {
-            // MySQL configuration
-            if (empty($server->mysql_password)) $server->mysql_password = Str::random(12);
+        // MySQL configuration
+        if (empty($server->mysql_password)) $server->mysql_password = Str::random(12);
 
-            // PHP configuration
-            if (empty($server->php_post_max_size)) $server->php_post_max_size = 64;
-            if (empty($server->php_upload_max_filesize)) $server->php_upload_max_filesize = 32;
-            if (empty($server->php_memory_limit)) $server->php_memory_limit = 256;
+        // PHP configuration
+        if (empty($server->php_post_max_size)) $server->php_post_max_size = 64;
+        if (empty($server->php_upload_max_filesize)) $server->php_upload_max_filesize = 32;
+        if (empty($server->php_memory_limit)) $server->php_memory_limit = 256;
 
-            // SMTP Relay configuration
-            if (empty($server->smtp_relay_host)) $server->smtp_relay_host = 'smtp.eu.mailgun.org';
-            if (empty($server->smtp_relay_domain)) $server->smtp_relay_domain = 'mg.example.com';
-            if (empty($server->smtp_relay_user)) $server->smtp_relay_user = 'postmaster@mg.example.com';
-            if (empty($server->smtp_relay_password)) $server->smtp_relay_password = 'supersecret';
-        }
+        // SMTP Relay configuration
+        if (empty($server->smtp_relay_host)) $server->smtp_relay_host = 'smtp.eu.mailgun.org';
+        if (empty($server->smtp_relay_domain)) $server->smtp_relay_domain = 'mg.example.com';
+        if (empty($server->smtp_relay_user)) $server->smtp_relay_user = 'postmaster@mg.example.com';
+        if (empty($server->smtp_relay_password)) $server->smtp_relay_password = 'supersecret';
     }
 
     /**
