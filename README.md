@@ -4,7 +4,7 @@
 
 Autopilot is a (cloud) webhosting control panel for managing multiple servers, sites and WordPress installations. We use Autopilot at [Sitepilot](https://sitepilot.io) for our managed WordPress webhosting platform. With Autopilot you can:
 
-* Provision WordPress optimized web servers and load balancers.
+* Provision WordPress optimized web servers.
 * Monitor server and site health of the provisioned servers and sites.
 * Manage and maintain WordPress sites.
 
@@ -28,6 +28,7 @@ If your preferred provider is not baked into Autopilot, you can always use the C
 
 The following packages/services will be installed and configured on web servers (together with dependencies):
 
+* [Caddy Web Server (for proxy and auto ssl)](https://caddyserver.com/)
 * [OpenLitespeed (web server)](https://www.litespeedtech.com/open-source/openlitespeed)
 * [LSPHP 7.4](https://www.litespeedtech.com/open-source/litespeed-sapi/php)
 * [LSPHP 7.3](https://www.litespeedtech.com/open-source/litespeed-sapi/php)
@@ -35,7 +36,6 @@ The following packages/services will be installed and configured on web servers 
 * [WPCLI](https://wp-cli.org/)
 * [WordMove](https://github.com/welaika/wordmove)
 * [UFW (firewall)](https://help.ubuntu.com/community/UFW)
-* [Fail2Ban](https://en.wikipedia.org/wiki/Fail2ban)
 * [OpenSSH Server & SFTP](https://www.openssh.com/)
 * [SSMTP (email relay)](https://wiki.archlinux.org/index.php/SSMTP)
 * [Restic (for backups)](https://restic.net/)
@@ -59,27 +59,12 @@ Users are isolated and allowed to use SFTP with password authentication (chroot 
 * Users folder: `/opt/sitepilot/users`.
 * Site public folder: `/opt/sitepilot/users/{{ user.name }}/{{ app.name }}/public`.
 * Site logs folder: `/opt/sitepilot/users/{{ user.name }}/{{ app.name }}/logs`.
+* OpenLitespeed service folder: `/opt/sitepilot/services/caddy`.
 * OpenLitespeed service folder: `/opt/sitepilot/services/olsws`.
 * MySQL service folder: `/opt/sitepilot/services/mysql`.
 * Redis service folder: `/opt/sitepilot/services/redis`.
 * Node Exporter service folder: `/opt/sitepilot/services/node-exporter`.
 * phpMyAdmin service folder: `/opt/sitepilot/services/phpmyadmin`.
-
-## Load Balancer Configuration
-
-### Packages & Services
-
-The following packages/services will be installed and configured on load balancer servers (together with dependencies):
-
-* [Caddy Web Server (for proxy and auto ssl)](https://caddyserver.com/)
-* [UFW (firewall)](https://help.ubuntu.com/community/UFW)
-* [Restic (for backups)](https://restic.net/)
-* [Node Exporter (for monitoring)](https://prometheus.io/docs/guides/node-exporter/)
-
-### Filesystem
-
-* Caddy vhosts folder: `/opt/sitepilot/services/caddy/vhosts`.
-* Caddy logs folder: `/opt/sitepilot/services/caddy/logs`.
 
 ## Monitoring
 
