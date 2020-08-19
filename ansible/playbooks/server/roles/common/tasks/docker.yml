@@ -9,6 +9,7 @@
 - name: "docker : install Docker repositories"
   apt_repository:
     repo: "{{ item }}"
+    mode: "0644"
   loop:
     - "deb https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
 
@@ -35,3 +36,7 @@
     name: "{{ admin }}"
     groups: docker
     append: true
+
+- name: "docker : create default overlay network"
+  docker_network:
+    name: "{{ docker_network_name }}"

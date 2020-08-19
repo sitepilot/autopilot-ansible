@@ -133,7 +133,7 @@ class ServerObserver
      */
     public function deleted(Server $server)
     {
-        if (!$server->isDestroyed()) {
+        if (!$server->isForceDeleting()) {
             $server->deleteFromProvider();
         }
     }

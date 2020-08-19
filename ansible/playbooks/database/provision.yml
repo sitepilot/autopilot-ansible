@@ -19,3 +19,4 @@
         state: present
         host: "%"
         config_file: "/root/.my.cnf"
+      no_log: true

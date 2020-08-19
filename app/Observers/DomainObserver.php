@@ -52,8 +52,10 @@ class DomainObserver
      */
     public function deleted(Domain $domain)
     {
-        $domain->site->provision();
-        $domain->deleteFromServer();
+        if (!$domain->isForceDeleting()) {
+            $domain->site->provision();
+            $domain->deleteFromServer();
+        }
     }
 
     /**

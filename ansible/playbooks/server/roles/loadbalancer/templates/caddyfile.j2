@@ -1,1 +1,5 @@
+:80 {    
+    reverse_proxy /.sitepilot/node-exporter* http://127.0.0.1:9100
+}
+
 import /opt/sitepilot/services/caddy/vhosts/*

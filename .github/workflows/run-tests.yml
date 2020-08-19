@@ -23,18 +23,6 @@ jobs:
           - 3307:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
-      test-web:
-        image: sitepilot/autopilot-test:20.04
-        options: --name test-web --privileged --cap-add NET_ADMIN
-        volumes:
-          - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
-
-      test-lb:
-        image: sitepilot/autopilot-test:20.04
-        options: --name test-lb --privileged --cap-add NET_ADMIN
-        volumes:
-          - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
-
     env:
       APP_ENV: testing
       APP_KEY: base64:V78KNl8AZXSQ3p7Kapd8Gr/i7D1hJHbB72vsXSVuG1I=
@@ -68,9 +56,8 @@ jobs:
       - name: Execute tests
         run: |
           sudo modprobe ip6table_filter
-          DOCKER_TEST_LB_IP=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' test-lb` 
-          DOCKER_TEST_WEB_IP=`docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' test-web`
-          TEST_WEB_IP=$DOCKER_TEST_LB_IP TEST_LB_IP=$DOCKER_TEST_LB_IP php artisan test
+          docker-compose up -d
+          TEST_WEB_IP=172.25.1.1 TEST_LB_IP=172.25.1.2 php artisan test
 
       - name: "Failure: dump tasks"
         if: failure()
@@ -81,6 +68,17 @@ jobs:
         if: failure()
         run: |
           cat storage/logs/laravel.log
+
+#      - name: Start SSH via Ngrok
+#        if: failure()
+#        run: curl -sL https://gist.githubusercontent.com/retyui/7115bb6acf151351a143ec8f96a7c561/raw/7099b9db76729dc5761da72aa8525f632d8875c9/debug-github-actions.sh | bash
+#        env:
+#          NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+#          USER_PASS: ${{ secrets.SSH_USER_PASSWORD }}
+
+#      - name: Don't kill instace
+#        if: failure()
+#        run: sleep 1h
 
   deploy:
     runs-on: ubuntu-20.04

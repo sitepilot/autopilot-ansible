@@ -17,6 +17,7 @@
       - gnupg
       - cron
       - nano
+      - ntpdate
       - mysql-client
 
 - name: "install : install required packages"

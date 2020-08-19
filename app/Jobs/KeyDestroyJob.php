@@ -67,6 +67,7 @@ class KeyDestroyJob implements ShouldQueue
 
             if ($task->successful()) {
                 $this->key->markAsDestroyed();
+                $this->key->forceDelete();
                 return $this->delete();
             }
 

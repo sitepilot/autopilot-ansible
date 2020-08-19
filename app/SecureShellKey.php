@@ -14,7 +14,7 @@ class SecureShellKey
      */
     public static function forServer()
     {
-        return app()->environment('testing')
+        return app()->environment('local') || app()->environment('testing')
             ? static::forTesting()
             : static::make();
     }
@@ -26,7 +26,7 @@ class SecureShellKey
      */
     public static function forSysuser(Sysuser $sysuser)
     {
-        return app()->environment('testing')
+        return app()->environment('local') || app()->environment('testing')
             ? static::forTesting()
             : static::make("{$sysuser->name}@{$sysuser->server->name}");
     }

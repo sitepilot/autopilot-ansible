@@ -4,6 +4,7 @@
     dest: "/etc/apt/sources.list.d/caddy-fury.list"
     content: |
       deb [trusted=yes] https://apt.fury.io/caddy/ /
+    mode: "0644"
 
 - name: "caddy : install caddy server"
   apt:
@@ -43,4 +44,5 @@
   template:
     src: caddyfile.j2
     dest: /etc/caddy/Caddyfile
+    mode: "0644"
   notify: reload caddy

@@ -20,15 +20,3 @@
       comment: "mysql"
     - port: 2083
       comment: "openlitespeed"
-
-- name: "firewall : allow authorized addresses to query node exporter port"
-  ufw:
-    port: "9100"
-    rule: allow
-    from_ip: "{{ item }}"
-    comment: "node exporter"
-  loop: "{{ authorized_addresses }}"
-
-- name: "firewall : enable firewall"
-  ufw:
-    state: enabled

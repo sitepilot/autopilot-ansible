@@ -38,7 +38,7 @@ class TaskDebugCommand extends Command
      */
     public function handle()
     {
-        $tasks = Task::orderBy('id', 'desc')->limit(1)->get();
+        $tasks = Task::orderBy('id', 'desc')->limit(10)->get();
 
         foreach($tasks as $task) {
             $this->line("");

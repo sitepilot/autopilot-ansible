@@ -66,7 +66,7 @@ class DatabaseObserver
      */
     public function deleted(Database $database)
     {
-        if (!$database->isDestroyed()) {
+        if (!$database->isForceDeleting()) {
             $database->deleteFromServer();
         }
     }

@@ -9,35 +9,18 @@
 - name: "mysql : create service folders"
   file:
     path: "{{ item }}"
-    owner: "{{ admin }}"
-    group: "{{ admin }}"
+    owner: "1001"
+    group: "1001"
     state: directory
     mode: "0700"
   loop:
-    - /opt/sitepilot/services/mysql
-    - /opt/sitepilot/services/mysql/logs/
     - /opt/sitepilot/services/mysql/data/
-    - /opt/sitepilot/services/mysql/conf/
-
-- name: "mysql : get the admin UID"
-  command: "id -u {{ admin }}"
-  register: cmd_admin_uid
-  changed_when: false
-
-- name: "mysql : get the admin GID"
-  command: "id -g {{ admin }}"
-  register: cmd_admin_gid
-  changed_when: false
-
-- name: "mysql : generate service configuration"
-  template:
-    src: mysql_config.j2
-    dest: /opt/sitepilot/services/mysql/conf/service.cnf
 
 - name: "mysql : generate Docker Compose configuration"
   template:
     src: mysql_docker_compose.j2
     dest: /opt/sitepilot/services/mysql/docker-compose.yml
+    mode: "0600"
 
 - name: "mysql : start containers"
   docker_compose:
@@ -80,7 +63,7 @@
     host: "%"
     config_file: "/root/.my.cnf"
   register: result
-  retries: 5
+  retries: 8
   delay: 10
   until: result is not failed
   no_log: true

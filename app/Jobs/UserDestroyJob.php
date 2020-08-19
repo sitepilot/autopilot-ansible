@@ -66,6 +66,7 @@ class UserDestroyJob implements ShouldQueue
 
             if ($task->successful()) {
                 $this->sysuser->markAsDestroyed();
+                $this->sysuser->forceDelete();
                 return $this->delete();
             }
 

@@ -56,7 +56,7 @@ class BackupObserver
      */
     public function deleted(Backup $backup)
     {
-        if (!$backup->isDestroyed()) {
+        if (!$backup->isForceDeleting()) {
             $backup->deleteFromServer();
         }
     }

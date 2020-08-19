@@ -66,6 +66,7 @@ class BackupDestroyJob implements ShouldQueue
 
             if ($task->successful()) {
                 $this->backup->markAsDestroyed();
+                $this->backup->forceDelete();
                 return $this->delete();
             }
 

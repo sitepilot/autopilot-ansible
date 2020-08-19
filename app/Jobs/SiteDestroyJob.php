@@ -66,6 +66,7 @@ class SiteDestroyJob implements ShouldQueue
 
             if ($task->successful()) {
                 $this->site->markAsDestroyed();
+                $this->site->forceDelete();
                 return $this->delete();
             }
 

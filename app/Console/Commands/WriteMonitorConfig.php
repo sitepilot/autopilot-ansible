@@ -48,7 +48,7 @@ class WriteMonitorConfig extends Command
         foreach ($servers as $server) {
             $item = new stdClass;
             $item->labels = new stdClass;
-            $item->targets[] = $server->address . ':9100';
+            $item->targets[] = 'http://' . $server->address . ':/.sitepilot/node-exporter/';
             $item->labels->name =  $server->name;
             $content[] = $item;
 
