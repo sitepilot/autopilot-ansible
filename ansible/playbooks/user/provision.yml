@@ -59,6 +59,14 @@
 
     - name: "user/provision : {{ user }} : set home dir permission"
       file:
+        src: "{{ path }}"
+        dest: "/home/{{ user }}/sites"
+        owner: "{{ user }}"
+        group: "{{ user }}"
+        state: link
+
+    - name: "user/provision : {{ user }} : set home dir permission"
+      file:
         path: "{{ item }}"
         state: directory
         owner: "{{ user }}"
