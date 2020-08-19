@@ -3,8 +3,28 @@
 }
 
 (webapps) {
-	reverse_proxy /.sitepilot/pma* http://127.0.0.1:9001
+	route /.sitepilot/pma* {
+		uri strip_prefix /.sitepilot/pma
+		reverse_proxy http://127.0.0.1:9001
+	}
+
     reverse_proxy /.sitepilot/node-exporter* http://127.0.0.1:9100
+}
+
+:443 {
+	tls {{ tls_email }} {
+        on_demand
+    }
+
+	reverse_proxy {
+        to 127.0.0.1:7082
+
+        header_down -Server
+
+        transport http {
+            tls_insecure_skip_verify
+        }
+    }
 }
 
 import /opt/sitepilot/services/caddy/vhosts/*

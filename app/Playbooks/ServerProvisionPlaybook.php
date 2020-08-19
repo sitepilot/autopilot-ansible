@@ -72,6 +72,7 @@ class ServerProvisionPlaybook extends Playbook
             'timezone' => (string) $this->server->timezone,
             'admin_email' => (string) $this->server->admin_email,
             'health_email' => (string) $this->server->health_email,
+            'tls_email' => (string) app()->environment(['testing', 'local']) ? 'internal' : $this->server->admin_email,
             'php_post_max_size' => (int) $this->server->php_post_max_size,
             'php_upload_max_filesize' => (int) $this->server->php_upload_max_filesize,
             'php_memory_limit' => (int) $this->server->php_memory_limit,
