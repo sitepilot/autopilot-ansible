@@ -67,9 +67,5 @@ virtualHostConfig  {
   rewrite  {
     enable                1
     autoLoadHtaccess      1
-    rules                 <<<END_rules
-RewriteRule /.sitepilot/pma/(.*) http://phpMyAdmin/$1 [P]
-RewriteRule /.sitepilot/node-exporter/(.*) http://nodeExporter/.sitepilot/node-exporter/$1 [P]
-    END_rules
   }
 }
