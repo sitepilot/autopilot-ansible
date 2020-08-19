@@ -5,6 +5,7 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
 use App\Nova\Actions\JobAction;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\BelongsTo;
 
@@ -70,6 +71,10 @@ class Domain extends Resource
             BelongsTo::make('Site')
                 ->searchable()
                 ->withoutTrashed(),
+
+            Boolean::make('Monitor', 'monitor')
+                ->hideWhenCreating()
+                ->rules(\App\Domain::$validationRules['monitor']),
 
             \App\Domain::getNovaStatusField($this),
 

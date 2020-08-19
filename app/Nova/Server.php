@@ -9,7 +9,9 @@ use Laravel\Nova\Fields\Text;
 use App\Nova\Actions\JobAction;
 use Laravel\Nova\Fields\Number;
 use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
+
 use Laravel\Nova\Fields\Textarea;;
 
 use Laravel\Nova\Fields\BelongsToMany;
@@ -152,6 +154,10 @@ class Server extends Resource
             Text::make('Private Address')
                 ->hideFromIndex()
                 ->rules(\App\Server::$validationRules['private_address']),
+
+            Boolean::make('Monitor', 'monitor')
+                ->hideWhenCreating()
+                ->rules(\App\Server::$validationRules['monitor']),
 
             Text::make('Authorized Addresses')
                 ->hideFromIndex()
