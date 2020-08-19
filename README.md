@@ -38,13 +38,13 @@ The following packages/services will be installed and configured on web servers 
 * [Fail2Ban](https://en.wikipedia.org/wiki/Fail2ban)
 * [OpenSSH Server & SFTP](https://www.openssh.com/)
 * [SSMTP (email relay)](https://wiki.archlinux.org/index.php/SSMTP)
+* [Restic (for backups)](https://restic.net/)
 * [Docker](https://www.docker.com/)
 * [Docker Compose](https://hub.docker.com/_/redis/)
 * [Docker Redis 5](https://redis.io/)
 * [Docker MariaDB 10.4](https://hub.docker.com/_/mariadb)
-* [phpMyAdmin 5](https://www.phpmyadmin.net/)
-* [Restic (for backups)](https://restic.net/)
-* [Node Exporter (for monitoring)](https://prometheus.io/docs/guides/node-exporter/)
+* [Docker phpMyAdmin 5](https://www.phpmyadmin.net/)
+* [Docker Node Exporter (for monitoring)](https://prometheus.io/docs/guides/node-exporter/)
 
 Users are isolated and allowed to use SFTP with password authentication (chroot directory `/opt/sitepilot/users/%u`).
 
@@ -52,17 +52,18 @@ Users are isolated and allowed to use SFTP with password authentication (chroot 
 
 * phpMyAdmin: `http://<domain.name>/.sitepilot/pma/`.
 * Health check: `http://<domain.name>/.sitepilot/health/`.
+* Node Exporter: `http://<domain.name>/.sitepilot/node-exporter/`.
 
 ### Filesystem
 
 * Users folder: `/opt/sitepilot/users`.
 * Site public folder: `/opt/sitepilot/users/{{ user.name }}/{{ app.name }}/public`.
 * Site logs folder: `/opt/sitepilot/users/{{ user.name }}/{{ app.name }}/logs`.
-* OpenLitespeed logs folder: `/opt/sitepilot/services/olsws/logs`.
-* OpenLitespeed temp folder: `/opt/sitepilot/services/olsws/tmp`.
-* Docker MySQL data folder: `/opt/sitepilot/services/mysql/data`.
-* Docker MySQL logs folder: `/opt/sitepilot/services/mysql/logs`.
-* Docker Redis data folder: `/opt/sitepilot/services/redis/data`.
+* OpenLitespeed service folder: `/opt/sitepilot/services/olsws`.
+* MySQL service folder: `/opt/sitepilot/services/mysql`.
+* Redis service folder: `/opt/sitepilot/services/redis`.
+* Node Exporter service folder: `/opt/sitepilot/services/node-exporter`.
+* phpMyAdmin service folder: `/opt/sitepilot/services/phpmyadmin`.
 
 ## Load Balancer Configuration
 
