@@ -30,15 +30,6 @@
     - /opt/sitepilot/services/caddy
     - /opt/sitepilot/services/caddy/vhosts
 
-- name: "caddy : create access logfile if not exists"
-  file:
-    path: /opt/sitepilot/services/caddy/logs/access.log
-    state: touch
-    owner: "caddy"
-    group: "caddy"
-  loop:
-    - /opt/sitepilot/services/caddy/logs/access.log
-
 - name: "caddy : add caddy user to sudo group"
   user:
     name: "caddy"
