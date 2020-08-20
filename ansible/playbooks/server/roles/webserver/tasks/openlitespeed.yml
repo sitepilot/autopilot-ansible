@@ -42,14 +42,17 @@
       - lsphp74-curl
       - lsphp74-imagick
     state: present
-  notify:
-    - reload openlitespeed
 
 - name: "olsws : enable and start openlitespeed"
   service:
     name: lshttpd
     enabled: true
     state: started
+
+- name: "olsws : remove lshttpd temp folder"
+  file:
+    path: "/tmp/lshttpd"
+    state: absent
 
 - name: "olsws : create folders"
   file:
@@ -66,6 +69,8 @@
     - path: /opt/sitepilot/services/olsws/tmp
       mode: "0700"
     - path: /opt/sitepilot/services/olsws/logs
+      mode: "0700"
+    - path: /opt/sitepilot/services/olsws/vhosts
       mode: "0700"
     - path: /opt/sitepilot/services/default
       mode: "0700"
@@ -105,11 +110,11 @@
 - name: "olsws : generate default vhost configuration"
   template:
     src: olsws_default_vhost.j2
-    dest: /usr/local/lsws/conf/vhosts/default.conf
+    dest: /opt/sitepilot/services/olsws/vhosts/default.conf
     owner: lsadm
     group: lsadm
     mode: "0644"
-  notify: reload openlitespeed
+  notify: restart openlitespeed
 
 - name: "olsws : generate httpd config"
   template:
@@ -118,7 +123,7 @@
     owner: lsadm
     group: lsadm
     mode: "0644"
-  notify: reload openlitespeed
+  notify: restart openlitespeed
 
 - name: "olsws : generate olsws admin config"
   template:
@@ -127,7 +132,7 @@
     owner: lsadm
     group: lsadm
     mode: "0644"
-  notify: reload openlitespeed
+  notify: restart openlitespeed
 
 - name: "olsws : generate lsphp74 vhost template"
   template:
@@ -136,7 +141,7 @@
     owner: lsadm
     group: lsadm
     mode: "0644"
-  notify: reload openlitespeed
+  notify: restart openlitespeed
   vars:
     php_version: "74"
 
@@ -154,7 +159,7 @@
     owner: lsadm
     group: lsadm
     mode: "0644"
-  notify: reload openlitespeed
+  notify: restart openlitespeed
   vars:
     php_version: "73"
 
