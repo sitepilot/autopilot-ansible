@@ -7,7 +7,6 @@ use Tests\TestCase;
 class ProvisionTest extends TestCase
 {
     private static $webServer;
-    private static $lbServer;
     private static $sysuser;
     private static $site;
     private static $database;
@@ -19,7 +18,7 @@ class ProvisionTest extends TestCase
 
     public function test_server_is_provisioned_on_create()
     {
-        $webServer = self::getWebServer();
+        $webServer = self::getServer();
 
         $this->assertEquals($webServer->fresh()->status, 'ready');
         $this->assertLastTask();
@@ -27,7 +26,7 @@ class ProvisionTest extends TestCase
 
     public function test_server_can_be_tested()
     {
-        $webServer = self::getWebServer();
+        $webServer = self::getServer();
 
         $webServer->test();
 
@@ -167,7 +166,7 @@ class ProvisionTest extends TestCase
 
     public function test_server_is_destroyed_on_delete()
     {
-        $webServer = self::getWebServer();
+        $webServer = self::getServer();
 
         $webServer->delete();
 
@@ -177,7 +176,7 @@ class ProvisionTest extends TestCase
 
     /* ========== Getters ========== */
 
-    public static function getWebServer($attributes = [])
+    public static function getServer($attributes = [])
     {
         if (!self::$webServer) {
             return self::$webServer = factory(\App\Server::class)->create($attributes);
