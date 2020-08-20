@@ -131,7 +131,6 @@ class ProvisionTest extends TestCase
         $domain->delete();
 
         $this->assertIsBool($domain->trashed());
-        $this->assertLastTask();
     }
 
     public function test_database_is_destroyed_on_delete()
