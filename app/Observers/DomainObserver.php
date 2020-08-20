@@ -16,8 +16,6 @@ class DomainObserver
     public function created(Domain $domain)
     {
         $domain->site->provision();
-
-        $domain->provision();
     }
 
     /**
@@ -28,19 +26,15 @@ class DomainObserver
      */
     public function updated(Domain $domain)
     {
-        if ($domain->wasChanged(['name'])) {
-            $domain->site->provision();
-        }
-
         if ($domain->wasChanged(['site_id'])) {
             $oldSite = Site::find($domain->getOriginal('site_id'));
             if ($oldSite) {
                 $oldSite->provision();
             }
-            $domain->site->provision();
         }
+
         if ($domain->wasChanged(['name', 'site_id'])) {
-            $domain->provision();
+            $domain->site->provision();
         }
     }
 
@@ -53,8 +47,8 @@ class DomainObserver
     public function deleted(Domain $domain)
     {
         if (!$domain->isForceDeleting()) {
+            $domain->forceDelete();
             $domain->site->provision();
-            $domain->deleteFromServer();
         }
     }
 

@@ -68,14 +68,23 @@ class SiteProvisionPlaybook extends Playbook
         $domains = [];
         foreach ($this->site->domains as $domain) {
             $domains[] = $domain->name;
+            $domains[] = "www." . $domain->name;
         }
+
+        $backends[] = '127.0.0.1:7082';
+        if (!empty($this->server->private_address)) {
+            $backends[] = $this->site->server->private_address . ':7082';
+        }
+        $backends[] =  $this->site->server->address . ':7082';
 
         return array_merge(parent::vars(), [
             'user' => (string) $this->site->sysuser->name,
             'site' => (string) $this->site->name,
             'domain' => (string) $this->site->domain,
             'domains' => (array) $domains,
-            'php_version' => (integer) $this->site->php_version
+            'php_version' => (int) $this->site->php_version,
+            'email' => (string) app()->environment(['testing', 'local']) ? 'internal' : $this->site->sysuser->email,
+            'backends' => (array) $backends
         ]);
     }
 

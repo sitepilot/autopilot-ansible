@@ -4,7 +4,6 @@ namespace App\Nova;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
-use App\Nova\Actions\JobAction;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\BelongsTo;
@@ -26,11 +25,11 @@ class Domain extends Resource
     public static $title = 'name';
 
     /**
-     * The logical group associated with the resource.
+     * Indicates if the resource should be displayed in the sidebar.
      *
-     * @var string
+     * @var bool
      */
-    public static $group = 'Autopilot';
+    public static $displayInNavigation = false;
 
     /**
      * The columns that should be searched.
@@ -75,10 +74,8 @@ class Domain extends Resource
             Boolean::make('Monitor', 'monitor')
                 ->hideWhenCreating()
                 ->rules(\App\Domain::$validationRules['monitor']),
-
+            
             \App\Domain::getNovaStatusField($this),
-
-            HasMany::make('Tasks', 'tasks', Task::class)
         ];
     }
 
@@ -134,16 +131,7 @@ class Domain extends Resource
     public function actions(Request $request)
     {
         return [
-            (new JobAction)
-                ->exceptOnIndex()
-                ->showOnTableRow()
-                ->setName('Provision Domain')
-                ->setResourceName('domain')
-                ->setFunctionName('provision')
-                ->confirmButtonText('Provision')
-                ->confirmText('Are you sure you want to provision the selected domain(s)?')
-                ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.')
-                ->canRunWhenNotBusy($this),
+            //
         ];
     }
 }

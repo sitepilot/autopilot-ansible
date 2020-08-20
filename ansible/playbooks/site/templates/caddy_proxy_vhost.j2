@@ -1,5 +1,5 @@
 # {{ sitepilot_managed }}
-{{ domain }}, www.{{ domain }} {
+{{ domain }}{{ ', ' if (domains|length>0) else '' }}{{ domains|join(', ') }} {
     tls {{ email }} {
         on_demand
     }

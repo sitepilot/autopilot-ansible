@@ -3,8 +3,6 @@
 namespace App;
 
 use App\Traits\Provisionable;
-use App\Jobs\DomainDestroyJob;
-use App\Jobs\DomainProvisionJob;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -48,25 +46,5 @@ class Domain extends Model
     public function site()
     {
         return $this->belongsTo(Site::class, 'site_id');
-    }
-
-    /**
-     * Provision domain on server(s).
-     *
-     * @return bool|PendingDispatch|mixed
-     */
-    public function provision()
-    {
-        return $this->dispatchJob(DomainProvisionJob::class);
-    }
-
-    /**
-     * Destroy domain on on server(s).
-     *
-     * @return bool|PendingDispatch|mixed
-     */
-    public function deleteFromServer()
-    {
-        return $this->dispatchJob(DomainDestroyJob::class);
     }
 }

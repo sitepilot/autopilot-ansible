@@ -56,13 +56,28 @@ class SiteProvisionJob implements ShouldQueue
         if ($this->site->server->isReady() && $this->site->sysuser->isReady() && !$this->site->isBusy()) {
             $this->site->markAsProvisioning();
 
+            $domains = $this->site->domains()->where('status', '!=', 'ready')->get();
+
+            foreach ($domains as $domain) {
+                $domain->markAsProvisioning();
+            }
+
             $task = $this->site->run(
                 new SiteProvisionPlaybook($this->site)
             );
 
             if ($task->successful()) {
                 $this->site->markAsReady();
+
+                foreach ($domains as $domain) {
+                    $domain->markAsReady();
+                }
+
                 return $this->delete();
+            }
+
+            foreach ($domains as $domain) {
+                $domain->markAsError();
             }
 
             $this->site->markAsError();
