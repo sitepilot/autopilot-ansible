@@ -18,9 +18,22 @@
       - cron
       - nano
       - ntpdate
+      - rsyslog
       - mysql-client
 
 - name: "install : install required packages"
   apt:
     name: "{{ packages|join(', ') }}"
     state: present
+
+- name: "config : enable and start crond"
+  service:
+    name: cron
+    state: started
+    enabled: true
+
+- name: "config : enable and start rsyslog"
+  service:
+    name: rsyslog
+    state: started
+    enabled: true
