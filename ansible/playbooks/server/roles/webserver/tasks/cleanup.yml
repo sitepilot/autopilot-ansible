@@ -3,8 +3,3 @@
   apt:
     name: certbot
     state: absent
-
-- name: "cleanup : remove fail2ban"
-  apt:
-    name: fail2ban
-    state: absent

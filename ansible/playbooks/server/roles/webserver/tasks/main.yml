@@ -11,6 +11,9 @@
 - include: php.yml
   tags: "php"
 
+- include: fail2ban.yml
+  tags: "fail2ban"
+
 - include: docker-mysql.yml
   tags: "mysql"
 

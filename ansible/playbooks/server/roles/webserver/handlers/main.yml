@@ -1,10 +1,15 @@
 ---
-- name: reload openlitespeed
-  service:
-    name: lshttpd
-    state: restarted
-
 - name: reload caddy
   service:
     name: caddy
     state: reloaded
+
+- name: restart openlitespeed
+  service:
+    name: lshttpd
+    state: restarted
+
+- name: restart fail2ban
+  service:
+    name: fail2ban
+    state: restarted

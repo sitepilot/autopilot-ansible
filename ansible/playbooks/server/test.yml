@@ -60,6 +60,12 @@
           - 403
 
     # Other Checks
+    - name: "server/test : fail2ban is installed"
+      command: "fail2ban-client --version"
+      become: true
+      become_user: "{{ admin }}"
+      changed_when: false
+
     - name: "server/test : PHP 7.4 is installed"
       command: "php74 -v"
       become: true

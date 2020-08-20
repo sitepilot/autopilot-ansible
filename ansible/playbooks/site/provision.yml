@@ -7,8 +7,12 @@
     # domain: ""
     # domains: []
     # php_version: "74"
+    # email: ""
+    # backends: []
     path: "/opt/sitepilot/users/{{ user }}/{{ site }}"
-    path_vhost: "/usr/local/lsws/conf/vhosts/{{ site }}.conf"
+    path_vhost: "/opt/sitepilot/services/olsws/vhosts/{{ site }}.conf"
+    path_proxy: "/opt/sitepilot/services/caddy/vhosts/{{ site }}.conf"
+    path_fail2ban: "/etc/fail2ban/jail.d/{{ site }}.conf"
   tasks:
     - name: "site/provision : {{ user }} : {{ site }} : create folders"
       file:
@@ -34,5 +38,29 @@
         - "find {{ path }} -type f -exec chmod 644 {} +"
         - "find {{ path }} -type d -exec chmod 755 {} +"
 
+    - name: "site/provision : {{ user }} : {{ site }} : generate proxy vhost"
+      template:
+        src: ./templates/caddy_proxy_vhost.j2
+        dest: "{{ path_proxy }}"
+        mode: "0644"
+
+    - name: "site/provision : {{ user }} : {{ site }} : generate fail2ban jail"
+      template:
+        src: ./templates/fail2ban_jail.j2
+        dest: "{{ path_fail2ban }}"
+        mode: "0644"
+
     - name: "site/provision : {{ user }} : {{ site }} : reload web server"
-      command: "/usr/local/lsws/bin/lswsctrl reload"
+      service:
+        name: lshttpd
+        state: reloaded
+
+    - name: "site/provision : {{ user }} : {{ site }} : reload proxy server"
+      service:
+        name: caddy
+        state: reloaded
+
+    - name: "site/provision : {{ user }} : {{ site }} : reload fail2ban"
+      service:
+        name: fail2ban
+        state: reloaded
