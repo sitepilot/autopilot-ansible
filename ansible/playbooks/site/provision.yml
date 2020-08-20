@@ -53,7 +53,7 @@
     - name: "site/provision : {{ user }} : {{ site }} : reload web server"
       service:
         name: lshttpd
-        state: reloaded
+        state: restarted
 
     - name: "site/provision : {{ user }} : {{ site }} : reload proxy server"
       service:
