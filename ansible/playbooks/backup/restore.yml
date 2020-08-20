@@ -53,5 +53,5 @@
 
     - name: "backup/restore : reload web server"
       service:
-        name: lsws
+        name: lshttpd
         state: restarted
