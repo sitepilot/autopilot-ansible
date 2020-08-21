@@ -165,24 +165,6 @@ extProcessor lsphp73 {
     env                             PHP_LSAPI_CHILDREN=5
 }
 
-extprocessor phpMyAdmin {
-  type                    proxy
-  address                 http://127.0.0.1:9001
-  maxConns                2000
-  initTimeout             60
-  retryTimeout            0
-  respBuffer              0
-}
-
-extprocessor nodeExporter {
-  type                    proxy
-  address                 http://127.0.0.1:9100
-  maxConns                2000
-  initTimeout             60
-  retryTimeout            0
-  respBuffer              0
-}
-
 listener http {
   address               [ANY]:7081
   secure                0
