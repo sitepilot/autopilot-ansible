@@ -4,16 +4,17 @@ namespace App\Nova;
 
 use Exception;
 use Laravel\Nova\Panel;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
 use App\Nova\Actions\JobAction;
 use Laravel\Nova\Fields\Number;
+
 use Laravel\Nova\Fields\Select;
+
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
-
 use Laravel\Nova\Fields\Textarea;;
-
 use Laravel\Nova\Fields\BelongsToMany;
 
 class Server extends Resource
@@ -71,6 +72,7 @@ class Server extends Resource
         return [
             Text::make('Name')
                 ->sortable()
+                ->default("web-x" . Str::slug(Str::random(3)))
                 ->rules(\App\Server::$validationRules['name']),
 
             Select::make('Provider', 'provider')
