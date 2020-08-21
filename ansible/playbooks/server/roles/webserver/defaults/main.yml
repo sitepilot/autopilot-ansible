@@ -1,6 +1,6 @@
 ---
 tls_email: internal
-health_email: health@sitepilot.io
+health_email: health@autopilot.local
 
 php_post_max_size: 64M
 php_upload_max_filesize: 32M

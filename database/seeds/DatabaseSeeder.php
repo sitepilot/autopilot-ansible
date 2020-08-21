@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
         if (!User::count()) {
             factory(User::class)->create([
                 'name' => 'Admin',
-                'email' => 'admin@sitepilot.io'
+                'email' => 'admin@' . config('autopilot.root_domain')
             ]);
         }
     }

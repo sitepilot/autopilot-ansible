@@ -89,7 +89,7 @@ Thank you for considering contributing to Autopilot! Follow these steps to insta
 * Install Composer packages with `composer install`. *NOTE: Composer will prompt for your Laravel Nova username and password to validate your license.*
 * Generate an application key with `php artisan key:generate`.
 * Migrate and seed the database with `php artisan migrate --seed`.
-* Navigate to the application domain and login. Default user: `admin@sitepilot.io`, default password: `supersecret`.
+* Navigate to the application domain and login. Default user: `admin@autopilot.local`, default password: `supersecret`.
 
 #### Environment Requirements
 

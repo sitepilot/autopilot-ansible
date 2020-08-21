@@ -20,8 +20,8 @@ class ServerObserver
         // General configuration
         if (empty($server->admin_password)) $server->admin_password = Str::random(12);
         if (empty($server->timezone)) $server->timezone = 'Europe/Amsterdam';
-        if (empty($server->admin_email)) $server->admin_email = 'support@sitepilot.io';
-        if (empty($server->health_email)) $server->health_email = 'health@sitepilot.io';
+        if (empty($server->admin_email)) $server->admin_email = 'support@' . config('autopilot.root_domain');
+        if (empty($server->health_email)) $server->health_email = 'health@' . config('autopilot.root_domain');
         if (empty($server->authorized_addresses) && env('APP_AUTOPILOT_IPS', false)) $server->authorized_addresses =  env('APP_AUTOPILOT_IPS');
 
         // Backup configuration

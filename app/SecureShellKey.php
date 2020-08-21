@@ -49,8 +49,12 @@ class SecureShellKey
      *
      * @return object
      */
-    public static function make($email = "worker@sitepilot.io")
+    public static function make($email = null)
     {
+        if (!$email) {
+            $email = "worker@" . config('autopilot.root_domain');
+        }
+
         $name = Str::random(20);
 
         (new Process(
