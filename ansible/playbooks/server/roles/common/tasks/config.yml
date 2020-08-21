@@ -3,15 +3,15 @@
   hostname:
     name: "{{ hostname }}"
   ignore_errors: true # Can't change hostname when running in Docker container
-  register: hostname_update
 
 - name: "config : add hostname to /etc/hosts"
   blockinfile:
     path: /etc/hosts
-    marker: "# Autopilot Hostname"
+    marker: "# {mark} Autopilot Hostname"
     block: |
-      "::1 {{ hostname }}"
-      "127.0.0.1 {{ hostname }}"
+      ::1 {{ hostname }}
+      127.0.0.1 {{ hostname }}
+    unsafe_writes: yes # Can't use safe writes when running in a Docker container
 
 - name: "config : set the timezone to '{{ timezone }}'"
   timezone:
