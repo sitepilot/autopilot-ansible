@@ -152,6 +152,15 @@
     remote_src: yes
     mode: "0644"
 
+- name: "olsws : generate php configuration for lsphp74"
+  template:
+    src: php_sitepilot.ini.j2
+    dest: /usr/local/lsws/lsphp74/etc/php/7.4/mods-available/10-sitepilot.ini
+    owner: root
+    group: root
+    mode: "0644"
+  notify: restart openlitespeed
+
 - name: "olsws : generate lsphp73 vhost template"
   template:
     src: olsws_vhost_template.j2
@@ -169,6 +178,15 @@
     dest: /usr/local/lsws/conf/templates/lsphp73-ssl.conf
     remote_src: yes
     mode: "0644"
+
+- name: "olsws : generate php configuration for lsphp73"
+  template:
+    src: php_sitepilot.ini.j2
+    dest: /usr/local/lsws/lsphp73/etc/php/7.3/mods-available/10-sitepilot.ini
+    owner: root
+    group: root
+    mode: "0644"
+  notify: restart openlitespeed
 
 - name: "olsws : generate admin password script"
   template:

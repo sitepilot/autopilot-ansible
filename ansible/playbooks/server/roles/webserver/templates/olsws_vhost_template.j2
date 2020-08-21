@@ -46,11 +46,7 @@ virtualHostConfig  {
 
   phpIniOverride  {
     php_admin_value open_basedir "$VH_ROOT:/opt/sitepilot/services:/tmp"
-    php_admin_value date.timezone "{{ timezone }}"
-    php_admin_value post_max_size "{{ php_post_max_size }}M"
-    php_admin_value upload_max_filesize "{{ php_upload_max_filesize }}M"
     php_admin_value error_log $VH_ROOTlogs/php_error.log
-    php_admin_value memory_limit "{{ php_memory_limit }}M"
     php_admin_value mail.log $VH_ROOTlogs/php_mail.log
   }
 
