@@ -158,7 +158,7 @@ class UpCloud implements ServerProviderClient
             "server" => [
                 "zone" => $this->server->region,
                 "title" => $this->server->name,
-                "hostname" => $this->server->name,
+                "hostname" => $this->server->fqdn,
                 "plan" => $this->server->size,
                 "storage_devices" => [
                     "storage_device" => [
