@@ -1,9 +1,9 @@
 ---
 - hosts: "all"
   vars:
-    user: ""
-    password: ""
-    database: ""
+    #user: ""
+    #password: ""
+    #database: ""
   tasks:
     - name: "database/provision : {{ database }} : create database"
       mysql_db:

@@ -1,8 +1,8 @@
 ---
 - hosts: "all"
   vars:
-    user: ""
-    key: ""
+    #user: ""
+    #key: ""
   tasks:
     - name: "key/provision : {{ user }} : remove key from authorized keys"
       authorized_key:

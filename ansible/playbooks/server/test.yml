@@ -1,9 +1,9 @@
 ---
 - hosts: "all"
   vars:
-    admin: "sitepilot"
-    admin_pass: "secret"
-    hostname: 127.0.0.1
+    #admin: "sitepilot"
+    #admin_pass: "secret"
+    #hostname: 127.0.0.1
   tasks:
     # MySQL Tests
     - name: "server/test : connect to MySQL as admin"

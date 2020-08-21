@@ -1,14 +1,14 @@
 ---
 - hosts: "all"
   vars:
-    user: ""
-    full_name: ""
-    email: ""
-    password: ""
-    mysql_password: ""
-    isolated: true
-    private_key: ""
-    public_key: ""
+    #user: ""
+    #full_name: ""
+    #email: ""
+    #password: ""
+    #mysql_password: ""
+    #isolated: true
+    #private_key: ""
+    #public_key: ""
     path: "/opt/sitepilot/users/{{ user }}"
   tasks:
     - name: "user/provision : {{ user }} : ensure 'isolated' group exists"

@@ -1,8 +1,8 @@
 ---
 - hosts: "all"
   vars:
-    user: ""
-    user_path: "/opt/sitepilot/users/{{ user }}"
+    #user: ""
+    path: "/opt/sitepilot/users/{{ user }}"
   tasks:
     - name: "user/destroy : {{ user }} : install required pip packages"
       pip:
@@ -28,7 +28,7 @@
         state: absent
       loop:
         - "/home/{{ user }}"
-        - "{{ user_path }}"
+        - "{{ path }}"
 
     - name: "user/destroy : {{ user }} : remove database user"
       mysql_user:

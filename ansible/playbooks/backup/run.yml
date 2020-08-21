@@ -1,15 +1,15 @@
 ---
 - hosts: "all"
   vars:
-    backup_id: ""
-    backup_s3_key: ""
-    backup_s3_secret: ""
-    backup_s3_bucket: ""
-    backup_password: ""
-    backup_path: ""
-    backup_tag: ""
-    backup_resource_tag: ""
-    backup_database_name: ""
+    #backup_id: ""
+    #backup_s3_key: ""
+    #backup_s3_secret: ""
+    #backup_s3_bucket: ""
+    #backup_password: ""
+    #backup_path: ""
+    #backup_tag: ""
+    #backup_resource_tag: ""
+    #backup_database_name: ""
   tasks:
     - name: "backup/run : create database dump"
       mysql_db:

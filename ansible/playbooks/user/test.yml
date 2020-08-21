@@ -1,13 +1,13 @@
 ---
 - hosts: "all"
   vars:
-    user: ""
-    mysql_password: ""
-    isolated: true
-    ssh_keys: []
-    sites: []
-    databases: []
-    domains: []
+    #user: ""
+    #mysql_password: ""
+    #isolated: true
+    #ssh_keys: []
+    #sites: []
+    #databases: []
+    #domains: []
     path: "/opt/sitepilot/users/{{ user }}"
   tasks:
     # SSH Tests (when test public key is used)

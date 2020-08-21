@@ -1,8 +1,8 @@
 ---
 - hosts: "all"
   vars:
-    user: ""
-    database: ""
+    #user: ""
+    #database: ""
   tasks:
     - name: "database/destroy : {{ database }} : drop database"
       mysql_db:

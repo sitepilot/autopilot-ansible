@@ -1,11 +1,11 @@
 ---
 - hosts: "all"
   vars:
-    backup_s3_key: ""
-    backup_s3_secret: ""
-    backup_s3_bucket: ""
-    backup_password: ""
-    backup_tag: ""
+    #backup_s3_key: ""
+    #backup_s3_secret: ""
+    #backup_s3_bucket: ""
+    #backup_password: ""
+    #backup_tag: ""
   tasks:
     - name: "backup/destroy : remove backups from repository"
       command: "restic -r s3:{{ backup_s3_bucket}} --tag {{ backup_tag }} snapshots --json"
