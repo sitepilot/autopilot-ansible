@@ -1,7 +1,7 @@
 ---
 - hosts: "all"
   vars:
-    #admin: "sitepilot"
+    admin: "sitepilot"
     #admin_pass: "secret"
     #hostname: 127.0.0.1
   tasks:
