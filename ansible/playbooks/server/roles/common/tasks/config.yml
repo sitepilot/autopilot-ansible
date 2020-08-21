@@ -12,7 +12,6 @@
     block: |
       "::1 {{ hostname }}"
       "127.0.0.1 {{ hostname }}"
-  when: hostname_update.changed
 
 - name: "config : set the timezone to '{{ timezone }}'"
   timezone:
