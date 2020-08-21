@@ -58,6 +58,7 @@ class ServerTestPlaybook extends Playbook
     public function vars()
     {
         return array_merge(parent::vars(), [
+            'hostname' => (string) $this->server->fqdn,
             'admin_pass' => (string) $this->server->admin_password
         ]);
     }
