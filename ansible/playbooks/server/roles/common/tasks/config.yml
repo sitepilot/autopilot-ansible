@@ -2,16 +2,11 @@
 - name: "config : set the hostname"
   hostname:
     name: "{{ hostname }}"
-  when:
-    - hostname_update is defined
-    - hostname_update|bool
+  ignore_errors: true # Can't change hostname when running in Docker container
 
 - name: "config : set the timezone to '{{ timezone }}'"
   timezone:
     name: "{{ timezone }}"
-  when:
-    - timezone_update is defined
-    - timezone_update|bool
 
 - name: "config : set default home dir permission"
   lineinfile:

@@ -6,6 +6,7 @@ services:
     container_name: autopilot-test
     restart: always
     privileged: true
+    hostname: test-web.${APP_ROOT_DOMAIN:-autopilot.local}
     cap_add:
       - NET_ADMIN
     ports:

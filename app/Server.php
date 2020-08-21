@@ -465,6 +465,16 @@ class Server extends Model implements ProvisionableResource
     }
 
     /**
+     * Get fully qualified domain name attribute.
+     *
+     * @return string
+     */
+    public function getFqdnAttribute()
+    {
+        return $this->name . '.' . config('autopilot.root_domain');
+    }
+
+    /**
      * Create server and dispatch the job to provision the server.
      *
      * @return bool|PendingDispatch|mixed

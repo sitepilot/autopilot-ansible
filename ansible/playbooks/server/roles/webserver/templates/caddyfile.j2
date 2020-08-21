@@ -11,7 +11,16 @@
     reverse_proxy /.sitepilot/node-exporter* http://127.0.0.1:9100
 }
 
-:443 {
+:80 {
+    import config
+
+    reverse_proxy {
+        to 127.0.0.1:7081
+        header_down -Server
+    }
+}
+
+{{ hostname }}:443 {
 	tls {{ tls_email }} {
         on_demand
     }
@@ -22,7 +31,6 @@
 
 	reverse_proxy {
         to 127.0.0.1:7082
-
         header_down -Server
 
         transport http {

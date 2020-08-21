@@ -75,8 +75,8 @@ function checkMail()
     $lastCheck = $client->get('sitepilot_mail_check_timestamp');
 
     if (((time() - $lastCheck) > 3600) || $lastState == "NOK") {
-        $from = "server@sitepilot.io";
-        $to = "{{ health_email if health_email is defined else 'health@sitepilot.io' }}";
+        $from = "health@{{ hostname }}";
+        $to = "{{ health_email }}";
         
         $subject = "Test mail function";
         $message = "This is a test to check if php mail function sends out the email.";

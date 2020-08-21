@@ -1,12 +1,9 @@
 admin: sitepilot
 admin_pass: "secret"
-admin_email: support@sitepilot.io
+admin_email: support@autopilot.local
 
 hostname: undefined
-hostname_update: false
-
 timezone: Europe/Amsterdam
-timezone_update: true
 
 swap_path: "/swapfile"
 swap_size: "1G"
@@ -14,9 +11,7 @@ swap_swappiness: "60"
 
 docker_network_name: "sitepilot"
 
-authorized_addresses: [
-  192.56.55.1
-]
+authorized_addresses: []
 
 smtp_relay_host: "smtp.eu.mailgun.org"
 smtp_relay_domain: "mg.example.com"

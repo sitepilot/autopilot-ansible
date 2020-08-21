@@ -66,7 +66,7 @@ class ServerProvisionPlaybook extends Playbook
     public function vars()
     {
         return array_merge(parent::vars(), [
-            'hostname' => (string) $this->server->name,
+            'hostname' => (string) $this->server->fqdn,
             'admin_pass' => (string) $this->server->admin_password,
             'mysql_root_pass' => (string) $this->server->mysql_password,
             'timezone' => (string) $this->server->timezone,
