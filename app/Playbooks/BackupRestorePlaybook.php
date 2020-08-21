@@ -67,14 +67,12 @@ class BackupRestorePlaybook extends Playbook
     public function vars()
     {
         return array_merge(parent::vars(), [
-            'backup_id' => (int) $this->backup->id,
             'backup_s3_key' => (string) $this->backup->server->backup_s3_key,
             'backup_s3_secret' => (string) $this->backup->server->backup_s3_secret,
             'backup_s3_bucket' => (string) $this->backup->server->backup_s3_bucket,
             'backup_password' => (string) $this->backup->server->backup_password,
             'backup_path' => (string) $this->backup->path,
             'backup_tag' => (string) $this->backup->getBackupTag(),
-            'backup_resource_tag' => (string) $this->backup->getBackupResourceTag(),
             'backup_database_name' => (string) ($this->backup->backupable_type == Database::class ? $this->backup->backupable->name : ''),
             'backup_user' => (string) $this->backup->getBackupSysuser()
         ]);
