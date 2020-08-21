@@ -11,8 +11,6 @@
       mode: "0711"
     - path: "/opt/sitepilot"
       mode: "0711"
-    - path: "/opt/sitepilot/logs"
-      mode: "0711"
     - path: "/opt/sitepilot/scripts"
       mode: "0711"
     - path: "/opt/sitepilot/services"
