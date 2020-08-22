@@ -53,7 +53,7 @@ class WriteMonitorConfig extends Command
                 $item->labels->name =  $server->name;
                 $content[] = $item;
 
-                if (in_array($server->type, ['shared', 'dedicated'])) {
+                if (in_array($server->type, ['shared', 'dedicated', 'development'])) {
                     $healthItem = new stdClass;
                     $healthItem->labels = new stdClass;
                     $healthItem->targets[] = 'https://' . $server->fqdn . '/.sitepilot/health/';

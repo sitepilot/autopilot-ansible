@@ -33,7 +33,7 @@ class SiteDestroyPlaybook extends Playbook
      * @return void
      */
     public $serverTypes = [
-        'shared', 'dedicated'
+        'shared', 'dedicated', 'development'
     ];
 
     /**

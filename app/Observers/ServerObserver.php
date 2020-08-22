@@ -35,11 +35,19 @@ class ServerObserver
         if (empty($server->php_upload_max_filesize)) $server->php_upload_max_filesize = 32;
         if (empty($server->php_memory_limit)) $server->php_memory_limit = 256;
 
-        // SMTP Relay configuration
+        // SMTP relay configuration
         if (empty($server->smtp_relay_host)) $server->smtp_relay_host = 'smtp.eu.mailgun.org';
         if (empty($server->smtp_relay_domain)) $server->smtp_relay_domain = 'mg.example.com';
         if (empty($server->smtp_relay_user)) $server->smtp_relay_user = 'postmaster@mg.example.com';
         if (empty($server->smtp_relay_password)) $server->smtp_relay_password = 'supersecret';
+
+        // Replace variables in server name
+        $typeCast = [
+            'dedicated' => 'dedi',
+            'development' => 'dev'
+        ];
+
+        if (strpos($server->name, '__type__') !== false) $server->name = str_replace('__type__', isset($typeCast[$server->type]) ? $typeCast[$server->type] : $server->type, $server->name);
     }
 
     /**

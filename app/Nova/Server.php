@@ -9,12 +9,10 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
 use App\Nova\Actions\JobAction;
 use Laravel\Nova\Fields\Number;
-
 use Laravel\Nova\Fields\Select;
-
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
-use Laravel\Nova\Fields\Textarea;;
+use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Fields\BelongsToMany;
 
 class Server extends Resource
@@ -72,7 +70,8 @@ class Server extends Resource
         return [
             Text::make('Name')
                 ->sortable()
-                ->default("web-x" . Str::slug(Str::random(3)))
+                ->default("__type__-" . Str::slug(Str::random(4)))
+                ->help('Tip: __type__ will be replaced with the server type.')
                 ->rules(\App\Server::$validationRules['name']),
 
             Select::make('Provider', 'provider')
@@ -132,7 +131,8 @@ class Server extends Resource
             Select::make('Type')
                 ->options([
                     'shared' => 'Shared',
-                    'dedicated' => 'Dedicated'
+                    'dedicated' => 'Dedicated',
+                    'development' => 'Development'
                 ])
                 ->displayUsingLabels()
                 ->rules(\App\Server::$validationRules['type']),
@@ -376,7 +376,7 @@ class Server extends Resource
                 ->confirmButtonText('Run Tests')
                 ->confirmText('Are you sure you want to test the selected server(s)?')
                 ->setSuccessMessage('Autopilot will test your {{resourceName}} in a few seconds.')
-                ->canRunWhenReady($this, ['shared', 'dedicated']),
+                ->canRunWhenReady($this, ['shared', 'dedicated', 'development']),
             (new JobAction)
                 ->exceptOnIndex()
                 ->showOnTableRow()

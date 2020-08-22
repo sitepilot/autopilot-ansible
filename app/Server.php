@@ -73,7 +73,7 @@ class Server extends Model implements ProvisionableResource
         'address' => ['required_if:provider,custom'],
         'ipv6_address' => ['nullable', 'ipv6'],
         'private_address' => ['nullable', 'ipv4'],
-        'type' => ['required_if:provider,custom', 'in:shared,dedicated'],
+        'type' => ['required_if:provider,custom', 'in:shared,dedicated,development'],
         'port' => ['required', 'numeric'],
         'user' => ['required', 'min:3'],
         'admin_password' => ['nullable', 'min:8'],
@@ -187,6 +187,16 @@ class Server extends Model implements ProvisionableResource
     public function isDedicated()
     {
         return $this->type == 'dedicated';
+    }
+
+    /**
+     * Determine if the server is a development hosting server.
+     * 
+     * @return boolean
+     */
+    public function isDevelopment()
+    {
+        return $this->type == 'development';
     }
 
     /**
