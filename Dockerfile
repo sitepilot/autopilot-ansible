@@ -44,6 +44,7 @@ RUN apk add --update \
         php7-dom \
         php7-xmlwriter \
         php7-tokenizer \
+        php7-fileinfo \
         supervisor \
         openssh \
         curl \
