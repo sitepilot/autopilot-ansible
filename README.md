@@ -59,7 +59,7 @@ Users are isolated and allowed to use SFTP with password authentication (chroot 
 * Users folder: `/opt/sitepilot/users`.
 * Site public folder: `/opt/sitepilot/users/{{ user.name }}/{{ app.name }}/public`.
 * Site logs folder: `/opt/sitepilot/users/{{ user.name }}/{{ app.name }}/logs`.
-* OpenLitespeed service folder: `/opt/sitepilot/services/caddy`.
+* Caddy service folder: `/opt/sitepilot/services/caddy`.
 * OpenLitespeed service folder: `/opt/sitepilot/services/olsws`.
 * MySQL service folder: `/opt/sitepilot/services/mysql`.
 * Redis service folder: `/opt/sitepilot/services/redis`.
