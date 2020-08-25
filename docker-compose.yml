@@ -9,8 +9,6 @@ services:
     hostname: test-web.${APP_ROOT_DOMAIN:-autopilot.local}
     cap_add:
       - NET_ADMIN
-    security_opt:
-      - apparmor:unconfined
     ports:
       - "8080:80"
       - "8443:443"
