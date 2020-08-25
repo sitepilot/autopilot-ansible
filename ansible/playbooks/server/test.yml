@@ -14,8 +14,7 @@
     - name: "server/test : caddy server is running (HTTP)"
       uri:
         url: "http://{{ hostname }}"
-        status_code:
-          - 308 # expect a 308 redirect to https page
+        validate_certs: false # caddy will redirect to https
 
     - name: "server/test : caddy server is running (HTTPS)"
       uri:
