@@ -10,7 +10,7 @@ services:
     cap_add:
       - NET_ADMIN
     security_opt:
-      - apparmor=unconfined
+      - apparmor:unconfined
     ports:
       - "8080:80"
       - "8443:443"
