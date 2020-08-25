@@ -12,11 +12,11 @@ class SecureShellKey
      *
      * @return object
      */
-    public static function forServer()
+    public static function forServer(Server $server)
     {
         return app()->environment('local') || app()->environment('testing')
             ? static::forTesting()
-            : static::make();
+            : static::make($server->name . '@' . 'autopilot');
     }
 
     /**
@@ -58,7 +58,7 @@ class SecureShellKey
         $name = Str::random(20);
 
         (new Process(
-            ["ssh-keygen", "-C", "\"$email\"", "-f", $name, "-t", "rsa", "-m", "PEM", "-b", "4096"],
+            ["ssh-keygen", "-C", "$email", "-f", $name, "-t", "rsa", "-m", "PEM", "-b", "4096"],
             storage_path('app')
         ))->mustRun();
 

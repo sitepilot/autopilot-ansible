@@ -15,8 +15,6 @@ class ServerObserver
      */
     public function creating(Server $server)
     {
-        $server->generateKeypair();
-
         // General configuration
         if (empty($server->admin_password)) $server->admin_password = Str::random(12);
         if (empty($server->timezone)) $server->timezone = 'Europe/Amsterdam';
@@ -48,6 +46,8 @@ class ServerObserver
         ];
 
         if (strpos($server->name, '__type__') !== false) $server->name = str_replace('__type__', isset($typeCast[$server->type]) ? $typeCast[$server->type] : $server->type, $server->name);
+
+        $server->generateKeypair();
     }
 
     /**

@@ -531,7 +531,7 @@ class Server extends Model implements ProvisionableResource
      */
     public function generateKeypair()
     {
-        return $this->keypair = SecureShellKey::forServer();
+        return $this->keypair = SecureShellKey::forServer($this);
     }
 
     /**
