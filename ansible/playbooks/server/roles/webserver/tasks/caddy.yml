@@ -18,9 +18,9 @@
   file:
     path: "{{ item }}"
     state: directory
-    owner: "root"
-    group: "root"
-    mode: "750"
+    owner: "caddy"
+    group: "caddy"
+    mode: "0700"
   loop:
     - /etc/caddy/vhosts
 

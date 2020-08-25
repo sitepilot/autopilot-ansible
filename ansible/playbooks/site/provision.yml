@@ -25,28 +25,34 @@
         - "{{ path }}/public"
         - "{{ path }}/logs"
 
-    - name: "site/provision : {{ user }} : {{ site }} : generate vhost configuration"
-      template:
-        src: ./templates/lshttpd_vhost.j2
-        dest: "{{ path_vhost }}"
-        mode: "0644"
-
     - name: "site/provision : {{ user }} : {{ site }} : set folder / file permissions"
       command: "{{ item }}"
       loop:
         - "find {{ path }} -type f -exec chmod 644 {} +"
         - "find {{ path }} -type d -exec chmod 755 {} +"
 
+    - name: "site/provision : {{ user }} : {{ site }} : generate vhost configuration"
+      template:
+        src: ./templates/lshttpd_vhost.j2
+        dest: "{{ path_vhost }}"
+        owner: "lsadm"
+        group: "nogroup"
+        mode: "0644"
+
     - name: "site/provision : {{ user }} : {{ site }} : generate proxy vhost"
       template:
         src: ./templates/caddy_proxy_vhost.j2
         dest: "{{ path_proxy }}"
+        owner: "caddy"
+        group: "caddy"
         mode: "0644"
 
     - name: "site/provision : {{ user }} : {{ site }} : generate fail2ban jail"
       template:
         src: ./templates/fail2ban_jail.j2
         dest: "{{ path_fail2ban }}"
+        owner: "root"
+        group: "root"
         mode: "0644"
 
     - name: "site/provision : {{ user }} : {{ site }} : reload web server"
