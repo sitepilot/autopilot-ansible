@@ -47,7 +47,7 @@
 
     - name: "server/test : node-exporter is available"
       uri:
-        url: "http://{{ hostname }}/stats/"
+        url: "http://{{ hostname }}/metrics/"
 
     - name: "server/test : check if modsecurity is installed"
       uri:

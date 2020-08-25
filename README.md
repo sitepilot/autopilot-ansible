@@ -50,7 +50,7 @@ Users are isolated and allowed to use SFTP with password authentication (chroot 
 
 * phpMyAdmin: `http://<hostname>/phpmyadmin/`.
 * Health check: `http://<hostname>/health/`.
-* Node Exporter: `http://<hostname>/stats/`.
+* Node Exporter: `http://<hostname>/metrics/`.
 
 ### Filesystem
 

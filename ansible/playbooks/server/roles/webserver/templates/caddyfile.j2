@@ -20,7 +20,7 @@
 
     import webapps
 
-    reverse_proxy /stats/* http://127.0.0.1:9100
+    reverse_proxy /metrics* http://127.0.0.1:9100
 
     reverse_proxy {
         to http://127.0.0.1:6080
@@ -37,7 +37,7 @@
 
     import webapps
 
-    reverse_proxy /stats/* http://127.0.0.1:9100
+    reverse_proxy /metrics* http://127.0.0.1:9100
 
 	reverse_proxy {
         to https://127.0.0.1:6443

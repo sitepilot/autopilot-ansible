@@ -49,7 +49,7 @@ class WriteMonitorConfig extends Command
             if ($server->monitor) {
                 $item = new stdClass;
                 $item->labels = new stdClass;
-                $item->targets[] = 'https://' . $server->fqdn . ':/stats/';
+                $item->targets[] = $server->fqdn;
                 $item->labels->name =  $server->name;
                 $content[] = $item;
 
