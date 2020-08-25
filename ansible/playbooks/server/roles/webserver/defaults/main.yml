@@ -1,15 +1,30 @@
----
-tls_email: internal
+hostname: server.autopilot.local
+timezone: "Europe/Amsterdam"
+
+admin: sitepilot
+admin_pass: supersecret
+
+admin_email: server@autopilot.local
 health_email: health@autopilot.local
+cert_email: internal
 
-php_post_max_size: 64M
-php_upload_max_filesize: 32M
-php_memory_limit: 256M
-
-mysql_image: bitnami/mariadb:10.4-debian-10
 mysql_root_pass: supersecret
 
-pma_image: bitnami/phpmyadmin:5-debian-10
-redis_image: bitnami/redis:6.0-debian-10
+swap_path: "/swapfile"
+swap_size: "1G"
 
-sitepilot_managed: "WARNING: This file is managed by Sitepilot, any changes will be overwritten (updated at: {{ansible_date_time.date}} {{ansible_date_time.time}})."
+php_memory_limit: 256
+php_upload_max_filesize: 32
+
+smtp_relay_host: "smtp.eu.mailgun.org"
+smtp_relay_domain: "mg.example.com"
+smtp_relay_user: "postmaster@mg.example.com"
+smtp_relay_password: "supersecret"
+
+node_exporter_version: 1.0.0
+node_exporter_release_name: "node_exporter-{{ node_exporter_version }}.linux-amd64"
+
+pma_version: 5.0.2
+pma_update: true
+
+autopilot_managed: "WARNING: This file is managed by Autopilot, any changes will be overwritten (updated at: {{ansible_date_time.date}} {{ansible_date_time.time}})."

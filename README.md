@@ -5,7 +5,7 @@
 Autopilot is a (cloud) webhosting control panel for managing multiple servers, sites and WordPress installations. We use Autopilot at [Sitepilot](https://sitepilot.io) for our managed WordPress webhosting platform. With Autopilot you can:
 
 * Provision WordPress optimized web servers.
-* Monitor server and site health of the provisioned servers and sites.
+* Monitor server and site health.
 * Manage and maintain WordPress sites.
 
 Autopilot is build on top of [Laravel](https://laravel.com/) and uses [Ansible](https://www.ansible.com/) to provision servers, users, databases and sites on Ubuntu 20.04 LTS servers.
@@ -26,7 +26,7 @@ If your preferred provider is not baked into Autopilot, you can always use the C
 
 ### Packages & Services
 
-The following packages/services will be installed and configured on web servers (together with dependencies):
+The following packages/services will be installed and configured on servers (together with dependencies):
 
 * [Caddy Web Server (for proxy and auto ssl)](https://caddyserver.com/)
 * [OpenLitespeed (web server)](https://www.litespeedtech.com/open-source/openlitespeed)
@@ -37,34 +37,28 @@ The following packages/services will be installed and configured on web servers 
 * [WordMove](https://github.com/welaika/wordmove)
 * [UFW (firewall)](https://help.ubuntu.com/community/UFW)
 * [OpenSSH Server & SFTP](https://www.openssh.com/)
-* [SSMTP (email relay)](https://wiki.archlinux.org/index.php/SSMTP)
+* [MSMTP (email relay)](https://wiki.archlinux.org/index.php/msmtp)
 * [Restic (for backups)](https://restic.net/)
-* [Docker](https://www.docker.com/)
-* [Docker Compose](https://hub.docker.com/_/redis/)
-* [Docker Redis 5](https://redis.io/)
-* [Docker MariaDB 10.4](https://hub.docker.com/_/mariadb)
-* [Docker phpMyAdmin 5](https://www.phpmyadmin.net/)
-* [Docker Node Exporter (for monitoring)](https://prometheus.io/docs/guides/node-exporter/)
+* [Redis](https://redis.io/)
+* [MySQL 8](https://hub.docker.com/_/mariadb)
+* [phpMyAdmin 5](https://www.phpmyadmin.net/)
+* [Node Exporter (for monitoring)](https://prometheus.io/docs/guides/node-exporter/)
 
-Users are isolated and allowed to use SFTP with password authentication (chroot directory `/opt/sitepilot/users/%u`).
+Users are isolated and allowed to use SFTP with password authentication (chroot directory `/opt/sitepilot/users/%u/sites`).
 
 ### Tools
 
-* phpMyAdmin: `http://<domain.name>/.sitepilot/pma/`.
-* Health check: `http://<domain.name>/.sitepilot/health/`.
-* Node Exporter: `http://<domain.name>/.sitepilot/node-exporter/`.
+* phpMyAdmin: `http://<hostname>/phpmyadmin/`.
+* Health check: `http://<hostname>/health/`.
+* Node Exporter: `http://<hostname>/stats/`.
 
 ### Filesystem
 
-* Users folder: `/opt/sitepilot/users`.
-* Site public folder: `/opt/sitepilot/users/{{ user.name }}/{{ app.name }}/public`.
-* Site logs folder: `/opt/sitepilot/users/{{ user.name }}/{{ app.name }}/logs`.
-* Caddy service folder: `/opt/sitepilot/services/caddy`.
-* OpenLitespeed service folder: `/opt/sitepilot/services/olsws`.
-* MySQL service folder: `/opt/sitepilot/services/mysql`.
-* Redis service folder: `/opt/sitepilot/services/redis`.
-* Node Exporter service folder: `/opt/sitepilot/services/node-exporter`.
-* phpMyAdmin service folder: `/opt/sitepilot/services/phpmyadmin`.
+* Caddy vhosts folder: `/etc/caddy/vhosts`.
+* OpenLitespeed vhosts folder: `/usr/local/lsws/conf/vhosts`.
+* Site public folder: `/home/{{ user.name }}/sites/{{ site.name }}/public`.
+* Site logs folder: `/home/{{ user.name }}/sites/{{ site.name }}/logs`.
+* Default services folder (health & phpMyAdmin): `/home/sitepilot/sites/default/public`
 
 ## Monitoring
 

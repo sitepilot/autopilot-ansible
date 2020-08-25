@@ -22,26 +22,26 @@
 
     - name: "server/test : web server is running (HTTP)"
       uri:
-        url: "http://{{ hostname }}:7081"
+        url: "http://{{ hostname }}:6080"
 
     - name: "server/test : web server is running (HTTPS)"
       uri:
-        url: "https://{{ hostname }}:7082"
+        url: "https://{{ hostname }}:6443"
         validate_certs: false
 
     - name: "server/test : web server admin panel is running (HTTPS)"
       uri:
-        url: "https://{{ hostname }}:7083"
+        url: "https://{{ hostname }}:7080"
         validate_certs: false
 
-    - name: "server/test : phpMyAdmin is available"
-      uri:
-        url: "https://{{ hostname }}/.sitepilot/pma/"
-        validate_certs: false
+    #- name: "server/test : phpMyAdmin is available"
+    #  uri:
+    #    url: "https://{{ hostname }}/.sitepilot/pma/"
+    #    validate_certs: false
 
     - name: "server/test : health check is available"
       uri:
-        url: "https://{{ hostname }}/.sitepilot/health/"
+        url: "http://{{ hostname }}/health/"
         validate_certs: false
         status_code:
           - 200
@@ -49,15 +49,15 @@
 
     - name: "server/test : node-exporter is available"
       uri:
-        url: "https://{{ hostname }}/.sitepilot/node-exporter/"
+        url: "http://{{ hostname }}/stats/"
         validate_certs: false
 
-    - name: "server/test : check if modsecurity is installed"
-      uri:
-        url: "https://{{ hostname }}/test.sql"
-        validate_certs: false
-        status_code:
-          - 403
+    #- name: "server/test : check if modsecurity is installed"
+    #  uri:
+    #    url: "https://{{ hostname }}/test.sql"
+    #    validate_certs: false
+    #    status_code:
+    #      - 403
 
     # Other Checks
     - name: "server/test : fail2ban is installed"

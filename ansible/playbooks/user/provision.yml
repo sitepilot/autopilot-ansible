@@ -37,32 +37,28 @@
         password: "{{ password | password_hash('sha512') }}"
         comment: "{{ full_name if (full_name is defined) and (full_name|length > 0) else user }}"
 
-    - name: "user/provision : {{ user }} : create root owned user folders"
+    - name: "user/provision : {{ user }} : create folders"
       file:
-        path: "{{ item }}"
+        path: "{{ item.path }}"
         state: directory
-        owner: "root"
-        group: "root"
-        mode: "0755"
+        owner: "{{ item.owner }}"
+        group: "{{ item.owner }}"
+        mode: "{{ item.mode }}"
       loop:
-        - "{{ path }}"
+        - path: "{{ path }}"
+          owner: "root"
+          mode: "0711"
+        - path: "{{ path }}/sites"
+          owner: "root"
+          mode: "0755"
+        - path: "/home/{{ user }}/.ssh/"
+          owner: "{{ user }}"
+          mode: "0700"
 
-    - name: "user/provision : {{ user }} : create user owned folders"
+    - name: "user/provision : {{ user }} : create symlink to sites folder"
       file:
-        path: "{{ item }}"
-        state: directory
-        owner: "{{ user }}"
-        group: "{{ user }}"
-        mode: "0700"
-      loop:
-        - "/home/{{ user }}/.ssh/"
-
-    - name: "user/provision : {{ user }} : set home dir permission"
-      file:
-        src: "{{ path }}"
+        src: "{{ path }}/sites"
         dest: "/home/{{ user }}/sites"
-        owner: "{{ user }}"
-        group: "{{ user }}"
         state: link
 
     - name: "user/provision : {{ user }} : set home dir permission"
@@ -95,24 +91,6 @@
         - mysql_password is defined
         - mysql_password | length > 0
       no_log: true
-
-    - name: "user : {{ user }} : set ssmtp alias"
-      lineinfile:
-        path: /etc/ssmtp/revaliases
-        regexp: "^{{ user }}:"
-        line: "{{ user }}:{{ email }}"
-        state: present
-      when:
-        - email is defined
-        - email | length > 0
-
-    - name: "user : {{ user }} : remove ssmtp alias"
-      lineinfile:
-        path: /etc/ssmtp/revaliases
-        regexp: "^{{ user }}:"
-        state: absent
-      when:
-        - (email is not defined) or (email | length < 1)
 
     - name: "user : {{ user }} : save private key"
       copy:

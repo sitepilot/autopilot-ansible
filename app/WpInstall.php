@@ -72,7 +72,7 @@ class WpInstall extends Model implements ProvisionableResource
     public function getPath()
     {
         if ($this->site) {
-            return '/opt/sitepilot/users/' . $this->site->sysuser->name . '/' . $this->site->name . '/public';
+            return '/opt/sitepilot/users/' . $this->site->sysuser->name . '/sites/' . $this->site->name . '/public';
         }
 
         return $this->path;

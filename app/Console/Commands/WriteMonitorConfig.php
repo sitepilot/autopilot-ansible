@@ -49,14 +49,14 @@ class WriteMonitorConfig extends Command
             if ($server->monitor) {
                 $item = new stdClass;
                 $item->labels = new stdClass;
-                $item->targets[] = 'https://' . $server->fqdn . ':/.sitepilot/node-exporter/';
+                $item->targets[] = 'https://' . $server->fqdn . ':/stats/';
                 $item->labels->name =  $server->name;
                 $content[] = $item;
 
                 if (in_array($server->type, ['shared', 'dedicated', 'development'])) {
                     $healthItem = new stdClass;
                     $healthItem->labels = new stdClass;
-                    $healthItem->targets[] = 'https://' . $server->fqdn . '/.sitepilot/health/';
+                    $healthItem->targets[] = 'https://' . $server->fqdn . '/health/';
                     $healthItem->labels->name = $server->name;
                     $health[] = $healthItem;
                 }

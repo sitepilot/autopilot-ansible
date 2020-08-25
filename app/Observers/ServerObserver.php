@@ -85,19 +85,14 @@ class ServerObserver
             'admin_password'
         ])) {
             $tags[] = 'admin';
+            $tags[] = 'lshttpd';
+            $tags[] = 'mysql';
         }
 
         if ($server->wasChanged([
             'health_email',
         ])) {
-            $tags[] = 'health';
-        }
-
-        if ($server->wasChanged([
-            'authorized_addresses'
-        ])) {
-            $tags[] = 'sshd';
-            $tags[] = 'firewall';
+            $tags[] = 'lshttpd';
         }
 
         if ($server->wasChanged([
@@ -105,7 +100,8 @@ class ServerObserver
             'php_upload_max_filesize',
             'php_memory_limit',
         ])) {
-            $tags[] = 'php';
+            $tags[] = 'lsphp74';
+            $tags[] = 'lsphp73';
         }
 
         if ($server->wasChanged([
@@ -114,7 +110,7 @@ class ServerObserver
             'smtp_relay_user',
             'smtp_relay_password',
         ])) {
-            $tags[] = 'ssmtp';
+            $tags[] = 'msmtp';
         }
 
         if ($server->wasChanged([

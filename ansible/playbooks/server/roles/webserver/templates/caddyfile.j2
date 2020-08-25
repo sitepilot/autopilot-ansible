@@ -1,36 +1,46 @@
+# {{ autopilot_managed }}
 (config) {
 	header Server "Sitepilot"
 }
 
 (webapps) {
-	route /.sitepilot/pma* {
-		uri strip_prefix /.sitepilot/pma
-		reverse_proxy http://127.0.0.1:9001
+	route /.sitepilot/phpmyadmin* {
+		uri strip_prefix /.sitepilot
+		reverse_proxy http://127.0.0.1
 	}
 
-    reverse_proxy /.sitepilot/node-exporter* http://127.0.0.1:9100
+    route /.sitepilot/health* {
+		uri strip_prefix /.sitepilot
+		reverse_proxy http://127.0.0.1
+	}
 }
 
 :80 {
     import config
 
+    import webapps
+
+    reverse_proxy /stats/* http://127.0.0.1:9100
+
     reverse_proxy {
-        to 127.0.0.1:7081
+        to http://127.0.0.1:6080
         header_down -Server
     }
 }
 
 {{ hostname }}:443 {
-	tls {{ tls_email }} {
+	tls {{ cert_email }} {
         on_demand
     }
 
-    import config 
+    import config
 
     import webapps
 
+    reverse_proxy /stats/* http://127.0.0.1:9100
+
 	reverse_proxy {
-        to 127.0.0.1:7082
+        to https://127.0.0.1:6443
         header_down -Server
 
         transport http {
@@ -39,4 +49,4 @@
     }
 }
 
-import /opt/sitepilot/services/caddy/vhosts/*
+import /etc/caddy/vhosts/*

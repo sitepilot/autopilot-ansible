@@ -1,0 +1,50 @@
+---
+- name: "base : install required packages"
+  apt:
+    pkg:
+      - software-properties-common
+      - ca-certificates
+      - build-essential
+      - curl
+      - python3
+      - python3-pip
+      - python3-setuptools
+      - unattended-upgrades
+      - zip
+      - unzip
+      - zsh
+      - ncdu
+      - gnupg
+      - cron
+      - nano
+      - ntpdate
+      - rsyslog
+      - bubblewrap
+    state: present
+    update_cache: yes
+
+- name: "base : enable and start rsyslog"
+  service:
+    name: rsyslog
+    state: started
+    enabled: true
+
+- name: "base : ensure 'isolated' group exists"
+  group:
+    name: "isolated"
+    state: present
+
+- name: "base : prepare filesystem"
+  file:
+    path: "{{ item.path }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.owner }}"
+    state: directory
+    mode: "{{ item.mode }}"
+  loop:
+    - path: "/opt/sitepilot"
+      mode: "0711"
+      owner: "root"
+    - path: "/opt/sitepilot/users"
+      mode: "0711"
+      owner: "root"

@@ -38,8 +38,3 @@
         host: "%"
       no_log: true
 
-    - name: "user/destroy : {{ user }} : remove ssmtp alias"
-      lineinfile:
-        path: /etc/ssmtp/revaliases
-        regexp: "^{{ user }}:"
-        state: absent

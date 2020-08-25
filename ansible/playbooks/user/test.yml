@@ -41,7 +41,7 @@
 
     # File Tests
     - name: "user/test : {{ user }} : user can write to app public folders"
-      command: "touch /opt/sitepilot/users/{{ user }}/{{ item }}/public/user_test"
+      command: "touch /opt/sitepilot/users/{{ user }}/sites/{{ item }}/public/user_test"
       become: true
       become_user: "{{ user }}"
       changed_when: false
@@ -50,7 +50,7 @@
         warn: false
 
     - name: "user/test : {{ user }} : user can delete files in app public folders"
-      command: "rm /opt/sitepilot/users/{{ user }}/{{ item }}/public/user_test"
+      command: "rm /opt/sitepilot/users/{{ user }}/sites/{{ item }}/public/user_test"
       become: true
       become_user: "{{ user }}"
       changed_when: false

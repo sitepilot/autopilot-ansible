@@ -115,7 +115,7 @@ class Site extends Model implements ProvisionableResource
      */
     public function getBackupPath()
     {
-        return '/opt/sitepilot/users/' . $this->sysuser->name . '/' . $this->name;
+        return '/opt/sitepilot/users/' . $this->sysuser->name . '/sites/' . $this->name;
     }
 
     /**

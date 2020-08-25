@@ -1,4 +1,4 @@
-# {{ sitepilot_managed }}
+# {{ autopilot_managed }}
 {{ domain }}{{ ', ' if (domains|length>0) else '' }}{{ domains|join(', ') }} {
     tls {{ email }} {
         on_demand
@@ -6,8 +6,6 @@
     
     import config
 
-    import webapps
-  
     reverse_proxy {
         to {{ backends | join(' ') }}
 

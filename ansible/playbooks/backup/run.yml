@@ -11,6 +11,21 @@
     #backup_resource_tag: ""
     #backup_database_name: ""
   tasks:
+    - name: "backup/run : create folders"
+      file:
+        path: "{{ item.path }}"
+        state: directory
+        owner: "{{ item.owner }}"
+        group: "{{ item.owner }}"
+        mode: "{{ item.mode }}"
+      loop:
+        - path: "/opt/sitepilot/backups"
+          owner: "root"
+          mode: "0700"
+        - path: "/opt/sitepilot/backups/mysql"
+          owner: "root"
+          mode: "0700"
+
     - name: "backup/run : create database dump"
       mysql_db:
         state: dump

@@ -1,0 +1,35 @@
+---
+- name: "admin : ensure '{{ admin }}' user exists"
+  user:
+    name: "{{ admin }}"
+    password: "{{ admin_pass | password_hash('sha512') }}"
+    groups: sudo,www-data
+
+- name: "admin : setup bash for '{{ admin }}'"
+  command: "chsh -s /bin/bash {{ admin }}"
+  changed_when: false
+
+- name: "admin : create folders"
+  file:
+    path: "{{ item.path }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.owner }}"
+    state: directory
+    mode: "{{ item.mode }}"
+  loop:
+    - path: "/home/{{ admin }}/.ssh"
+      mode: "0700"
+      owner: "{{ admin }}"
+    - path: "/opt/sitepilot/users/{{ admin }}"
+      mode: "0711"
+      owner: "root"
+    - path: "/opt/sitepilot/users/{{ admin }}/sites"
+      mode: "0755"
+      owner: "root"
+
+- name: "admin : generate SSH keypair"
+  openssh_keypair:
+    path: /home/{{ admin }}/.ssh/id_rsa
+    owner: "{{ admin }}"
+    group: "{{ admin }}"
+    comment: "{{ admin }}@{{ hostname }}"

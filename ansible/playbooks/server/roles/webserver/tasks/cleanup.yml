@@ -1,5 +1,0 @@
----
-- name: "cleanup : remove certbot"
-  apt:
-    name: certbot
-    state: absent

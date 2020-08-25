@@ -60,7 +60,7 @@ class Playbook
         return [
             'ansible_ssh_common_args' => '-o StrictHostKeyChecking=no',
             'ansible_python_interpreter' => '/usr/bin/python3',
-            'sitepilot_managed' => 'WARNING: This file is managed by Sitepilot, any changes will be overwritten (updated at: {{ansible_date_time.date}} {{ansible_date_time.time}}).'
+            'autopilot_managed' => 'WARNING: This file is managed by Autopilot, any changes will be overwritten (updated at: {{ansible_date_time.date}} {{ansible_date_time.time}}).'
         ];
     }
 

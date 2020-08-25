@@ -71,11 +71,11 @@ class SiteProvisionPlaybook extends Playbook
             $domains[] = "www." . $domain->name;
         }
 
-        $backends[] = '127.0.0.1:7082';
+        $backends[] = '127.0.0.1:6443';
         if (!empty($this->server->private_address)) {
-            $backends[] = $this->site->server->private_address . ':7082';
+            $backends[] = $this->site->server->private_address . ':6443';
         }
-        $backends[] =  $this->site->server->address . ':7082';
+        $backends[] =  $this->site->server->address . ':6443';
 
         return array_merge(parent::vars(), [
             'user' => (string) $this->site->sysuser->name,
