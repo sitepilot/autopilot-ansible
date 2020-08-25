@@ -12,11 +12,11 @@
     - pma_update_version is defined
     - pma_update_version|bool
 
-- name: "phpmyadmin : create folder"
+- name: "phpmyadmin : create folders"
   file:
     path: "{{ pma_path }}"
-    owner: "root"
-    group: "root"
+    owner: "{{ admin }}"
+    group: "{{ admin }}"
     state: directory
     mode: "0755"
 
