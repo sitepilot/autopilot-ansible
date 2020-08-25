@@ -15,20 +15,7 @@
 	}
 }
 
-*:80 {
-    import config
-
-    import webapps
-
-    reverse_proxy /metrics* http://127.0.0.1:9100
-
-    reverse_proxy {
-        to http://127.0.0.1:6080
-        header_down -Server
-    }
-}
-
-{{ hostname }}:443 {
+{{ hostname }} {
 	tls {{ cert_email }} {
         on_demand
     }

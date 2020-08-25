@@ -14,6 +14,8 @@
     - name: "server/test : caddy server is running (HTTP)"
       uri:
         url: "http://{{ hostname }}"
+        status_code:
+          - 308 # expect a 308 redirect to https page
 
     - name: "server/test : caddy server is running (HTTPS)"
       uri:
@@ -36,24 +38,28 @@
 
     - name: "server/test : phpMyAdmin is available"
       uri:
-        url: "http://{{ hostname }}/phpmyadmin/"
+        url: "https://{{ hostname }}/phpmyadmin/"
+        validate_certs: false
 
     - name: "server/test : health check is available"
       uri:
-        url: "http://{{ hostname }}/health/"
+        url: "https://{{ hostname }}/health/"
         status_code:
           - 200
           - 500
+        validate_certs: false
 
     - name: "server/test : node-exporter is available"
       uri:
-        url: "http://{{ hostname }}/metrics/"
+        url: "https://{{ hostname }}/metrics/"
+        validate_certs: false
 
     - name: "server/test : check if modsecurity is installed"
       uri:
-        url: "http://{{ hostname }}/test.sql"
+        url: "https://{{ hostname }}/test.sql"
         status_code:
           - 403
+        validate_certs: false
 
     # Other Checks
     - name: "server/test : fail2ban is installed"
