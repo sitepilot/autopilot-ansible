@@ -3,8 +3,10 @@
     tls {{ email }} {
         on_demand
     }
-    
+
     import config
+
+    import webapps
 
     reverse_proxy {
         to {{ backends | join(' ') }}

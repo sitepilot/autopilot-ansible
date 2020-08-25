@@ -4,15 +4,7 @@
 }
 
 (webapps) {
-	route /.sitepilot/phpmyadmin* {
-		uri strip_prefix /.sitepilot
-		reverse_proxy http://127.0.0.1
-	}
-
-    route /.sitepilot/health* {
-		uri strip_prefix /.sitepilot
-		reverse_proxy http://127.0.0.1
-	}
+	# nothing here yet
 }
 
 {{ hostname }} {
