@@ -41,6 +41,7 @@ class ServerObserver
 
         // Replace variables in server name
         $typeCast = [
+            'shared' => 'web',
             'dedicated' => 'dedi',
             'development' => 'dev'
         ];
