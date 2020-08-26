@@ -237,20 +237,21 @@ class Server extends Resource
     protected function phpConfigurationFields()
     {
         return [
-            Number::make('Max Post Size', 'php_post_max_size')
+            Number::make('Max Children', 'php_max_children')
                 ->hideFromIndex()
                 ->hideWhenCreating()
-                ->rules(\App\Server::$validationRules['php_post_max_size']),
+                ->rules(\App\Server::$validationRules['php_max_children'])
+                ->help('The maximum number of php child processes per sysuser.'),
+
+            Number::make('Memory Limit', 'php_memory_limit')
+                ->hideFromIndex()
+                ->hideWhenCreating()
+                ->rules(\App\Server::$validationRules['php_memory_limit']),
 
             Number::make('Max Upload Filesize', 'php_upload_max_filesize')
                 ->hideFromIndex()
                 ->hideWhenCreating()
                 ->rules(\App\Server::$validationRules['php_upload_max_filesize']),
-
-            Number::make('Memory Limit', 'php_memory_limit')
-                ->hideFromIndex()
-                ->hideWhenCreating()
-                ->rules(\App\Server::$validationRules['php_memory_limit'])
         ];
     }
 

@@ -75,6 +75,7 @@ class ServerProvisionPlaybook extends Playbook
             'cert_email' => (string) app()->environment(['testing', 'local']) ? 'internal' : $this->server->admin_email,
             'php_memory_limit' => (int) $this->server->php_memory_limit,
             'php_upload_max_filesize' => (int) $this->server->php_upload_max_filesize,
+            'php_max_children' => (int) $this->server->php_max_children,
             'smtp_relay_host' => (string) $this->server->smtp_relay_host,
             'smtp_relay_domain' => (string) $this->server->smtp_relay_domain,
             'smtp_relay_user' => (string) $this->server->smtp_relay_user,

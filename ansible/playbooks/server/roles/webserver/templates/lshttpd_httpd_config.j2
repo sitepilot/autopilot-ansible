@@ -117,8 +117,8 @@ accessControl  {
 extprocessor lsphp73 {
     type                    lsapi
     address                 uds://tmp/lshttpd/lsphp73.sock
-    maxConns                10
-    env                     PHP_LSAPI_CHILDREN=10
+    maxConns                {{ php_max_children }}
+    env                     PHP_LSAPI_CHILDREN={{ php_max_children }}
     env                     LSAPI_AVOID_FORK=200M
     initTimeout             60
     retryTimeout            0
@@ -138,8 +138,8 @@ extprocessor lsphp73 {
 extprocessor lsphp74 {
     type                    lsapi
     address                 uds://tmp/lshttpd/lsphp74.sock
-    maxConns                10
-    env                     PHP_LSAPI_CHILDREN=10
+    maxConns                {{ php_max_children }}
+    env                     PHP_LSAPI_CHILDREN={{ php_max_children }}
     env                     LSAPI_AVOID_FORK=200M
     initTimeout             60
     retryTimeout            0

@@ -29,7 +29,6 @@ class ServerObserver
         if (empty($server->mysql_password)) $server->mysql_password = Str::random(12);
 
         // PHP configuration
-        if (empty($server->php_post_max_size)) $server->php_post_max_size = 64;
         if (empty($server->php_upload_max_filesize)) $server->php_upload_max_filesize = 32;
         if (empty($server->php_memory_limit)) $server->php_memory_limit = 256;
 
@@ -92,12 +91,12 @@ class ServerObserver
 
         if ($server->wasChanged([
             'health_email',
+            'php_max_children'
         ])) {
             $tags[] = 'lshttpd';
         }
 
         if ($server->wasChanged([
-            'php_post_max_size',
             'php_upload_max_filesize',
             'php_memory_limit',
         ])) {

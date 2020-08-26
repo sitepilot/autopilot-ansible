@@ -15,6 +15,7 @@ swap_size: "1G"
 
 php_memory_limit: 256
 php_upload_max_filesize: 32
+php_max_children: 5
 
 smtp_relay_host: "smtp.eu.mailgun.org"
 smtp_relay_domain: "mg.example.com"
