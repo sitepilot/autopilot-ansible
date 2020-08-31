@@ -27,6 +27,7 @@
   when:
     - swap_file_create is changed
   register: mkswap_result
+  ignore_errors: true # Can't run swapon when filesystem type is btrfs
 
 - name: "swap : run swapon on the swap file"
   command: swapon {{ swap_path }}
