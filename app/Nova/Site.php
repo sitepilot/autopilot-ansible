@@ -9,6 +9,7 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\HasMany;
 use App\Nova\Actions\BackupAction;
 use Laravel\Nova\Fields\BelongsTo;
+use App\Nova\Actions\SiteMountAction;
 
 class Site extends Resource
 {
@@ -175,7 +176,8 @@ class Site extends Resource
                 ->canRunWhenReady($this)
                 ->setName('Backup Site')
                 ->confirmText('Are you sure you want to backup the selected site?')
-                ->confirmButtonText('Backup'),
+                ->confirmButtonText('Backup')
+                ->canRunWhenReady($this),
             (new JobAction)
                 ->exceptOnIndex()
                 ->showOnTableRow()
@@ -185,7 +187,9 @@ class Site extends Resource
                 ->confirmButtonText('Provision')
                 ->confirmText('Are you sure you want to provision the selected site(s)?')
                 ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.')
-                ->canRunWhenNotBusy($this)
+                ->canRunWhenNotBusy($this),
+            (new SiteMountAction)
+                ->canRunWhenReady($this),
         ];
     }
 }

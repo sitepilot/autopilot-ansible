@@ -15,6 +15,12 @@
       loop:
         - "{{ path }}"
 
+    - name: "site/destroy : {{ user }} : {{ site }} : remove mount points"
+      lineinfile:
+        path: /etc/fstab
+        regexp: "^/opt/sitepilot/users/{{ user }}/sites/{{ site }}"
+        state: absent
+
     - name: "site/destroy : {{ user }} : {{ site }} : remove vhost configuration"
       file:
         path: "{{ path_vhost }}"

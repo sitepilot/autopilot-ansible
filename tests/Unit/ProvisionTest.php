@@ -64,6 +64,26 @@ class ProvisionTest extends TestCase
         $this->assertLastTask();
     }
 
+    public function test_site_can_be_mounted_to_user()
+    {
+        $site = self::getSite();
+
+        $site->mountToSysuser('sitepilot');
+
+        $this->assertEquals($site->fresh()->status, 'ready');
+        $this->assertLastTask();
+    }
+
+    public function test_site_can_be_unmounted_from_user()
+    {
+        $site = self::getSite();
+
+        $site->unmountFromSysuser('sitepilot');
+
+        $this->assertEquals($site->fresh()->status, 'ready');
+        $this->assertLastTask();
+    }
+
     /* ========== Database Tests ========== */
 
     public function test_database_is_provisioned_on_create()

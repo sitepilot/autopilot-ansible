@@ -18,11 +18,13 @@ trait Provisionable
      * Dispatch a job.
      *
      * @param string $jobClass
+     * @param array $tags
+     * @param array $vars
      * @return void
      */
-    public function dispatchJob($jobClass, $tags = [])
+    public function dispatchJob(string $jobClass, array $tags = [], array $vars = [])
     {
-        return $jobClass::dispatch($this->withTrashed()->find($this->id), $tags);
+        return $jobClass::dispatch($this->withTrashed()->find($this->id), $tags, $vars);
     }
 
     /**

@@ -1,0 +1,11 @@
+---
+- hosts: "all"
+  vars:
+    # mount_site: ""
+    # mount_user: ""
+    path: "/opt/sitepilot/users/{{ mount_user }}/sites/{{ mount_site }}"
+  tasks:
+    - name: "site/unmount-from-user : unmount site '{{ source_site }}' from user '{{ mount_user }}'"
+      mount:
+        path: "{{ path }}"
+        state: absent

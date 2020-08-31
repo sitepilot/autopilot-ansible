@@ -1,0 +1,17 @@
+---
+- hosts: "all"
+  vars:
+    # source_site: ""
+    # source_user: ""
+    # mount_site: ""
+    # mount_user: ""
+    mount_path: "/opt/sitepilot/users/{{ mount_user }}/sites/{{ mount_site }}"
+    source_path: "/opt/sitepilot/users/{{ source_user }}/sites/{{ source_site }}"
+  tasks:
+    - name: "site/mount-to-user : mount site '{{ source_site }}' to user '{{ mount_user }}'"
+      mount:
+        path: "{{ mount_path }}"
+        src: "{{ source_path }}"
+        fstype: fuse.bindfs
+        opts: "create-for-user={{ source_user }},create-for-group={{ source_user }},mirror-only={{ mount_user }}"
+        state: mounted
