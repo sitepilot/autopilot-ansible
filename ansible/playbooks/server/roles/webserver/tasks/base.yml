@@ -12,6 +12,8 @@
       - unattended-upgrades
       - zip
       - unzip
+      - acl
+      - bindfs
       - zsh
       - ncdu
       - gnupg
@@ -43,8 +45,8 @@
     mode: "{{ item.mode }}"
   loop:
     - path: "/opt/sitepilot"
-      mode: "0711"
+      mode: "0755"
       owner: "root"
     - path: "/opt/sitepilot/users"
-      mode: "0711"
+      mode: "0755"
       owner: "root"

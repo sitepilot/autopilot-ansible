@@ -67,25 +67,19 @@
     mode: "{{ item.mode }}"
   loop:
     - path: "/opt/sitepilot/users/{{ admin }}/sites/default"
-      mode: "0755"
+      mode: "0750"
       owner: "{{ admin }}"
     - path: "/opt/sitepilot/users/{{ admin }}/sites/default/public"
-      mode: "0755"
+      mode: "0750"
       owner: "{{ admin }}"
     - path: "/opt/sitepilot/users/{{ admin }}/sites/default/public/health"
-      mode: "0755"
-      owner: "root"
+      mode: "0750"
+      owner: "{{ admin }}"
     - path: "/opt/sitepilot/users/{{ admin }}/sites/default/logs"
-      mode: "0755"
+      mode: "0750"
       owner: "{{ admin }}"
   notify:
     - restart lshttpd
-
-- name: "lshttpd : create symlink to sites folder"
-  file:
-    src: "/opt/sitepilot/users/{{ admin }}/sites"
-    dest: "/home/{{ admin }}/sites"
-    state: link
 
 - name: "lshttpd : check if default index.php exists"
   stat:
@@ -105,8 +99,8 @@
   template:
     src: lshttpd_health_index.j2
     dest: /opt/sitepilot/users/{{ admin }}/sites/default/public/health/index.php
-    owner: "root"
-    group: "root"
+    owner: "{{ admin }}"
+    group: "{{ admin }}"
     mode: "0644"
 
 - name: "lshttpd : generate admin password script"

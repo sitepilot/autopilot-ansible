@@ -122,7 +122,7 @@ Subsystem       sftp    /usr/lib/openssh/sftp-server
 PasswordAuthentication no
 
 Match Group isolated
-    ChrootDirectory /opt/sitepilot/users/%u/sites
+    ChrootDirectory /opt/sitepilot/users/%u
     X11Forwarding no
     AllowTcpForwarding no
     ForceCommand internal-sftp

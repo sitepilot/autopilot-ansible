@@ -15,21 +15,21 @@
   tasks:
     - name: "site/provision : {{ user }} : {{ site }} : create folders"
       file:
-        path: "{{ item }}"
+        path: "{{ item.path }}"
         state: directory
-        owner: "{{ user }}"
-        group: "{{ user }}"
-        mode: "0755"
+        owner: "{{ item.owner }}"
+        group: "{{ item.owner }}"
+        mode: "{{ item.mode }}"
       loop:
-        - "{{ path }}"
-        - "{{ path }}/public"
-        - "{{ path }}/logs"
-
-    - name: "site/provision : {{ user }} : {{ site }} : set folder / file permissions"
-      command: "{{ item }}"
-      loop:
-        - "find {{ path }} -type f -exec chmod 644 {} +"
-        - "find {{ path }} -type d -exec chmod 755 {} +"
+        - path: "{{ path }}"
+          owner: "{{ user }}"
+          mode: "0750"
+        - path: "{{ path }}/public"
+          owner: "{{ user }}"
+          mode: "0750"
+        - path: "{{ path }}/logs"
+          owner: "{{ user }}"
+          mode: "0750"
 
     - name: "site/provision : {{ user }} : {{ site }} : generate vhost configuration"
       template:

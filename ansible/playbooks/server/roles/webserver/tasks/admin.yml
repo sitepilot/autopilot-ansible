@@ -17,15 +17,47 @@
     state: directory
     mode: "{{ item.mode }}"
   loop:
+    - path: "/opt/sitepilot/users/{{ admin }}"
+      mode: "0750"
+      owner: "root"
+    - path: "/opt/sitepilot/users/{{ admin }}/sites"
+      mode: "0750"
+      owner: "{{ admin }}"
     - path: "/home/{{ admin }}/.ssh"
       mode: "0700"
       owner: "{{ admin }}"
-    - path: "/opt/sitepilot/users/{{ admin }}"
-      mode: "0711"
-      owner: "root"
-    - path: "/opt/sitepilot/users/{{ admin }}/sites"
-      mode: "0755"
-      owner: "root"
+
+- name: "admin : setup ACL"
+  acl:
+    path: "/opt/sitepilot/users/{{ admin }}"
+    entity: "{{ item.entity }}"
+    etype: "{{ item.etype }}"
+    permissions: "{{ item.permissions }}"
+    default: "{{ item.default }}"
+    recursive: yes
+    state: present
+  loop:
+    - entity: "{{ admin }}" # allow user to read files
+      etype: group
+      permissions: rx
+      default: no
+      recursive: no
+    - entity: sitepilot # allow sitepilot group to read files
+      etype: group
+      permissions: rx
+      default: no
+      recursive: yes
+    - entity: sitepilot
+      etype: group
+      permissions: rx
+      default: yes
+      recursive: yes
+
+- name: "admin : create symlink to sites folder"
+  file:
+    src: "/opt/sitepilot/users/{{ admin }}/sites"
+    dest: "/home/{{ admin }}/sites"
+    state: link
 
 - name: "admin : generate SSH keypair"
   openssh_keypair:

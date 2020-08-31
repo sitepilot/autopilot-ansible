@@ -47,13 +47,39 @@
       loop:
         - path: "{{ path }}"
           owner: "root"
-          mode: "0711"
+          mode: "0750"
         - path: "{{ path }}/sites"
-          owner: "root"
-          mode: "0755"
+          owner: "{{ user }}"
+          mode: "0750"
         - path: "/home/{{ user }}/.ssh/"
           owner: "{{ user }}"
           mode: "0700"
+
+    - name: "user : {{ user }} : setup ACL"
+      acl:
+        path: "{{ path }}"
+        entity: "{{ item.entity }}"
+        etype: "{{ item.etype }}"
+        permissions: "{{ item.permissions }}"
+        default: "{{ item.default }}"
+        recursive: "{{ item.recursive }}"
+        state: present
+      loop:
+        - entity: "{{ user }}" # allow user to read files
+          etype: group
+          permissions: rx
+          default: no
+          recursive: no
+        - entity: sitepilot # allow sitepilot group to read files
+          etype: group
+          permissions: rx
+          default: no
+          recursive: yes
+        - entity: sitepilot
+          etype: group
+          permissions: rx
+          default: yes
+          recursive: yes
 
     - name: "user/provision : {{ user }} : create symlink to sites folder"
       file:
@@ -67,7 +93,7 @@
         state: directory
         owner: "{{ user }}"
         group: "{{ user }}"
-        mode: "0711"
+        mode: "0700"
       loop:
         - "/home/{{ user }}"
 
