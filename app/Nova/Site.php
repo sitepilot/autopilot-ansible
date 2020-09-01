@@ -9,7 +9,6 @@ use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\HasMany;
 use App\Nova\Actions\BackupAction;
 use Laravel\Nova\Fields\BelongsTo;
-use App\Nova\Actions\SiteMountAction;
 
 class Site extends Resource
 {
@@ -114,6 +113,7 @@ class Site extends Resource
             HasMany::make('Domains', 'domains', Domain::class),
             HasMany::make('Databases', 'databases', Database::class),
             HasMany::make('Backups', 'backups', Backup::class),
+            HasMany::make('Site Mounts', 'siteMounts'),
             HasMany::make('Tasks', 'tasks', Task::class)
         ];
     }

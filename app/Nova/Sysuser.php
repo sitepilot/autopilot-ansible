@@ -106,9 +106,9 @@ class Sysuser extends Resource
             \App\Sysuser::getNovaStatusField($this),
 
             HasMany::make('Sites'),
-            HasMany::make('Site Mounts', 'siteMounts'),
             HasMany::make('Databases'),
             HasMany::make('Keys', 'keys', SysuserKey::class),
+            HasMany::make('Site Mounts', 'siteMounts'),
             HasMany::make('Tasks', 'tasks', Task::class)
         ];
     }
