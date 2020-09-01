@@ -28,13 +28,6 @@ class Sysuser extends Resource
     public static $group = 'Autopilot';
 
     /**
-     * Indicates if the resource should be displayed in the sidebar.
-     *
-     * @var bool
-     */
-    public static $displayInNavigation = false;
-
-    /**
      * The single value that should be used to represent the resource when being displayed.
      *
      * @var string
@@ -205,6 +198,6 @@ class Sysuser extends Resource
      */
     public static function label()
     {
-        return 'System Users';
+        return 'Sysusers';
     }
 }
