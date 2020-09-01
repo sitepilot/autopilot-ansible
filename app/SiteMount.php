@@ -53,16 +53,6 @@ class SiteMount extends Model implements ProvisionableResource
     }
 
     /**
-     * Get the server the site mount belongs to.
-     * 
-     * @return BelongsTo
-     */
-    public function server()
-    {
-        return $this->sysuser->server();
-    }
-
-    /**
      * Get the site that belongs to this mount.
      * 
      * @return BelongsTo
@@ -70,6 +60,16 @@ class SiteMount extends Model implements ProvisionableResource
     public function site()
     {
         return $this->belongsTo(Site::class, 'site_id');
+    }
+
+    /**
+     * Get the server the site mount belongs to.
+     * 
+     * @return BelongsTo
+     */
+    public function server()
+    {
+        return $this->sysuser->server();
     }
 
     /**
