@@ -68,6 +68,16 @@ class Site extends Model implements ProvisionableResource
     }
 
     /**
+     * Get the site mounts for the site.
+     * 
+     * @return HasMany
+     */
+    public function siteMounts()
+    {
+        return $this->hasMany(SiteMount::class, 'site_id');
+    }
+
+    /**
      * Get the primary domain of the site.
      * 
      * @return string
