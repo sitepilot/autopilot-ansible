@@ -71,6 +71,7 @@ class UserDestroyJob implements ShouldQueue
             }
 
             $this->sysuser->markAsError();
+            $this->sysuser->restore();
         }
 
         $this->release(30);
@@ -85,5 +86,6 @@ class UserDestroyJob implements ShouldQueue
     public function failed($exception)
     {
         $this->sysuser->markAsError();
+        $this->sysuser->restore();
     }
 }

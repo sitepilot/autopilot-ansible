@@ -72,6 +72,7 @@ class KeyDestroyJob implements ShouldQueue
             }
 
             $this->key->markAsError();
+            $this->key->restore();
         }
 
         $this->release(30);
@@ -86,5 +87,6 @@ class KeyDestroyJob implements ShouldQueue
     public function failed($exception)
     {
         $this->key->markAsError();
+        $this->key->restore();
     }
 }

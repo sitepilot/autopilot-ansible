@@ -71,6 +71,7 @@ class BackupDestroyJob implements ShouldQueue
             }
 
             $this->backup->markAsError();
+            $this->backup->restore();
         }
 
         $this->release(30);
@@ -85,5 +86,6 @@ class BackupDestroyJob implements ShouldQueue
     public function failed($exception)
     {
         $this->backup->markAsError();
+        $this->backup->restore();
     }
 }
