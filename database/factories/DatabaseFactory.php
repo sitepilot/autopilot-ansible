@@ -5,7 +5,7 @@ use Faker\Generator as Faker;
 $factory->define(\App\Database::class, function (Faker $faker) {
     return [
         'password' => 'supersecret',
-        'sysuser_id' => factory(\App\Sysuser::class)->states('ready')
+        'site_id' => factory(\App\Site::class)->states('ready')
     ];
 });
 
@@ -17,8 +17,8 @@ $factory->state(\App\Database::class, 'ready', function (Faker $faker) {
 });
 
 // Create and provision a sysuser
-$factory->state(\App\Database::class, 'withProvisionedSysuser', function (Faker $faker) {
+$factory->state(\App\Database::class, 'withProvisionedSite', function (Faker $faker) {
     return [
-        'sysuser_id' => factory(\App\Sysuser::class)
+        'site_id' => factory(\App\Site::class)
     ];
 });
