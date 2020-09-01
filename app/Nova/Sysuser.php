@@ -2,14 +2,14 @@
 
 namespace App\Nova;
 
-use App\Nova\Actions\GenerateKeypairAction;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
 use App\Nova\Actions\JobAction;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Fields\BelongsTo;
-use Laravel\Nova\Fields\Boolean;
+use App\Nova\Actions\GenerateKeypairAction;
 
 class Sysuser extends Resource
 {
@@ -26,7 +26,7 @@ class Sysuser extends Resource
      * @var string
      */
     public static $group = 'Autopilot';
-    
+
     /**
      * Indicates if the resource should be displayed in the sidebar.
      *
@@ -113,6 +113,7 @@ class Sysuser extends Resource
             \App\Sysuser::getNovaStatusField($this),
 
             HasMany::make('Sites'),
+            HasMany::make('Site Mounts', 'siteMounts'),
             HasMany::make('Databases'),
             HasMany::make('Keys', 'keys', SysuserKey::class),
             HasMany::make('Tasks', 'tasks', Task::class)

@@ -5,7 +5,7 @@
     # mount_user: ""
     path: "/opt/sitepilot/users/{{ mount_user }}/sites/{{ mount_site }}"
   tasks:
-    - name: "site/unmount-from-user : unmount site '{{ source_site }}' from user '{{ mount_user }}'"
+    - name: "site/unmount-from-user : unmount site '{{ mount_site }}' from user '{{ mount_user }}'"
       mount:
         path: "{{ path }}"
         state: absent

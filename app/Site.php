@@ -6,8 +6,6 @@ use App\Sysuser;
 use App\Jobs\SiteDestroyJob;
 use App\Traits\Provisionable;
 use App\Jobs\SiteProvisionJob;
-use App\Jobs\SiteMountToSysuserJob;
-use App\Jobs\SiteUnmountFromSysuserJob;
 use Illuminate\Database\Eloquent\Model;
 use App\Contracts\ProvisionableResource;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -138,34 +136,6 @@ class Site extends Model implements ProvisionableResource
     public function provision()
     {
         return $this->dispatchJob(SiteProvisionJob::class);
-    }
-
-    /**
-     * Dispatch mount site to sysuser job.
-     *
-     * @return bool|PendingDispatch|mixed
-     */
-    public function mountToSysuser($user)
-    {
-        return $this->dispatchJob(SiteMountToSysuserJob::class, [], [
-            'mount_user' => (string) $user,
-            'mount_site' => (string) $this->name,
-            'source_user' => (string) $this->sysuser->name,
-            'source_site' => (string) $this->name
-        ]);
-    }
-
-    /**
-     * Dispatch unmount site from sysuser job.
-     *
-     * @return bool|PendingDispatch|mixed
-     */
-    public function unmountFromSysuser($user)
-    {
-        return $this->dispatchJob(SiteUnmountFromSysuserJob::class, [], [
-            'mount_user' => (string) $user,
-            'mount_site' => (string) $this->name
-        ]);
     }
 
     /**

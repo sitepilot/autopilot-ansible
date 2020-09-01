@@ -108,6 +108,16 @@ class Sysuser extends Model implements ProvisionableResource
     }
 
     /**
+     * Get the site mounts for the sysuser.
+     * 
+     * @return HasMany
+     */
+    public function siteMounts()
+    {
+        return $this->hasMany(SiteMount::class, 'sysuser_id');
+    }
+
+    /**
      * Get the databases for the sysuser.
      * 
      * @return HasMany

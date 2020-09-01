@@ -2,25 +2,25 @@
 
 namespace App\Jobs;
 
-use App\Site;
 use Exception;
+use App\SiteMount;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
+use App\Playbooks\SiteMountDestroyPlaybook;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Playbooks\SiteUnmountFromSysuserPlaybook;
 
-class SiteUnmountFromSysuserJob implements ShouldQueue
+class SiteMountDestroyJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * The site instance.
+     * The site mount instance.
      *
-     * @var Site
+     * @var SiteMount
      */
-    public $site;
+    public $siteMount;
 
     /**
      * The number of times the job may be attempted.
@@ -37,21 +37,13 @@ class SiteUnmountFromSysuserJob implements ShouldQueue
     public $timeout = 360;
 
     /**
-     * The variables which will be passed to the playbook.
-     *
-     * @var array
-     */
-    public $vars;
-
-    /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Site $site, $tags = [], $vars)
+    public function __construct(SiteMount $siteMount)
     {
-        $this->site = $site;
-        $this->vars = $vars;
+        $this->siteMount = $siteMount;
     }
 
     /**
@@ -61,17 +53,24 @@ class SiteUnmountFromSysuserJob implements ShouldQueue
      */
     public function handle()
     {
-        if ($this->site->server->isReady() && $this->site->isReady()) {
-            $task = $this->site->run(
-                new SiteUnmountFromSysuserPlaybook($this->vars)
-            );
-
-            if ($task->successful()) {
-                return $this->delete();
-            }
+        if ($this->siteMount->isDestroying()) {
+            return $this->delete();
         }
 
-        $this->release(30);
+        $this->siteMount->markAsDestroying();
+
+        $task = $this->siteMount->run(
+            new SiteMountDestroyPlaybook($this->siteMount)
+        );
+
+        if ($task->successful()) {
+            $this->siteMount->markAsDestroyed();
+            $this->siteMount->forceDelete();
+            return $this->delete();
+        }
+
+        $this->siteMount->markAsError();
+        $this->siteMount->restore();
     }
 
     /**
@@ -82,6 +81,7 @@ class SiteUnmountFromSysuserJob implements ShouldQueue
      */
     public function failed($exception)
     {
-        //
+        $this->siteMount->markAsError();
+        $this->siteMount->restore();
     }
 }

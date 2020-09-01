@@ -2,16 +2,16 @@
 
 namespace App\Playbooks;
 
-use App\Site;
+use App\SiteMount;
 
-class SiteUnmountFromSysuserPlaybook extends Playbook
+class SiteMountProvisionPlaybook extends Playbook
 {
     /**
      * The displayable name of the playbook.
      *
      * @var string
      */
-    public $name = 'Unmount Site From User';
+    public $name = 'Provision Site Mount';
 
     /**
      * The server instance.
@@ -21,18 +21,11 @@ class SiteUnmountFromSysuserPlaybook extends Playbook
     public $server;
 
     /**
-     * The site instance.
+     * The site mount instance.
      *
-     * @var Site
+     * @var SiteMount
      */
-    public $site;
-
-    /**
-     * The playbook variables.
-     *
-     * @var array
-     */
-    public $vars;
+    public $siteMount;
 
     /**
      * Allowed server types the playbook can run on.
@@ -49,9 +42,10 @@ class SiteUnmountFromSysuserPlaybook extends Playbook
      * @param  array  $vars
      * @return void
      */
-    public function __construct(array $vars)
+    public function __construct(SiteMount $siteMount)
     {
-        $this->vars = $vars;
+        $this->siteMount = $siteMount;
+        $this->server = $siteMount->server;
     }
 
     /**
@@ -61,7 +55,7 @@ class SiteUnmountFromSysuserPlaybook extends Playbook
      */
     public function playbook()
     {
-        return 'ansible/playbooks/site/unmountFromUser.yml';
+        return 'ansible/playbooks/site/mount/provision.yml';
     }
 
     /**
@@ -71,7 +65,12 @@ class SiteUnmountFromSysuserPlaybook extends Playbook
      */
     public function vars()
     {
-        return array_merge(parent::vars(), $this->vars);
+        return array_merge(parent::vars(), [
+            'mount_user' => (string) $this->siteMount->sysuser->name,
+            'mount_site' => (string) $this->siteMount->site->name,
+            'source_user' => (string) $this->siteMount->site->sysuser->name,
+            'source_site' => (string)  $this->siteMount->site->name
+        ]);
     }
 
     /**

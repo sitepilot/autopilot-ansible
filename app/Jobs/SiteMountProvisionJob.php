@@ -2,25 +2,25 @@
 
 namespace App\Jobs;
 
-use App\Site;
 use Exception;
+use App\SiteMount;
 use Illuminate\Bus\Queueable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use App\Playbooks\SiteMountToSysuserPlaybook;
+use App\Playbooks\SiteMountProvisionPlaybook;
 
-class SiteMountToSysuserJob implements ShouldQueue
+class SiteMountProvisionJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
-     * The site instance.
+     * The site mount instance.
      *
-     * @var Site
+     * @var SiteMount
      */
-    public $site;
+    public $siteMount;
 
     /**
      * The number of times the job may be attempted.
@@ -37,21 +37,13 @@ class SiteMountToSysuserJob implements ShouldQueue
     public $timeout = 360;
 
     /**
-     * The variables which will be passed to the playbook.
-     *
-     * @var array
-     */
-    public $vars;
-
-    /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(Site $site, $tags = [], $vars)
+    public function __construct(SiteMount $siteMount)
     {
-        $this->site = $site;
-        $this->vars = $vars;
+        $this->siteMount = $siteMount;
     }
 
     /**
@@ -61,14 +53,19 @@ class SiteMountToSysuserJob implements ShouldQueue
      */
     public function handle()
     {
-        if ($this->site->server->isReady() && $this->site->isReady()) {
-            $task = $this->site->run(
-                new SiteMountToSysuserPlaybook($this->vars)
+        if ($this->siteMount->sysuser->isReady() && $this->siteMount->site->isReady()) {
+            $this->siteMount->markAsProvisioning();
+
+            $task = $this->siteMount->run(
+                new SiteMountProvisionPlaybook($this->siteMount)
             );
 
             if ($task->successful()) {
+                $this->siteMount->markAsReady();
                 return $this->delete();
             }
+
+            $this->siteMount->markAsError();
         }
 
         $this->release(30);
@@ -82,6 +79,6 @@ class SiteMountToSysuserJob implements ShouldQueue
      */
     public function failed($exception)
     {
-        //
+        $this->siteMount->markAsError();
     }
 }

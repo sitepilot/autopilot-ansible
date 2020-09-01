@@ -9,6 +9,7 @@ use App\Domain;
 use App\Server;
 use App\Sysuser;
 use App\Database;
+use App\SiteMount;
 use App\Observers\KeyObserver;
 use App\Observers\SiteObserver;
 use App\Observers\BackupObserver;
@@ -16,6 +17,7 @@ use App\Observers\DomainObserver;
 use App\Observers\ServerObserver;
 use App\Observers\SysuserObserver;
 use App\Observers\DatabaseObserver;
+use App\Observers\SiteMountObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -42,6 +44,7 @@ class AppServiceProvider extends ServiceProvider
         Key::observe(KeyObserver::class);
         Sysuser::observe(SysuserObserver::class);
         Site::observe(SiteObserver::class);
+        SiteMount::observe(SiteMountObserver::class);
         Domain::observe(DomainObserver::class);
         Database::observe(DatabaseObserver::class);
         Backup::observe(BackupObserver::class);

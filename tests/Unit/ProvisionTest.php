@@ -9,6 +9,7 @@ class ProvisionTest extends TestCase
     private static $webServer;
     private static $sysuser;
     private static $site;
+    private static $siteMount;
     private static $database;
     private static $domain;
     private static $serverKey;
@@ -64,23 +65,13 @@ class ProvisionTest extends TestCase
         $this->assertLastTask();
     }
 
-    public function test_site_can_be_mounted_to_user()
+    /* ========== Site Mount Tests ========== */
+
+    public function test_site__mount_is_provisioned_on_create()
     {
-        $site = self::getSite();
+        $siteMount = self::getSiteMount();
 
-        $site->mountToSysuser('sitepilot');
-
-        $this->assertEquals($site->fresh()->status, 'ready');
-        $this->assertLastTask();
-    }
-
-    public function test_site_can_be_unmounted_from_user()
-    {
-        $site = self::getSite();
-
-        $site->unmountFromSysuser('sitepilot');
-
-        $this->assertEquals($site->fresh()->status, 'ready');
+        $this->assertEquals($siteMount->fresh()->status, 'ready');
         $this->assertLastTask();
     }
 
@@ -228,6 +219,19 @@ class ProvisionTest extends TestCase
             return self::$site = factory(\App\Site::class)->create($attributes);
         } else {
             return self::$site->fresh();
+        }
+    }
+
+    public static function getSiteMount($attributes = [])
+    {
+        if (isset(self::$site->id)) {
+            $attributes['site_id'] = self::$site->id;
+        }
+
+        if (!self::$siteMount) {
+            return self::$siteMount = factory(\App\SiteMount::class)->create($attributes);
+        } else {
+            return self::$siteMount->fresh();
         }
     }
 

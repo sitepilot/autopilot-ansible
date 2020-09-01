@@ -187,9 +187,7 @@ class Site extends Resource
                 ->confirmButtonText('Provision')
                 ->confirmText('Are you sure you want to provision the selected site(s)?')
                 ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.')
-                ->canRunWhenNotBusy($this),
-            (new SiteMountAction)
-                ->canRunWhenReady($this),
+                ->canRunWhenNotBusy($this)
         ];
     }
 }
