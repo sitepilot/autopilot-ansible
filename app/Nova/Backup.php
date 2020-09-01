@@ -64,7 +64,7 @@ class Backup extends Resource
 
             BelongsTo::make('Server'),
 
-            Text::make('Path'),
+            Text::make('Path')->hideFromIndex(),
 
             \App\Backup::getNovaStatusField($this),
 
