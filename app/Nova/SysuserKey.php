@@ -2,12 +2,12 @@
 
 namespace App\Nova;
 
-use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\BelongsTo;
+use App\Nova\Actions\JobAction;
 use Laravel\Nova\Fields\HasMany;
 use Laravel\Nova\Fields\Textarea;
+use Laravel\Nova\Fields\BelongsTo;
 
 class SysuserKey extends Resource
 {
@@ -52,7 +52,7 @@ class SysuserKey extends Resource
         $fields = [
             //
         ];
-        
+
         return array_merge($fields, [
             BelongsTo::make('System User', 'sysuser', Sysuser::class)->hideWhenUpdating(),
 
@@ -111,6 +111,17 @@ class SysuserKey extends Resource
      */
     public function actions(Request $request)
     {
-        return [];
+        return [
+            (new JobAction)
+                ->exceptOnIndex()
+                ->showOnTableRow()
+                ->setName('Provision Key')
+                ->setResourceName('key')
+                ->setFunctionName('provision')
+                ->confirmButtonText('Provision')
+                ->confirmText('Are you sure you want to provision the selected key(s)?')
+                ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.')
+                ->canRunWhenNotBusy($this),
+        ];
     }
 }
