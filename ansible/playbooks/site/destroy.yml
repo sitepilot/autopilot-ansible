@@ -40,7 +40,7 @@
         name: caddy
         state: reloaded
 
-    - name: "site/provision : {{ user }} : {{ site }} : reload fail2ban"
+    - name: "site/destroy : {{ user }} : {{ site }} : reload fail2ban"
       service:
         name: fail2ban
         state: reloaded
