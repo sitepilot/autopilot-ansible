@@ -67,7 +67,7 @@ class ProvisionTest extends TestCase
 
     /* ========== Site Mount Tests ========== */
 
-    public function test_site__mount_is_provisioned_on_create()
+    public function test_site_mount_is_provisioned_on_create()
     {
         $siteMount = self::getSiteMount();
 
@@ -155,6 +155,16 @@ class ProvisionTest extends TestCase
         $this->assertLastTask();
     }
 
+    public function test_site_mount_is_destroyed_on_delete()
+    {
+        $siteMount = self::getSiteMount();
+
+        $siteMount->delete();
+
+        $this->assertIsBool($siteMount->trashed());
+        $this->assertLastTask();
+    }
+
     public function test_site_is_destroyed_on_delete()
     {
         $site = self::getSite();
@@ -198,11 +208,11 @@ class ProvisionTest extends TestCase
 
     public static function getSysuser($attributes = [])
     {
-        if (isset(self::$webServer->id)) {
-            $attributes['server_id'] = self::$webServer->id;
-        }
-
         if (!self::$sysuser) {
+            if (isset(self::$webServer->id)) {
+                $attributes['server_id'] = self::$webServer->id;
+            }
+
             return self::$sysuser = factory(\App\Sysuser::class)->create($attributes);
         } else {
             return self::$sysuser->fresh();
@@ -211,11 +221,11 @@ class ProvisionTest extends TestCase
 
     public static function getSite($attributes = [])
     {
-        if (isset(self::$sysuser->id)) {
-            $attributes['sysuser_id'] = self::$sysuser->id;
-        }
-
         if (!self::$site) {
+            if (isset(self::$sysuser->id)) {
+                $attributes['sysuser_id'] = self::$sysuser->id;
+            }
+
             return self::$site = factory(\App\Site::class)->create($attributes);
         } else {
             return self::$site->fresh();
@@ -224,11 +234,15 @@ class ProvisionTest extends TestCase
 
     public static function getSiteMount($attributes = [])
     {
-        if (isset(self::$site->id)) {
-            $attributes['site_id'] = self::$site->id;
-        }
-
         if (!self::$siteMount) {
+            if (isset(self::$site->id)) {
+                $attributes['site_id'] = self::$site->id;
+            }
+
+            $attributes['sysuser_id'] = factory(\App\Sysuser::class)->create([
+                'server_id' => self::$webServer->id
+            ]);
+
             return self::$siteMount = factory(\App\SiteMount::class)->create($attributes);
         } else {
             return self::$siteMount->fresh();
@@ -237,11 +251,11 @@ class ProvisionTest extends TestCase
 
     public static function getDatabase($attributes = [])
     {
-        if (isset(self::$sysuser->id)) {
-            $attributes['sysuser_id'] = self::$sysuser->id;
-        }
-
         if (!self::$database) {
+            if (isset(self::$site->id)) {
+                $attributes['site_id'] = self::$site->id;
+            }
+
             return self::$database = factory(\App\Database::class)->create($attributes);
         } else {
             return self::$database->fresh();
@@ -250,11 +264,11 @@ class ProvisionTest extends TestCase
 
     public static function getDomain($attributes = [])
     {
-        if (isset(self::$site->id)) {
-            $attributes['site_id'] = self::$site->id;
-        }
-
         if (!self::$domain) {
+            if (isset(self::$site->id)) {
+                $attributes['site_id'] = self::$site->id;
+            }
+
             return self::$domain = factory(\App\Domain::class)->create($attributes);
         } else {
             return self::$domain->fresh();
@@ -263,11 +277,11 @@ class ProvisionTest extends TestCase
 
     public static function getServerKey($attributes = [])
     {
-        if (isset(self::$webServer->id)) {
-            $attributes['server_id'] = self::$webServer->id;
-        }
-
         if (!self::$serverKey) {
+            if (isset(self::$webServer->id)) {
+                $attributes['server_id'] = self::$webServer->id;
+            }
+
             return self::$serverKey = factory(\App\Key::class)->create($attributes);
         } else {
             return self::$serverKey->fresh();
@@ -276,12 +290,12 @@ class ProvisionTest extends TestCase
 
     public static function getSysuserKey($attributes = [])
     {
-        if (isset(self::$sysuser->id)) {
-            $attributes['server_id'] = self::$sysuser->server_id;
-            $attributes['sysuser_id'] = self::$sysuser->id;
-        }
-
         if (!self::$sysuserKey) {
+            if (isset(self::$sysuser->id)) {
+                $attributes['server_id'] = self::$sysuser->server_id;
+                $attributes['sysuser_id'] = self::$sysuser->id;
+            }
+
             return self::$sysuserKey = factory(\App\Key::class)->create($attributes);
         } else {
             return self::$sysuserKey->fresh();
