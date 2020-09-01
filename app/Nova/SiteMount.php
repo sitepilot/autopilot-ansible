@@ -108,7 +108,6 @@ class SiteMount extends Resource
     {
         return [
             (new JobAction)
-                ->exceptOnIndex()
                 ->showOnTableRow()
                 ->setName('Provision Mount')
                 ->setResourceName('mount')
@@ -116,31 +115,6 @@ class SiteMount extends Resource
                 ->confirmButtonText('Provision')
                 ->confirmText('Are you sure you want to provision the selected site mount(s)?')
                 ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.')
-                ->canRunWhenNotBusy($this)
         ];
-    }
-
-    /**
-     * Filter relatable sysusers query.
-     *
-     * @param NovaRequest $request
-     * @param Builder $query
-     * @return Builder
-     */
-    public static function relatableSysusers(NovaRequest $request, $query)
-    {
-        return $query->where('status', 'ready');
-    }
-
-    /**
-     * Filter relatable sites query.
-     *
-     * @param NovaRequest $request
-     * @param Builder $query
-     * @return Builder
-     */
-    public static function relatableSites(NovaRequest $request, $query)
-    {
-        return $query->where('status', 'ready');
     }
 }

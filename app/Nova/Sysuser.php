@@ -176,15 +176,13 @@ class Sysuser extends Resource
                 ->setSuccessMessage('Autopilot will test your {{resourceName}} in a few seconds.')
                 ->canRunWhenReady($this),
             (new JobAction)
-                ->exceptOnIndex()
                 ->showOnTableRow()
                 ->setName('Provision User')
                 ->setResourceName('user')
                 ->setFunctionName('provision')
                 ->confirmButtonText('Provision')
                 ->confirmText('Are you sure you want to provision the selected user(s)?')
-                ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.')
-                ->canRunWhenNotBusy($this),
+                ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.'),
             (new GenerateKeypairAction)
                 ->exceptOnIndex()
                 ->showOnTableRow()

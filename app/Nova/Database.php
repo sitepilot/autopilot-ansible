@@ -141,7 +141,6 @@ class Database extends Resource
                 ->confirmText('Are you sure you want to backup the selected database?')
                 ->confirmButtonText('Backup'),
             (new JobAction)
-                ->exceptOnIndex()
                 ->showOnTableRow()
                 ->setName('Provision Database')
                 ->setResourceName('database')
@@ -149,7 +148,6 @@ class Database extends Resource
                 ->confirmButtonText('Provision')
                 ->confirmText('Are you sure you want to provision the selected database(s)?')
                 ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.')
-                ->canRunWhenNotBusy($this),
         ];
     }
 }

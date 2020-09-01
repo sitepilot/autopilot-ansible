@@ -397,7 +397,6 @@ class Server extends Resource
                 ->confirmText('Are you sure you want to start the selected server(s)?')
                 ->setSuccessMessage('Autopilot will start your {{resourceName}} in a few seconds.'),
             (new JobAction)
-                ->exceptOnIndex()
                 ->showOnTableRow()
                 ->setName('Provision Server')
                 ->setResourceName('server')
@@ -405,7 +404,6 @@ class Server extends Resource
                 ->confirmButtonText('Provision')
                 ->confirmText('Are you sure you want to provision the selected server(s)?')
                 ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.')
-                ->canRunWhenNotBusy($this)
         ];
     }
 }

@@ -179,7 +179,6 @@ class Site extends Resource
                 ->confirmButtonText('Backup')
                 ->canRunWhenReady($this),
             (new JobAction)
-                ->exceptOnIndex()
                 ->showOnTableRow()
                 ->setName('Provision Site')
                 ->setResourceName('site')
@@ -187,7 +186,6 @@ class Site extends Resource
                 ->confirmButtonText('Provision')
                 ->confirmText('Are you sure you want to provision the selected site(s)?')
                 ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.')
-                ->canRunWhenNotBusy($this)
         ];
     }
 }

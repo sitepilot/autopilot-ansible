@@ -113,7 +113,6 @@ class SysuserKey extends Resource
     {
         return [
             (new JobAction)
-                ->exceptOnIndex()
                 ->showOnTableRow()
                 ->setName('Provision Key')
                 ->setResourceName('key')
@@ -121,7 +120,6 @@ class SysuserKey extends Resource
                 ->confirmButtonText('Provision')
                 ->confirmText('Are you sure you want to provision the selected key(s)?')
                 ->setSuccessMessage('Autopilot will provision your {{resourceName}} in a few seconds.')
-                ->canRunWhenNotBusy($this),
         ];
     }
 }
