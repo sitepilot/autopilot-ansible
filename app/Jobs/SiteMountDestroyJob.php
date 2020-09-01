@@ -70,7 +70,6 @@ class SiteMountDestroyJob implements ShouldQueue
         }
 
         $this->siteMount->markAsError();
-        $this->siteMount->restore();
     }
 
     /**

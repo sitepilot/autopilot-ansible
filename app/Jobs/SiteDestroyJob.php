@@ -71,7 +71,6 @@ class SiteDestroyJob implements ShouldQueue
             }
 
             $this->site->markAsError();
-            $this->site->restore();
         }
 
         $this->release(30);

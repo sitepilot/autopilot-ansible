@@ -72,7 +72,6 @@ class DatabaseDestroyJob implements ShouldQueue
             }
 
             $this->database->markAsError();
-            $this->database->restore();
         }
 
         $this->release(30);

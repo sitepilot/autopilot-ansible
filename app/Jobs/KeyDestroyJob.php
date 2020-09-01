@@ -72,7 +72,6 @@ class KeyDestroyJob implements ShouldQueue
             }
 
             $this->key->markAsError();
-            $this->key->restore();
         }
 
         $this->release(30);
