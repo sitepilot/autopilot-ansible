@@ -34,8 +34,6 @@ class SiteMountRule implements Rule
 
         if (!$site || !$sysuser) {
             $this->validatonMessage = 'The selected :attribute is invalid.';
-        } elseif ($sysuser->server->id != $site->server->id) {
-            $this->validatonMessage = 'The selected :attribute is not on the same server as the user.';
         } elseif ($sysuser->id == $site->sysuser->id) {
             $this->validatonMessage = 'The selected :attribute already belongs to the user.';
         } elseif ($sysuser->siteMounts()->where('site_id', $site->id)->count()) {
