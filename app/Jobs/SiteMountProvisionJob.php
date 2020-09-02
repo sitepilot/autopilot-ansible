@@ -56,18 +56,16 @@ class SiteMountProvisionJob implements ShouldQueue
         if ($this->siteMount->sysuser->isReady() && $this->siteMount->site->isReady()) {
             $this->siteMount->markAsProvisioning();
 
-            if ($this->siteMount->isRemote()) {
-                $key = $this->siteMount->site->sysuser->keys()->where('key', $this->siteMount->sysuser->public_key)->first();
-                if (!$key) {
-                    $this->siteMount->site->sysuser->keys()->create([
-                        'name' => $this->siteMount->sysuser->name . '@' . $this->siteMount->sysuser->server->name,
-                        'key' => $this->siteMount->sysuser->public_key
-                    ]);
+            $key = $this->siteMount->site->sysuser->keys()->where('key', $this->siteMount->sysuser->public_key)->first();
+            if (!$key) {
+                $this->siteMount->site->sysuser->keys()->create([
+                    'name' => $this->siteMount->sysuser->name . '@' . $this->siteMount->sysuser->server->name,
+                    'key' => $this->siteMount->sysuser->public_key
+                ]);
 
-                    return $this->release(30);
-                } elseif (!$key->isReady()) {
-                    return $this->release(30);
-                }
+                return $this->release(30);
+            } elseif (!$key->isReady()) {
+                return $this->release(30);
             }
 
             $task = $this->siteMount->run(

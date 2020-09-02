@@ -3,7 +3,7 @@
   vars:
     # mount_site: ""
     # mount_user: ""
-    path: "/opt/sitepilot/users/{{ mount_user }}/sites/{{ mount_site }}"
+    path: "/opt/sitepilot/users/{{ mount_user }}/sites/{{ mount_site }}-mnt"
   tasks:
     - name: "site/mount/destroy : unmount site '{{ mount_site }}' from user '{{ mount_user }}'"
       mount:

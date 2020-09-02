@@ -13,7 +13,7 @@
       - zip
       - unzip
       - acl
-      - bindfs
+      - sshfs
       - zsh
       - ncdu
       - gnupg
