@@ -56,17 +56,18 @@ class SiteMountProvisionJob implements ShouldQueue
         if ($this->siteMount->sysuser->isReady() && $this->siteMount->site->isReady()) {
             $this->siteMount->markAsProvisioning();
 
+            // Check if a ssh key was already provisioned
             $key = $this->siteMount->site->sysuser->keys()->where('key', $this->siteMount->sysuser->public_key)->first();
+
             if (!$key) {
-                $this->siteMount->site->sysuser->keys()->create([
+                $key = $this->siteMount->site->sysuser->keys()->create([
                     'name' => $this->siteMount->sysuser->name . '@' . $this->siteMount->sysuser->server->name,
                     'key' => $this->siteMount->sysuser->public_key
                 ]);
-
-                return $this->release(30);
-            } elseif (!$key->isReady()) {
-                return $this->release(30);
             }
+
+            // Wait for the ssh key to be provisioned
+            if (!$key->isReady()) return $this->release(30);
 
             $task = $this->siteMount->run(
                 new SiteMountProvisionPlaybook($this->siteMount)
