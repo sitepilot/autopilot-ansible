@@ -69,7 +69,8 @@ class SiteMountProvisionPlaybook extends Playbook
             'mount_user' => (string) $this->siteMount->sysuser->name,
             'mount_site' => (string) $this->siteMount->site->name,
             'source_user' => (string) $this->siteMount->site->sysuser->name,
-            'source_site' => (string)  $this->siteMount->site->name
+            'source_site' => (string)  $this->siteMount->site->name,
+            'ssh_host' => (string) $this->siteMount->isRemote() ? $this->siteMount->site->server->address : ''
         ]);
     }
 

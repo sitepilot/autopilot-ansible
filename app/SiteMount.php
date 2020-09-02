@@ -73,6 +73,16 @@ class SiteMount extends Model implements ProvisionableResource
     }
 
     /**
+     * Returns if the site mount is a remote mount.
+     *
+     * @return boolean
+     */
+    public function isRemote()
+    {
+        return $this->server->id != $this->site->server->id;
+    }
+
+    /**
      * Dispatch site mount provision job.
      *
      * @return bool|PendingDispatch|mixed

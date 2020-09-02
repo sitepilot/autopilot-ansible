@@ -59,6 +59,11 @@ class SiteMountDestroyJob implements ShouldQueue
 
         $this->siteMount->markAsDestroying();
 
+        if ($this->siteMount->isRemote()) {
+            $key = $this->siteMount->site->sysuser->keys()->where('key', $this->siteMount->sysuser->public_key)->first();
+            if ($key) $key->delete();
+        }
+
         $task = $this->siteMount->run(
             new SiteMountDestroyPlaybook($this->siteMount)
         );
